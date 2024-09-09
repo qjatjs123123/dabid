@@ -23,4 +23,8 @@ public class BaseEntity {
 
     @Column
     private Boolean isActive = true;
+
+    public void kill(){
+        isActive = false;
+    }
 }

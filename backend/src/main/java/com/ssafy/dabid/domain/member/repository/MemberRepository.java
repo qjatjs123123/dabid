@@ -1,4 +1,7 @@
 package com.ssafy.dabid.domain.member.repository;
 
-public interface MemberRepository {
+import com.ssafy.dabid.domain.member.entity.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MemberRepository extends JpaRepository<Member, Integer> {
 }
