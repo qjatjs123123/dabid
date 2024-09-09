@@ -4,6 +4,8 @@ import com.ssafy.dabid.domain.auction.service.BiddingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class BiddingController {
 
     private final BiddingService biddingService;
-
-    // 경매 참여, 경매 참여 포기, 입찰하기, 낙찰처리
-    //	웹소켓, 배치
 
     // 경매 참여
     @GetMapping("/join/{auctionId}")
@@ -33,8 +32,15 @@ public class BiddingController {
 
     // 입찰하기
     @PatchMapping("/{auctionId}/{bid}")
-    public void bid(@PathVariable int auctionId, @PathVariable int bid) {
-        biddingService.bid(auctionId, bid);
+    public ResponseEntity<Void> bid(@PathVariable int auctionId, @PathVariable int bid) {
+        int result = biddingService.bid(auctionId, bid);
+
+        if(result == 0) {
+            return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    // 경매 시간 종료
+    
 }

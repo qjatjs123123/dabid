@@ -7,6 +7,8 @@ import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,28 +56,48 @@ public class BiddingServiceImpl implements BiddingService {
         //Member member = memberRepository.findById(memberId).orElse(null);
         
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
-        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_Id(auctionId).orElse(null);
+        //AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElse(null);
         //if(auctionInfo.getMember.getId.equals(memberId)) {
         //    throw new BadRequestException("해당 경매에 참여한 상태가 아닙니다.");
         //}
 
         /* 3. 사용자의 경매 참여 정보를 DB(auction_Info)서 삭제한다. */
-        auctionInfoRepository.delete(auctionInfo);
+        //auctionInfoRepository.delete(auctionInfo);
 
     }
 
     // 입찰하기
     @Override
-    public void bid(int auctionId, int bid) {
+    public int bid(int auctionId, int bid) {
         /* 1. 요청한 사용자(member) 정보를 경매 참여자 정보 DB(auction_info)에서 가져온다. */
         //int memberId = SecurityUtil.getLoginUsername();
         //AuctionInfo auctionInfo = auctionInfoRepository.findByMember_Id(memberId);
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
-        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_Id(auctionId).orElse(null);
+        //AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElse(null);
         //if(auctionInfo.getMember.getId.equals(memberId)) {
         //    throw new BadRequestException("해당 경매에 참여한 상태가 아닙니다.");
         //}
+        //auctionInfo.setBid(bid);
 
+        /* 3. 사용자가 2nd price auction 경매 방식에서 입찰에 성공했는지 여부를 판단한다.  */
+        Auction auction = auctionRepository.findById(auctionId).orElse(null);
+        if(auction.getFirstBid() <= bid) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
+            if(auction.getSecondBid() > bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
+                auction.setSecondBid(bid);
+            }
+            return 0;
+        }
+        else { // 1등 입찰가보다 높은 금액 입찰 시도
+            auction.setSecondBid(auction.getFirstBid());
+            /*
+            로직 - 기존 auction.getFirstMemberId()의 사용자에게 낙찰 유력 뺐김을 알림
+            */
+            //auction.setFirstMemberId(memberId);
+            auction.setFirstBid(bid);
+            return 1;
+        }
     }
+
+
 }

@@ -11,5 +11,5 @@ public interface BiddingService {
     void giveUpBidding(int auctionId);
 
     // 입찰하기
-    void bid(int auctionId, int bid);
+    int bid(int auctionId, int bid);
 }

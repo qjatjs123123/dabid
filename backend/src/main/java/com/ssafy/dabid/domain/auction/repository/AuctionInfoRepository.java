@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AuctionInfoRepository extends JpaRepository<AuctionInfo, Integer> {
 
-    Optional<AuctionInfo> findByAuction_Id(int auctionId);
+    Optional<AuctionInfo> findByAuction_IdAndMember_Id(int auctionId, int memberId);
 
-    Optional<AuctionInfo> findByMember_Id(int memberId);
 }
