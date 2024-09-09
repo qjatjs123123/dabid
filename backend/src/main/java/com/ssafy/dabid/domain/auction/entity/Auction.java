@@ -46,6 +46,9 @@ public class Auction extends BaseEntity {
     private int firstMemberId;
 
     @Column
+    private int firstBid;
+
+    @Column
     private int secondBid;
 
 
