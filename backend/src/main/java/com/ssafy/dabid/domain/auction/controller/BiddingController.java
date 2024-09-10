@@ -12,34 +12,31 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Validated
-@RequestMapping("/api/bidding")
+@RequestMapping("/api/biddings")
 public class BiddingController {
 
     private final BiddingService biddingService;
 
     // 경매 참여
-    @GetMapping("/join/{auctionId}")
+    @PostMapping("/{auctionId}")
     public void joinBidding(@PathVariable int auctionId) {
         biddingService.joinBidding(auctionId);
     }
 
     // 경매 참여 포기
-    @DeleteMapping("/give-up/{auctionId}")
+    @DeleteMapping("/{auctionId}")
     public void giveUpBidding(@PathVariable int auctionId) {
         biddingService.giveUpBidding(auctionId);
     }
 
     // 입찰하기
     @PatchMapping("/{auctionId}/{bid}")
-    public ResponseEntity<Void> bid(@PathVariable int auctionId, @PathVariable int bid) {
+    public ResponseEntity<?> bid(@PathVariable int auctionId, @PathVariable int bid) {
         int result = biddingService.bid(auctionId, bid);
 
         if(result == 0) {
-            return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    // 경매 시간 종료
 }

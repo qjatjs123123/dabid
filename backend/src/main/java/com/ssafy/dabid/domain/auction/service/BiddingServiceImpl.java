@@ -3,14 +3,10 @@ package com.ssafy.dabid.domain.auction.service;
 import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.entity.AuctionInfo;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
-import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
-import com.ssafy.dabid.domain.member.entity.Member;
+import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BiddingServiceImpl implements BiddingService {
 
 //    private final MemberRepository memberRepository;
-    private final AuctionRepository auctionRepository;
+    private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionInfoRepository auctionInfoRepository;
     private final MemberAccountRepository memberAccountRepository;
 
@@ -40,7 +36,7 @@ public class BiddingServiceImpl implements BiddingService {
         //if(memberRepository.findPointById(memberId) < 5000)
         //    throw new IllegalStateException("포인트가 충분하지 않습니다.");
 
-        Auction auction = auctionRepository.findById(auctionId).orElse(null);
+        Auction auction = auctionJpaRepository.findById(auctionId).orElse(null);
 
         /* 2. 경매 참여 정보를 DB(auction_Info)에 저장하기 위한 정보를 세팅한다. */
         AuctionInfo auctionInfo = AuctionInfo.builder()
@@ -100,22 +96,22 @@ public class BiddingServiceImpl implements BiddingService {
         //auctionInfo.setBid(bid);
 
         /* 3. 사용자가 2nd price auction 경매 방식에서 입찰에 성공했는지 여부를 판단한다.  */
-        Auction auction = auctionRepository.findById(auctionId).orElse(null);
+        Auction auction = auctionJpaRepository.findById(auctionId).orElse(null);
         if(auction.getFirstBid() <= bid) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
             if(auction.getSecondBid() > bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
                 auction.setSecondBid(bid);
             }
-            auctionRepository.save(auction);
+            auctionJpaRepository.save(auction);
             return 0;
         }
         else { // 1등 입찰가보다 높은 금액 입찰 시도
             auction.setSecondBid(auction.getFirstBid());
             /*
-            로직 - 기존 auction.getFirstMemberId()의 사용자에게 낙찰 유력 뺐김을 알림
+            로직 - 기존 auction.getFirstMemberId()의 사용자에게 낙찰 유력 뺐김을 알림 + 포인트 돌려주기
             */
             //auction.setFirstMemberId(memberId);
             auction.setFirstBid(bid);
-            auctionRepository.save(auction);
+            auctionJpaRepository.save(auction);
             return 1;
         }
     }

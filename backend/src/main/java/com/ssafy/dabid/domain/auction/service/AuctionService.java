@@ -106,6 +106,9 @@ public class AuctionService {
         log.info("inActivePost 시작");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 auction"));
 
+        // i. 경매 참여자 존재 시, 판매자 보증금 회수 + 참여자에게 포인트 돌려주기
+        // ii. 경매 참여자 존재 X 시, 판매자 보증금 회수
+
         log.info("auctionId: " + auctionId + " kill");
         auction.kill();
 
