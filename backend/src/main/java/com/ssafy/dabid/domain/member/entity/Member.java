@@ -4,6 +4,8 @@ import com.ssafy.dabid.global.config.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Member extends BaseEntity {
     @Id @GeneratedValue
     private Integer id;
@@ -30,6 +34,8 @@ public class Member extends BaseEntity {
     private String imageUrl;
 
     private Integer point;
+
+    //private Role role;
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
