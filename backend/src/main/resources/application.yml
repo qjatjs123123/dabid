@@ -21,6 +21,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: 'true'
+  #Security
+  security:
+    user:
+      name: admin
+      password: dabid
+
+jwt:
+  key: /PrvvKm+CrnZUHBxKhqQNzhvN0QxnhGB1OzR1tV19yM=
+  access:
+    time: 10800
+  refresh:
+    time: 2592000
 
 server:
   servlet:
