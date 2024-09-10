@@ -1,13 +1,10 @@
 package com.ssafy.dabid.domain.member.entity;
 
-import com.ssafy.dabid.domain.auction.entity.Auction;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 /**
- * Member 더미데이터입니당
+ * 더미데이터입니당
  */
 @Entity
 @NoArgsConstructor
@@ -15,13 +12,12 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@Table(name = "member")
-public class Member {
+@Table(name = "member_account")
+public class MemberAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String name;
-
-    private int point;
+    @OneToOne(fetch = FetchType.LAZY)
+    Member member;
 }

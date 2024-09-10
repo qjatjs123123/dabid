@@ -5,6 +5,7 @@ import com.ssafy.dabid.domain.auction.entity.AuctionInfo;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.member.entity.Member;
+import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -22,6 +23,7 @@ public class BiddingServiceImpl implements BiddingService {
 //    private final MemberRepository memberRepository;
     private final AuctionRepository auctionRepository;
     private final AuctionInfoRepository auctionInfoRepository;
+    private final MemberAccountRepository memberAccountRepository;
 
     // 경매 참여
     @Override
@@ -29,6 +31,15 @@ public class BiddingServiceImpl implements BiddingService {
         /* 1. 요청한 사용자(member)와 참여 요청 경매(auction) 정보를 DB에서 가져온다. */
         //int memberId = SecurityUtil.getLoginUsername();
         //Member member = memberRepository.findById(memberId).orElse(null);
+
+        /* 계좌 인증 확인 */
+        //if(memberAccountRepository.findByMemberId(memberId) == 0)
+        //    throw new IllegalStateException("계좌가 인증되지 않았습니다.");
+
+        /* 포인트 확인 */
+        //if(memberRepository.findPointById(memberId) < 5000)
+        //    throw new IllegalStateException("포인트가 충분하지 않습니다.");
+
         Auction auction = auctionRepository.findById(auctionId).orElse(null);
 
         /* 2. 경매 참여 정보를 DB(auction_Info)에 저장하기 위한 정보를 세팅한다. */

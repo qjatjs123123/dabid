@@ -7,6 +7,7 @@ import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.entity.Category;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.member.entity.Member;
+import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.List;
 public class AuctionService {
     private final AuctionJpaRepository auctionJpaRepository;
     private final MemberRepository memberRepository;
+    private final MemberAccountRepository memberAccountRepository;
 
     public List<AuctionListDto> getAuctions(){
         log.info("getAuctions 시작");
@@ -65,6 +67,15 @@ public class AuctionService {
 
     public void registPost(RegistrationAuctionDto dto, int memberId){
         log.info("registPost 시작");
+
+        log.info("계좌 인증 확인");
+        if(memberAccountRepository.findByMemberId(memberId) == 0)
+            throw new IllegalStateException("계좌가 인증되지 않았습니다.");
+
+        log.info("포인트 확인");
+        if(memberRepository.findPointById(memberId) < 5000)
+            throw new IllegalStateException("포인트가 충분하지 않습니다.");
+
         log.info("member :" + memberId + " 조회");
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않은 회원"));
 
