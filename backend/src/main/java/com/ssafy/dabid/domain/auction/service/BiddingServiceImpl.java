@@ -4,6 +4,7 @@ import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.entity.AuctionInfo;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
+import com.ssafy.dabid.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -31,7 +32,12 @@ public class BiddingServiceImpl implements BiddingService {
         Auction auction = auctionRepository.findById(auctionId).orElse(null);
 
         /* 2. 경매 참여 정보를 DB(auction_Info)에 저장하기 위한 정보를 세팅한다. */
-        AuctionInfo auctionInfo = new AuctionInfo();
+        AuctionInfo auctionInfo = AuctionInfo.builder()
+
+                .auction(auction)
+                .bid(0)
+//                .member(member)
+                .build();
         auctionInfo.setBid(0);
         auctionInfo.setAuction(auction);
         //auctionInfo.setMember(member);
@@ -61,6 +67,8 @@ public class BiddingServiceImpl implements BiddingService {
         //    throw new BadRequestException("해당 경매에 참여한 상태가 아닙니다.");
         //}
 
+        throw new IllegalArgumentException("해당 경매에 참여한 상태가 아닙니다.");
+
         /* 3. 사용자의 경매 참여 정보를 DB(auction_Info)서 삭제한다. */
         //auctionInfoRepository.delete(auctionInfo);
 
@@ -71,11 +79,11 @@ public class BiddingServiceImpl implements BiddingService {
     public int bid(int auctionId, int bid) {
         /* 1. 요청한 사용자(member) 정보를 경매 참여자 정보 DB(auction_info)에서 가져온다. */
         //int memberId = SecurityUtil.getLoginUsername();
-        //AuctionInfo auctionInfo = auctionInfoRepository.findByMember_Id(memberId);
+        //AuctionInfo auctionInfo = auctionInfoRepository.findByMember_Id(memberId).orElse(null);
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         //AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElse(null);
-        //if(auctionInfo.getMember.getId.equals(memberId)) {
+        //if(auctionInfo.getMember.getId != memberId)) {
         //    throw new BadRequestException("해당 경매에 참여한 상태가 아닙니다.");
         //}
         //auctionInfo.setBid(bid);
@@ -86,6 +94,7 @@ public class BiddingServiceImpl implements BiddingService {
             if(auction.getSecondBid() > bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
                 auction.setSecondBid(bid);
             }
+            auctionRepository.save(auction);
             return 0;
         }
         else { // 1등 입찰가보다 높은 금액 입찰 시도
@@ -95,6 +104,7 @@ public class BiddingServiceImpl implements BiddingService {
             */
             //auction.setFirstMemberId(memberId);
             auction.setFirstBid(bid);
+            auctionRepository.save(auction);
             return 1;
         }
     }

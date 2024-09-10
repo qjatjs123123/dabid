@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.auction.entity;
 
+import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.global.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +26,7 @@ public class AuctionInfo extends BaseEntity {
     private Auction auction;
 
     // Member Entity 구현 시 적용
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }

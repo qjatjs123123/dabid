@@ -42,5 +42,4 @@ public class BiddingController {
     }
 
     // 경매 시간 종료
-    
 }
