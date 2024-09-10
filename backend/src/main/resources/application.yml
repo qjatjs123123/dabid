@@ -27,6 +27,18 @@ spring:
       ddl-auto: update
     show-sql: 'true'
 
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA6GBMGEM7RJN3IVWT
+      secret-key: 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
+    s3:
+      bucket: dabid-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 server:
   servlet:
     encoding:
