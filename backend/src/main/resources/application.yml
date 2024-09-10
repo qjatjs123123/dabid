@@ -2,6 +2,11 @@ spring:
   application:
     name: dabid
 
+  # Scheduler ThreadCount
+  quartz:
+    properties:
+      org.quartz.threadPool.threadCount: 20
+
   # MySQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -4,6 +4,7 @@ import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.quartz.SchedulerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class AuctionController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> registPost(@RequestBody RegistrationAuctionDto dto){
+    public ResponseEntity<?> registPost(@RequestBody RegistrationAuctionDto dto) throws SchedulerException {
         //        int memberId = Integer.parseInt((String) request.getAttribute("memberId"));
         int memberId = 1;
         service.registPost(dto, memberId);
@@ -36,7 +37,7 @@ public class AuctionController {
     }
 
     @DeleteMapping("/{auctionId}")
-    public ResponseEntity<?> inActivatePost(@PathVariable("auctionId") int auctionId){
+    public ResponseEntity<?> inActivatePost(@PathVariable("auctionId") int auctionId) throws SchedulerException {
         service.inActivatePost(auctionId);
 
         return new ResponseEntity<>(HttpStatus.OK);

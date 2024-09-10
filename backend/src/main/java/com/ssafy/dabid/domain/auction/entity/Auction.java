@@ -5,6 +5,8 @@ import com.ssafy.dabid.global.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * 기본키를 Primitive Type으로 하는 이유:
  * 각 요청에서 모든 변수를 Wrapper Class로 생성 시 객체 생성에 많은 메모리 소모를 우려함.
@@ -51,5 +53,7 @@ public class Auction extends BaseEntity {
     @Column
     private int secondBid;
 
+    @Column
+    private LocalDateTime finishedAt;
 
 }

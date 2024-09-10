@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/schedule")
 @RequiredArgsConstructor
-public class AuctionSchedulerController {
+public class XXXAuctionSchedulerController {
     
     private final QuartzSchedulerService schedulerService;
 

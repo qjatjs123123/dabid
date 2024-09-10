@@ -6,13 +6,16 @@ import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
 import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.entity.Category;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
+import com.ssafy.dabid.domain.job.service.QuartzSchedulerService;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.SchedulerException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class AuctionService {
     private final AuctionJpaRepository auctionJpaRepository;
     private final MemberRepository memberRepository;
     private final MemberAccountRepository memberAccountRepository;
+    private final QuartzSchedulerService schedulerService;
 
     public List<AuctionListDto> getAuctions(){
         log.info("getAuctions 시작");
@@ -65,7 +69,7 @@ public class AuctionService {
         return result;
     }
 
-    public void registPost(RegistrationAuctionDto dto, int memberId){
+    public void registPost(RegistrationAuctionDto dto, int memberId) throws SchedulerException {
         log.info("registPost 시작");
 
         log.info("계좌 인증 확인");
@@ -80,7 +84,7 @@ public class AuctionService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않은 회원"));
 
         log.info("auction 저장");
-        auctionJpaRepository.save(Auction.builder()
+        Auction auction = auctionJpaRepository.save(Auction.builder()
                 .title(dto.getTitle())
                         .member(member)
                         .name(dto.getName())
@@ -88,13 +92,17 @@ public class AuctionService {
                         .detail(dto.getDetail())
                         .deposit(dto.getDeposit())
                         .firstMemberId(-1)
+                        .finishedAt(LocalDateTime.now().plusDays((dto.getDuration())))
                         .secondBid(dto.getInitValue())
                         .build()
                 );
         log.info("registPost 종료");
+
+        // QuartzSchedulerService에서 경매 종료일자에 동작하도록 스케줄링 설정
+        schedulerService.endAuctionAndMakeDeal(auction.getId(), auction.getCreatedAt(), auction.getFinishedAt());
     }
 
-    public void inActivatePost(int auctionId){
+    public void inActivatePost(int auctionId) throws SchedulerException {
         log.info("inActivePost 시작");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 auction"));
 
@@ -104,5 +112,8 @@ public class AuctionService {
         auctionJpaRepository.save(auction);
 
         log.info("inActivePost 삭제");
+
+        // 경매 물품 중도 삭제 시, 경매 종료 시 동작하는 Job Scheduler도 같이 삭제
+        schedulerService.deleteAuctionJob(auctionId);
     }
 }

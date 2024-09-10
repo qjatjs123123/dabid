@@ -19,7 +19,7 @@ public class RegistrationAuctionDto {
     private String category;
     private List<String> images;
     private List<String> hashTags;
-    private String duration;
+    private long duration;
     private String detail;
     private int deposit;
     private int initValue;
