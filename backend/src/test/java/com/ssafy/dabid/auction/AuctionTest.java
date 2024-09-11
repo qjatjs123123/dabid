@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class AuctionTest {
-
     @InjectMocks
     AuctionService service;
 
