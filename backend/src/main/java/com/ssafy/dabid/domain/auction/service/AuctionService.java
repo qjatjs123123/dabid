@@ -5,6 +5,7 @@ import com.ssafy.dabid.domain.auction.dto.response.AuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
 import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.entity.Category;
+import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.job.service.QuartzSchedulerService;
 import com.ssafy.dabid.domain.member.entity.Member;
@@ -13,6 +14,7 @@ import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,7 +25,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuctionService {
+    @Value("${point.buy.deposit}")
+    private int deposit;
+
     private final AuctionJpaRepository auctionJpaRepository;
+    private final AuctionInfoRepository auctionInfoRepository;
     private final MemberRepository memberRepository;
     private final MemberAccountRepository memberAccountRepository;
     private final QuartzSchedulerService schedulerService;
@@ -107,7 +113,11 @@ public class AuctionService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 auction"));
 
         // i. 경매 참여자 존재 시, 판매자 보증금 회수 + 참여자에게 포인트 돌려주기
-        // ii. 경매 참여자 존재 X 시, 판매자 보증금 회수
+        if(isExistParticipant(auctionId)){
+            returnBuyerPoint(auctionId);
+        }else{ // ii. 경매 참여자 존재 X 시, 판매자 보증금 회수
+            returnSellerPoint(auctionId);
+        }
 
         log.info("auctionId: " + auctionId + " kill");
         auction.kill();
@@ -118,5 +128,35 @@ public class AuctionService {
 
         // 경매 물품 중도 삭제 시, 경매 종료 시 동작하는 Job Scheduler도 같이 삭제
         schedulerService.deleteAuctionJob(auctionId);
+    }
+
+    public boolean isExistParticipant(int auctionId){
+        return auctionInfoRepository.countByAuctionId(auctionId) > 0;
+    }
+
+    /**
+     * 판매자 보증금 먹고, 입찰자에게 돌려주기
+     * @param auctionId
+     */
+    public void returnBuyerPoint(int auctionId){
+        List<Member> members = memberRepository.findParticipantByAuctionId(auctionId);
+
+        for(Member member : members){
+            member.increasePoint(deposit);
+            memberRepository.save(member);
+        }
+    }
+
+    /**
+     * 판매자에게 돌려주기
+     * @param auctionId
+     */
+    public void returnSellerPoint(int auctionId){
+        Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 Auction"));
+
+        Member member = auction.getMember();
+        member.increasePoint(auction.getDeposit());
+
+        memberRepository.save(member);
     }
 }

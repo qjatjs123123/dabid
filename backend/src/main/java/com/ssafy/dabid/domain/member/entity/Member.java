@@ -24,4 +24,12 @@ public class Member {
     private String name;
 
     private int point;
+
+    public void increasePoint(int value){
+        this.point += value;
+    }
+
+    public void decreasePoint(int value){
+        this.point -= value;
+    }
 }

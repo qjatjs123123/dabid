@@ -43,3 +43,8 @@ server:
   servlet:
     encoding:
       enabled: 'true'
+
+point:
+  buy:
+    deposit: 5000
+
