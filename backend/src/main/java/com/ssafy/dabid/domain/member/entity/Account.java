@@ -9,21 +9,16 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@Table(name = "member")
-public class Member {
+@Table(name = "member_account")
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private String email;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Member member;
 
     @Column
-    private String user_key;
+    private String account_number;
 
-    @Column
-    private String nickname;
-
-    @Column
-    private int point;
 }
