@@ -4,6 +4,7 @@ import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
 import com.ssafy.dabid.domain.auction.entity.Auction;
+import com.ssafy.dabid.domain.auction.entity.AuctionInfo;
 import com.ssafy.dabid.domain.auction.entity.Category;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
@@ -61,6 +62,8 @@ public class AuctionService {
         log.info("auctionId: " + auctionId + " 조회");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 Auction"));
 
+        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElse(null);
+
         log.info("Dto 변환");
         AuctionDto result = AuctionDto.builder()
                 .title(auction.getTitle())
@@ -69,6 +72,8 @@ public class AuctionService {
                 .detail(auction.getDetail())
                 .deposit(auction.getDeposit())
                 .isFirstMember(auction.getFirstMemberId() == memberId)
+                .isOnwer(auction.getMember().getId() == memberId)
+                .isParticipant(auctionInfo != null)
                 .build();
 
         log.info("getAuction 종료");
@@ -79,15 +84,16 @@ public class AuctionService {
         log.info("registPost 시작");
 
         log.info("계좌 인증 확인");
-        if(memberAccountRepository.findByMemberId(memberId) == 0)
+        if(!memberAccountRepository.findByMemberId(memberId).getIsActive()) {
             throw new IllegalStateException("계좌가 인증되지 않았습니다.");
-
-        log.info("포인트 확인");
-        if(memberRepository.findPointById(memberId) < 5000)
-            throw new IllegalStateException("포인트가 충분하지 않습니다.");
+        }
 
         log.info("member :" + memberId + " 조회");
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않은 회원"));
+
+        log.info("포인트 확인");
+        if(member.getPoint() < deposit)
+            throw new IllegalStateException("포인트가 충분하지 않습니다.");
 
         log.info("auction 저장");
         Auction auction = auctionJpaRepository.save(Auction.builder()
@@ -96,9 +102,10 @@ public class AuctionService {
                         .name(dto.getName())
                         .category(Category.valueOf(dto.getCategory()))
                         .detail(dto.getDetail())
-                        .deposit(dto.getDeposit())
+                        .deposit((int)(dto.getInitValue() * 0.3))
                         .firstMemberId(-1)
                         .finishedAt(LocalDateTime.now().plusDays((dto.getDuration())))
+                        .firstBid(dto.getInitValue())
                         .secondBid(dto.getInitValue())
                         .build()
                 );
@@ -114,14 +121,13 @@ public class AuctionService {
 
         // i. 경매 참여자 존재 시, 판매자 보증금 회수 + 참여자에게 포인트 돌려주기
         if(isExistParticipant(auctionId)){
-            returnBuyerPoint(auctionId);
+            returnBuyerPointWhenGiveUp(auctionId, auction.getDeposit());
         }else{ // ii. 경매 참여자 존재 X 시, 판매자 보증금 회수
             returnSellerPoint(auctionId);
         }
 
         log.info("auctionId: " + auctionId + " kill");
         auction.kill();
-
         auctionJpaRepository.save(auction);
 
         log.info("inActivePost 삭제");
@@ -135,14 +141,29 @@ public class AuctionService {
     }
 
     /**
-     * 판매자 보증금 먹고, 입찰자에게 돌려주기
+     * 경매 중도 포기 - 판매자 보증금 먹고, 입찰자에게 돌려주기
      * @param auctionId
      */
-    public void returnBuyerPoint(int auctionId){
+    public void returnBuyerPointWhenGiveUp(int auctionId, int buyerDeposit){
         List<Member> members = memberRepository.findParticipantByAuctionId(auctionId);
 
         for(Member member : members){
-            member.increasePoint(deposit);
+            member.increasePoint(buyerDeposit);
+            memberRepository.save(member);
+        }
+    }
+
+    /**
+     * 경매 기간 만료 - 1등 빼고 입찰자에게 돌려주기
+     * @param auctionId
+     */
+    public void returnBuyerPointWhenExpired(int auctionId, int firstMemberId, int buyerDeposit){
+        List<Member> members = memberRepository.findParticipantByAuctionId(auctionId);
+
+        for(Member member : members){
+            if(member.getId() == firstMemberId) { continue; }
+
+            member.increasePoint(buyerDeposit);
             memberRepository.save(member);
         }
     }
@@ -155,7 +176,7 @@ public class AuctionService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 Auction"));
 
         Member member = auction.getMember();
-        member.increasePoint(auction.getDeposit());
+        member.increasePoint(deposit);
 
         memberRepository.save(member);
     }

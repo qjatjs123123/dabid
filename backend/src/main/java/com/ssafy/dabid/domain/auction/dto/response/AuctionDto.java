@@ -19,4 +19,6 @@ public class AuctionDto {
     private String detail;
     private int deposit;
     private boolean isFirstMember;
+    private boolean isOnwer;
+    private boolean isParticipant;
 }

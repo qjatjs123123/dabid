@@ -1,6 +1,6 @@
 package com.ssafy.dabid.domain.job.service;
 
-import com.ssafy.dabid.domain.job.component.DavidJob;
+import com.ssafy.dabid.domain.job.component.DabidJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -11,7 +11,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,7 +31,7 @@ public class QuartzSchedulerService {
         jobDataMap.put("auction", auctionId);
 
         // 3. 각각의 Job Schedule마다 세부설정이 다를 수 있기에 구분을 위한 JobDetail 생성
-        JobDetail jobDetail = JobBuilder.newJob(DavidJob.class)
+        JobDetail jobDetail = JobBuilder.newJob(DabidJob.class)
                 .withIdentity(jobId, "endAuctionJob")
                 .setJobData(jobDataMap)
                 .build();

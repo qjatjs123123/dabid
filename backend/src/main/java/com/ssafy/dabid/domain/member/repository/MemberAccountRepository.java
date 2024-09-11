@@ -5,8 +5,10 @@ import com.ssafy.dabid.domain.member.entity.MemberAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface MemberAccountRepository extends JpaRepository<MemberAccount, Integer> {
-    @Query("select count(m) from Member m " +
-            "inner join MemberAccount ma on m.id = ma.member.id ")
-    Integer findByMemberId(int memberId);
+    @Query("select ma from MemberAccount ma " +
+            "where ma.member.id = :memberId")
+    MemberAccount findByMemberId(int memberId);
 }

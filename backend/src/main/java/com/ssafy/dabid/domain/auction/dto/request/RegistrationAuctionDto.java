@@ -22,6 +22,5 @@ public class RegistrationAuctionDto {
     private List<String> hashTags;
     private long duration;
     private String detail;
-    private int deposit;
     private int initValue;
 }

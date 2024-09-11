@@ -35,8 +35,8 @@ public class BiddingController {
         int result = biddingService.bid(auctionId, bid);
 
         if(result == 0) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED); // 낙찰 유력자 탈환 실패
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK); // 낙찰 유력자 탈환 성공
     }
 }
