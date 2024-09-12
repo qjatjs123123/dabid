@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Setter
@@ -38,7 +40,7 @@ public class JwtUtils {
     public String createToken(String email, TokenType tokenType){
         Date now = new Date();
         int expiresIn = tokenType == TokenType.ACCESS ? accessTokenExpiresIn : refreshTokenExpiresIn;
-        Date expiredDate = new Date(now.getTime() + expiresIn);
+        Date expiredDate = Date.from(Instant.now().plus(expiresIn, ChronoUnit.SECONDS));
 
         JwtBuilder builder = Jwts.builder();
 

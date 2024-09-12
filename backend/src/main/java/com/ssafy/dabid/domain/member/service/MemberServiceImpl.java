@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public AuthResponseDto signUp(SignUpRequestDto dto) {
         Member member = Member
                 .builder()
@@ -44,12 +46,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public AuthResponseDto signIn(SignInRequestDto dto) {
         Member member = memberRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         if (passwordEncoder.matches(dto.getPassword(), member.getPassword())){
             String access = jwtUtils.createToken(member.getEmail(), TokenType.ACCESS);
             String refresh = jwtUtils.createToken(null, TokenType.REFRESH);
+            member.updateRefreshToken(refresh);
+
+            memberRepository.save(member);
 
             return new AuthResponseDto(access, refresh);
         }
@@ -57,6 +63,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void signOut(String email) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         member.updateRefreshToken(null);

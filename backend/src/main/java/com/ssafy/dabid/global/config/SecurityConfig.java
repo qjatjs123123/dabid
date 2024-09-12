@@ -1,27 +1,19 @@
 package com.ssafy.dabid.global.config;
 
-import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.global.filter.JwtAuthenticationFilter;
-import com.ssafy.dabid.global.handler.AuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,11 +25,11 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final AuthSuccessHandler authSuccessHandler;
+    private final JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        
+
         //보안 설정
         http
                 //corsConfigurationSource 기반으로 cors 허용
@@ -54,10 +46,11 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 //로그아웃 시 행동 설정
                 .logout(logout -> logout.logoutSuccessUrl("/")) //성공 시 메인페이지로 이동
-                //세션 사용 방식 설정 -> Rest API 서버에서는 불필요하므로 미사용 
+                //세션 사용 방식 설정 -> Rest API 서버에서는 불필요하므로 미사용
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 //사용자 지정 필터를 해당 필터 다음에 추가
+                .addFilterAfter(jsonUsernamePasswordAuthenticationFilter, LogoutFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
