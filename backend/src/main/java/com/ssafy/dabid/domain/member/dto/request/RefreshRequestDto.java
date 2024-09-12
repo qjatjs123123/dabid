@@ -1,7 +1,7 @@
 package com.ssafy.dabid.domain.member.dto.request;
 
-import lombok.Getter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignInRequestDto {
+public class RefreshRequestDto {
     private String email;
-    private String password;
+    private String refreshToken;
 }

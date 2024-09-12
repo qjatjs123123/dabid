@@ -65,10 +65,7 @@ public class JwtUtils {
                 .getPayload();
 
         Date expiredDate = payloads.getExpiration();
-        if(expiredDate.before(new Date()))
-            return null;
-
-        if(tokenType == TokenType.REFRESH)
+        if(expiredDate.before(new Date()) || tokenType.equals(TokenType.REFRESH))
             return null;
 
         return payloads.get("email", String.class);

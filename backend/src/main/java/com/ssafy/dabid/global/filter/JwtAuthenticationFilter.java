@@ -27,8 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     private static final String LOGIN_URL = "/api/member/sign-in";
-    private static final String HEADER_ACCESS = "Authorization";
-    private static final String HEADER_REFRESH = "Authorization-refresh";
+    private static final String AUTH_HEADER = "Authorization";
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -42,38 +41,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String accessToken = getToken(request, HEADER_ACCESS);
+            String accessToken = getAccessToken(request);
 
-            //유효한 액세스 토큰이 있으면
+            //유효한 액세스 토큰이 있으면 인가 처리
             if(StringUtils.hasText(accessToken)){
+                //TODO : 블랙리스트를 확인해 있으면 인가 진행
 
                 String email = jwtUtils.extractTokenIfValid(accessToken, TokenType.ACCESS);
                 if(StringUtils.hasText(email)
                         && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                    saveAuthentication(request, email, accessToken);
+                    saveAuthentication(request, email);
                 }
-                filterChain.doFilter(request, response);
-                return;
             }
-
-            //리퀘스트에서 리프레시 토큰을 추출
-            String refreshToken = getToken(request, HEADER_REFRESH);
-
-            //리프레시 토큰이 없을 경우
-            if(!StringUtils.hasText(refreshToken)){
-                //액세스 토큰이 있을 경우
-
-                filterChain.doFilter(request, response);
-                return;
-
-                //액세스 토큰도 없으면 인증에 실패한다
-            }
-            //리프레시 토큰이 있을 경우
-
-            //액세스 토큰을 추출
-
-            //토큰이 유효하면 액세스 토큰을 재발급한다
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -81,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void saveAuthentication(HttpServletRequest request, String username, String accessToken){
+    private void saveAuthentication(HttpServletRequest request, String username){
         UserDetails user = userDetailsService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -96,8 +76,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
-    private String getToken (HttpServletRequest request, String headerType){
-        String authorization = request.getHeader(headerType);
+    private String getAccessToken (HttpServletRequest request){
+        String authorization = request.getHeader(AUTH_HEADER);
 
         if(!StringUtils.hasText(authorization)) return null;
 

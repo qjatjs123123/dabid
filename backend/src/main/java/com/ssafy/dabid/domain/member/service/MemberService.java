@@ -1,13 +1,19 @@
 package com.ssafy.dabid.domain.member.service;
 
+import com.ssafy.dabid.domain.member.dto.request.CheckRequestDto;
+import com.ssafy.dabid.domain.member.dto.request.RefreshRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignInRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignUpRequestDto;
-import com.ssafy.dabid.domain.member.dto.response.AuthResponseDto;
+import com.ssafy.dabid.global.status.CommonResponseDto;
 
 public interface MemberService {
-    AuthResponseDto signUp(SignUpRequestDto dto);
+    CommonResponseDto signUp(SignUpRequestDto dto);
 
-    AuthResponseDto signIn(SignInRequestDto dto);
+    CommonResponseDto signIn(SignInRequestDto dto);
 
-    void signOut(String email);
+    CommonResponseDto signOut(String email);
+
+    CommonResponseDto refresh(RefreshRequestDto dto);
+
+    CommonResponseDto checkDuplicate(CheckRequestDto dto);
 }

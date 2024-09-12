@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -25,7 +24,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,15 +40,13 @@ public class SecurityConfig {
                 .formLogin(FormLoginConfigurer::disable)
                 //시큐리티를 적용/미적용할 url 지정
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/member/sign-in", "/api/member/sign-up", "/api/member/sign-out", "/error").permitAll()
+                        .requestMatchers("/api/member/auth/**", "/error").permitAll()
+                        .requestMatchers("/api/member/auth/sign-out").authenticated()
                         .anyRequest().authenticated())
-                //로그아웃 시 행동 설정
-                .logout(logout -> logout.logoutSuccessUrl("/")) //성공 시 메인페이지로 이동
                 //세션 사용 방식 설정 -> Rest API 서버에서는 불필요하므로 미사용
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 //사용자 지정 필터를 해당 필터 다음에 추가
-                .addFilterAfter(jsonUsernamePasswordAuthenticationFilter, LogoutFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

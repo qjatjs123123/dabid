@@ -1,34 +1,34 @@
 package com.ssafy.dabid.domain.member.controller;
 
+import com.ssafy.dabid.domain.member.dto.request.CheckRequestDto;
+import com.ssafy.dabid.domain.member.dto.request.RefreshRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignInRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignUpRequestDto;
 import com.ssafy.dabid.domain.member.service.MemberService;
+import com.ssafy.dabid.domain.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/member")
 @RequiredArgsConstructor
 public class MemberController {
 
-    private static final Logger log = LoggerFactory.getLogger(MemberController.class);
     private final MemberService memberService;
+    private final MemberServiceImpl memberServiceImpl;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/auth/sign-up")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto dto) {
         log.info("Sign Up for user with email : " + dto.getEmail());
         return ResponseEntity.ok(memberService.signUp(dto));
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/auth/sign-in")
     public ResponseEntity<?> signIn(@RequestBody SignInRequestDto dto){
         log.info("Sign In for user with email : " + dto.getEmail());
 
@@ -36,24 +36,29 @@ public class MemberController {
         return ResponseEntity.ok(memberService.signIn(dto));
     }
 
-    @PostMapping("/sign-out")
-    public ResponseEntity<?> signOut(@RequestBody Map<String, String> map){
+    @PostMapping("/auth/sign-out")
+    public ResponseEntity signOut(@RequestBody Map<String, String> map){
         String email = map.get("email");
         log.info("Sign Out for user with email : " + email);
         
         //리프레시 토큰을 삭제
-        memberService.signOut(email);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(memberService.signOut(email));
     }
 
-/*
-    @GetMapping("/random-nickname")
+    @PostMapping("/auth/refresh")
+    public ResponseEntity<?> refresh(@RequestBody RefreshRequestDto dto){
+        log.info("Refresh accessToken with refreshToken : " + dto.getRefreshToken());
+
+        return ResponseEntity.ok(memberService.refresh(dto));
+    }
+
+/*    @GetMapping("/random-nickname")
     public ResponseEntity<?> randomNickname(){
         //흠
-    }
-
-    @PostMapping("/check")
-    public ResponseEntity<?> checkDuplicate(@RequestBody Dto dto){
-
     }*/
+
+    @PostMapping("/auth/check")
+    public ResponseEntity<?> checkDuplicate(@RequestBody CheckRequestDto dto){
+        return ResponseEntity.ok(memberService.checkDuplicate(dto));
+    }
 }
