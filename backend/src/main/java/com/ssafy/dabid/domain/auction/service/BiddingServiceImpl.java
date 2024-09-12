@@ -30,7 +30,7 @@ public class BiddingServiceImpl implements BiddingService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
         /* 1. 요청한 사용자(member)와 참여 요청 경매(auction) 정보를 DB에서 가져온다. */
-        int memberId = 1;//SecurityUtil.getLoginUsername();
+        int memberId = 3;//SecurityUtil.getLoginUsername();
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
 
         /* 계좌 인증 확인 */
@@ -62,7 +62,7 @@ public class BiddingServiceImpl implements BiddingService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
         /* 1. 요청한 사용자(member)와 참여 포기 요청 경매(auction) 정보를 DB에서 가져온다. */
-        int memberId = 1; //SecurityUtil.getLoginUsername();
+        int memberId = 2; //SecurityUtil.getLoginUsername();
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
         
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
@@ -83,15 +83,15 @@ public class BiddingServiceImpl implements BiddingService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
         
         /* 1. 요청한 사용자(member) 정보를 경매 참여자 정보 DB(auction_info)에서 가져온다. */
-        int memberId = 1;//SecurityUtil.getLoginUsername();
+        int memberId = 3;//SecurityUtil.getLoginUsername();
         AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 AuctionInfo 입니다."));
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         auctionInfo.setBid(bid);
 
         /* 3. 사용자가 2nd price auction 경매 방식에서 입찰에 성공했는지 여부를 판단한다.  */
-        if (auction.getFirstBid() <= bid) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
-            if (auction.getSecondBid() > bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
+        if (auction.getFirstBid() >= bid) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
+            if (auction.getSecondBid() < bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
                 auction.setSecondBid(bid);
             }
             auctionJpaRepository.save(auction);

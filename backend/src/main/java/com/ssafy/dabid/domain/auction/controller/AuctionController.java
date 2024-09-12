@@ -28,7 +28,7 @@ public class AuctionController {
     @GetMapping("/{auctionId}")
     public ResponseEntity<?> getAuction(HttpServletRequest request, @PathVariable("auctionId") int auctionId){
 //        int memberId = Integer.parseInt((String) request.getAttribute("memberId"));
-        int memberId = 1;
+        int memberId = 2;
         return new ResponseEntity<>(service.getAuction(auctionId, memberId), HttpStatus.OK);
     }
 

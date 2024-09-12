@@ -95,6 +95,8 @@ public class AuctionService {
         if(member.getPoint() < deposit)
             throw new IllegalStateException("포인트가 충분하지 않습니다.");
 
+        member.decreasePoint(deposit);
+
         log.info("auction 저장");
         Auction auction = auctionJpaRepository.save(Auction.builder()
                 .title(dto.getTitle())
@@ -104,7 +106,7 @@ public class AuctionService {
                         .detail(dto.getDetail())
                         .deposit((int)(dto.getInitValue() * 0.3))
                         .firstMemberId(-1)
-                        .finishedAt(LocalDateTime.now().plusDays((dto.getDuration())))
+                        .finishedAt(LocalDateTime.now().plusSeconds((dto.getDuration())))
                         .firstBid(dto.getInitValue())
                         .secondBid(dto.getInitValue())
                         .build()
