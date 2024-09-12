@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class RegistrationAuctionDto {
     private String title;
-    private String name;
     private String category;
     private List<MultipartFile> images;
     private List<String> hashTags;

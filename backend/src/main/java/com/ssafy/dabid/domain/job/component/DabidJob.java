@@ -31,6 +31,8 @@ public class DabidJob implements Job {
     }
 
     private void endAuctionAndMakeDeal(int auctionId) {
+        log.info("스케쥴러 호출 - endAuctionAndMakeDeal 시작");
+
         // 경매 key를 통해 스케줄링을 실행할 경매를 알아냄
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
@@ -50,5 +52,7 @@ public class DabidJob implements Job {
 
         auction.kill();
         auctionJpaRepository.save(auction);
+
+        log.info("스케쥴러 호출 - endAuctionAndMakeDeal 종료");
     }
 }

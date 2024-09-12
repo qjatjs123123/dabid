@@ -64,16 +64,19 @@ public class AuctionService {
 
         AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElse(null);
 
+        int count = auctionInfoRepository.countByAuctionId(auctionId);
         log.info("Dto 변환");
         AuctionDto result = AuctionDto.builder()
                 .title(auction.getTitle())
-                .name(auction.getName())
                 .category(auction.getCategory().toString())
                 .detail(auction.getDetail())
                 .deposit(auction.getDeposit())
                 .isFirstMember(auction.getFirstMemberId() == memberId)
                 .isOnwer(auction.getMember().getId() == memberId)
                 .isParticipant(auctionInfo != null)
+                .person(count)
+                .finishedAt(auction.getFinishedAt())
+                .bid(auctionInfo != null ? auctionInfo.getBid() : 0)
                 .build();
 
         log.info("getAuction 종료");
@@ -101,7 +104,6 @@ public class AuctionService {
         Auction auction = auctionJpaRepository.save(Auction.builder()
                 .title(dto.getTitle())
                         .member(member)
-                        .name(dto.getName())
                         .category(Category.valueOf(dto.getCategory()))
                         .detail(dto.getDetail())
                         .deposit((int)(dto.getInitValue() * 0.3))

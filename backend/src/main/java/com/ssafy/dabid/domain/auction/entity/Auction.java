@@ -32,9 +32,6 @@ public class Auction extends BaseEntity {
     private String title;
 
     @Column
-    private String name;
-
-    @Column
     @Enumerated(EnumType.STRING)
     private Category category;
 

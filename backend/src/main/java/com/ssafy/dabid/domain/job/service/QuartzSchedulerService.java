@@ -4,6 +4,7 @@ import com.ssafy.dabid.domain.job.component.DabidJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -20,8 +23,12 @@ public class QuartzSchedulerService {
 
     private final Scheduler scheduler;
 
+    @Value("${spring.quartz.properties.org.quartz.threadPool.threadCount}")
+    private int threadCount;
+
     // 경매 진행 시간 만료
     public void endAuctionAndMakeDeal(int auctionId, LocalDateTime createdAt, LocalDateTime finishedAt) throws SchedulerException {
+        log.info("스케쥴러 생성 - endAuctionAndMakeDeal 시작");
 
         // 1. Trigger 고유 이름을 생성하기 위한 auction
         String jobId = "auction"+auctionId;
@@ -51,19 +58,47 @@ public class QuartzSchedulerService {
 
         // 6. jobSchedule을 trigger를 만족할 때 실행하도록 스케쥴러에 등록
         scheduler.scheduleJob(jobDetail, trigger);
+
+        log.info("스케쥴러 생성 - endAuctionAndMakeDeal 종료");
+
+        countJobScheduler();
     }
 
     // 경매 진행 시간 만료 시 실행되는 Job 삭제(Job에 연결된 Trigger도 같이 삭제 적용)
     public boolean deleteAuctionJob(int auctionId) throws SchedulerException {
+        log.info("deleteAuctionJob 시작");
+
         String jobId = "auction"+auctionId;
         JobKey jobKey = new JobKey(jobId, "endAuctionJob");
+
+        log.info("deleteAuctionJob 종료");
+
         return scheduler.deleteJob(jobKey);  // true -> 삭제 성공
     }
 
     // 경매 진행 시간 만료 시 실행되는 Trigger만 삭제(Job은 삭제 X)
     public boolean deleteAuctionTrigger(int auctionId) throws SchedulerException {
+        log.info("deleteAuctionTrigger 시작");
+
         String jobId = "auction"+auctionId;
         TriggerKey triggerKey = new TriggerKey("trigger-" + jobId, "timeoutTriggers");
+
+        log.info("deleteAuctionTrigger 끝");
+
         return scheduler.unscheduleJob(triggerKey);  // true -> 삭제 성공
+    }
+
+    public void countJobScheduler() throws SchedulerException {
+        log.info("countJobScheduler 시작");
+
+        List<String> jobGroupNames = scheduler.getJobGroupNames();
+        int jobCount = 0;
+        for (String groupName : jobGroupNames) {
+            Set<JobKey> jobKeys = scheduler.getJobKeys(org.quartz.impl.matchers.GroupMatcher.jobGroupEquals(groupName));
+            jobCount += jobKeys.size();
+        }
+        log.info("현재 생성된 스케쥴러는 " + jobCount + "/" + threadCount + "개입니다.");
+
+        log.info("countJobScheduler 종료");
     }
 }

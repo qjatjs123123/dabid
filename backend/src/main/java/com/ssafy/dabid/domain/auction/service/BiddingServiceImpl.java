@@ -27,22 +27,29 @@ public class BiddingServiceImpl implements BiddingService {
     // 경매 참여
     @Override
     public void joinBidding(int auctionId) {
+        log.info("joinBidding 시작");
+
+        log.info("참여 신청한 경매 조회");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
         /* 1. 요청한 사용자(member)와 참여 요청 경매(auction) 정보를 DB에서 가져온다. */
+        log.info("참여를 요청한 회원 조회");
         int memberId = 3;//SecurityUtil.getLoginUsername();
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
 
         /* 계좌 인증 확인 */
+        log.info("계좌 인증 여부 확인");
         if(!memberAccountRepository.findByMemberId(memberId).getIsActive())
             throw new IllegalStateException("계좌가 인증되지 않았습니다.");
 
         /* 포인트 확인 */
+        log.info("포인트 확인");
         if(member.getPoint() < auction.getDeposit())
             throw new IllegalStateException("포인트가 충분하지 않습니다.");
         member.decreasePoint(auction.getDeposit());
 
         /* 2. 경매 참여 정보를 DB(auction_Info)에 저장하기 위한 정보를 세팅한다. */
+        log.info("경매 참여 등록을 위한 데이터 생성");
         AuctionInfo auctionInfo = AuctionInfo.builder()
                 .auction(auction)
                 .bid(0)
@@ -54,49 +61,71 @@ public class BiddingServiceImpl implements BiddingService {
 
         /* 4. 경매 참여 정보를 DB(auction_Info)에 저장한다. */
         auctionInfoRepository.save(auctionInfo);
+
+        log.info("joinBidding 종료");
     }
 
     // 경매 참여 포기
     @Override
     public void giveUpBidding(int auctionId) {
+        log.info("giveUpBidding 시작");
+
+        log.info("참여 포기 신청한 경매 조회");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
         /* 1. 요청한 사용자(member)와 참여 포기 요청 경매(auction) 정보를 DB에서 가져온다. */
-        int memberId = 2; //SecurityUtil.getLoginUsername();
+        log.info("경매 참여 포기 신청한 회원 조회");
+        int memberId = 3; //SecurityUtil.getLoginUsername();
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
         
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
+        log.info("경매 참여 포기 가능 여부 확인");
         if(auction.getFirstMemberId() == memberId) {
             throw new IllegalArgumentException("1등 상태에서 참여 포기가 불가능합니다.");
         }
         AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 AuctionInfo 입니다."));
 
         /* 3. 사용자의 경매 참여 정보를 DB(auction_Info)서 삭제한다. */
+        log.info("경매 참여 기록 삭제 시작");
         member.increasePoint(auctionInfo.getAuction().getDeposit());
         memberRepository.save(member);
         auctionInfoRepository.delete(auctionInfo); //NoSQL 변경예정
+
+        log.info("giveUpBidding 종료");
     }
 
     // 입찰하기
     @Override
     public int bid(int auctionId, int bid) {
+        log.info("bid 시작");
+
+        log.info("경매 입찰 신청한 경매 조회");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
         
         /* 1. 요청한 사용자(member) 정보를 경매 참여자 정보 DB(auction_info)에서 가져온다. */
+        log.info("경매 입찰 신청한 회원 조회");
         int memberId = 3;//SecurityUtil.getLoginUsername();
         AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 AuctionInfo 입니다."));
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
+        log.info("입찰 신청한 회원의 입찰금 갱신 시작");
         auctionInfo.setBid(bid);
 
         /* 3. 사용자가 2nd price auction 경매 방식에서 입찰에 성공했는지 여부를 판단한다.  */
+        log.info("입찰 성공 여부 판단 시작");
         if (auction.getFirstBid() >= bid) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
+            log.info("입찰 실패! - 1등 입찰가보다 적은 입찰 금액!");
             if (auction.getSecondBid() < bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
+                log.info("2등 입찰가보다 높은 입찰 금액이므로 표기 2등 입찰가 수정");
                 auction.setSecondBid(bid);
             }
             auctionJpaRepository.save(auction);
+
+            log.info("bid 끝");
+
             return 0; // 유력 낙찰자 탈환 실패
         } else { // 1등 입찰가보다 높은 금액 입찰 시도
+            log.info("입찰 성공!");
             auction.setSecondBid(auction.getFirstBid());
             /*
             로직 - 기존 auction.getFirstMemberId()의 사용자에게 낙찰 유력 뺐김을 CoolSMS 알림
@@ -104,6 +133,9 @@ public class BiddingServiceImpl implements BiddingService {
             auction.setFirstMemberId(memberId);
             auction.setFirstBid(bid);
             auctionJpaRepository.save(auction);
+
+            log.info("bid 끝");
+
             return 1; // 유력 낙찰자 탈환 성공
         }
     }

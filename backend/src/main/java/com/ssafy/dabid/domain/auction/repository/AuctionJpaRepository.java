@@ -13,6 +13,6 @@ public interface AuctionJpaRepository extends JpaRepository<Auction, Integer> {
     @Query("select a from Auction a where a.isActive = true")
     List<Auction> findAllAuctions();
 
-    @Query("select a from Auction a where a.id = :id")
+    @Query("select a from Auction a where a.id = :id and a.isActive = true")
     Optional<Auction> findById(int id);
 }

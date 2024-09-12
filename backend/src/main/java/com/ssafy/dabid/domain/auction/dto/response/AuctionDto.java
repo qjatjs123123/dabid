@@ -2,6 +2,9 @@ package com.ssafy.dabid.domain.auction.dto.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * 해당 DTO는 Auction Entity에 대한 DTO로서 title, name,
  * category, detail, deposit, isFirstMember를 나타낸다.
@@ -13,12 +16,19 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuctionDto {
-    private String title;
-    private String name;
-    private String category;
-    private String detail;
-    private int deposit;
     private boolean isFirstMember;
     private boolean isOnwer;
     private boolean isParticipant;
+    private int deposit;
+    private int person;
+    private int bid;
+    private String title;
+    private String category;
+    private String detail;
+
+    private String profileImage;
+    private String nickname;
+
+    private LocalDateTime finishedAt;
+    private List<String> images;
 }

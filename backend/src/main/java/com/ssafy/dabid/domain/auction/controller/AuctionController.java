@@ -20,7 +20,7 @@ public class AuctionController {
     private final AuctionService service;
     private final S3Util s3Util;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAuctions(){
         return new ResponseEntity<>(service.getAuctions(), HttpStatus.OK);
     }
@@ -32,7 +32,7 @@ public class AuctionController {
         return new ResponseEntity<>(service.getAuction(auctionId, memberId), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> registPost(@RequestBody RegistrationAuctionDto dto) throws SchedulerException {
         //        int memberId = Integer.parseInt((String) request.getAttribute("memberId"));
         int memberId = 1;
