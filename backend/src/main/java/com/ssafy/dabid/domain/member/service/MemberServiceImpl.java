@@ -6,6 +6,7 @@ import com.ssafy.dabid.domain.member.dto.response.SignInResponseDto;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.entity.Role;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
+import com.ssafy.dabid.domain.member.repository.RandomNicknameMapper;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
 import com.ssafy.dabid.global.status.StatusMessage;
@@ -28,6 +29,7 @@ import java.util.function.Function;
 @Transactional
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final RandomNicknameMapper mapper;
 
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
