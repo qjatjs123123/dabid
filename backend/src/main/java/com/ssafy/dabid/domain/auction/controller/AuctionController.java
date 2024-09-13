@@ -33,7 +33,7 @@ public class AuctionController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> registPost(@RequestBody RegistrationAuctionDto dto) throws SchedulerException {
+    public ResponseEntity<?> registPost(@ModelAttribute RegistrationAuctionDto dto) throws SchedulerException {
         //        int memberId = Integer.parseInt((String) request.getAttribute("memberId"));
         int memberId = 1;
         service.registPost(dto, memberId);

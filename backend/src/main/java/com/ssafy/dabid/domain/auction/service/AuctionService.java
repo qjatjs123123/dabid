@@ -4,14 +4,17 @@ import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
 import com.ssafy.dabid.domain.auction.entity.Auction;
+import com.ssafy.dabid.domain.auction.entity.AuctionImage;
 import com.ssafy.dabid.domain.auction.entity.AuctionInfo;
 import com.ssafy.dabid.domain.auction.entity.Category;
+import com.ssafy.dabid.domain.auction.repository.AuctionImageRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.job.service.QuartzSchedulerService;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
+import com.ssafy.dabid.global.utils.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
@@ -31,9 +34,12 @@ public class AuctionService {
 
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionInfoRepository auctionInfoRepository;
+    private final AuctionImageRepository auctionImageRepository;
     private final MemberRepository memberRepository;
     private final MemberAccountRepository memberAccountRepository;
+
     private final QuartzSchedulerService schedulerService;
+    private final S3Util s3Util;
 
     public List<AuctionListDto> getAuctions(){
         log.info("getAuctions 시작");
@@ -47,7 +53,7 @@ public class AuctionService {
               AuctionListDto.builder()
                       .auctionId(auction.getId())
                       .title(auction.getTitle())
-                      .image(null)
+                      .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
                       .category(auction.getCategory().toString())
                       .build()
             );
@@ -63,6 +69,12 @@ public class AuctionService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 Auction"));
 
         AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElse(null);
+        List<AuctionImage> auctionImages = auctionImageRepository.findByAuction_Id(auctionId);
+        List<String> auctionImageUrls = new ArrayList<>();
+
+        for(AuctionImage auctionImage : auctionImages) {
+            auctionImageUrls.add(s3Util.generateFileUrl(auctionImage.getImageUrl()));
+        }
 
         int count = auctionInfoRepository.countByAuctionId(auctionId);
         log.info("Dto 변환");
@@ -77,6 +89,7 @@ public class AuctionService {
                 .person(count)
                 .finishedAt(auction.getFinishedAt())
                 .bid(auctionInfo != null ? auctionInfo.getBid() : 0)
+                .images(auctionImageUrls)
                 .build();
 
         log.info("getAuction 종료");
@@ -100,19 +113,34 @@ public class AuctionService {
 
         member.decreasePoint(deposit);
 
+        log.info("S3 이미지 가져오기");
+        List<String> imageList = s3Util.uploadFiles(dto.getImages());
+
         log.info("auction 저장");
-        Auction auction = auctionJpaRepository.save(Auction.builder()
+        Auction auction = Auction.builder()
                 .title(dto.getTitle())
-                        .member(member)
-                        .category(Category.valueOf(dto.getCategory()))
-                        .detail(dto.getDetail())
-                        .deposit((int)(dto.getInitValue() * 0.3))
-                        .firstMemberId(-1)
-                        .finishedAt(LocalDateTime.now().plusSeconds((dto.getDuration())))
-                        .firstBid(dto.getInitValue())
-                        .secondBid(dto.getInitValue())
-                        .build()
-                );
+                .member(member)
+                .category(Category.valueOf(dto.getCategory()))
+                .detail(dto.getDetail())
+                .deposit((int)(dto.getInitValue() * 0.3))
+                .firstMemberId(-1)
+                .finishedAt(LocalDateTime.now().plusSeconds((dto.getDuration())))
+                .firstBid(dto.getInitValue())
+                .secondBid(dto.getInitValue())
+                .thumbnail(imageList.get(0))
+                .build();
+
+        auction = auctionJpaRepository.save(auction);
+
+        log.info("경매 images 리스트 저장");
+        for(String image : imageList) {
+            auctionImageRepository.save(AuctionImage.builder()
+                    .auction(auction)
+                    .imageUrl(image)
+                    .build()
+            );
+        }
+
         log.info("registPost 종료");
 
         // QuartzSchedulerService에서 경매 종료일자에 동작하도록 스케줄링 설정

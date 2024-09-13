@@ -39,6 +39,9 @@ public class Auction extends BaseEntity {
     private String detail;
 
     @Column
+    private String thumbnail;
+
+    @Column
     private int deposit;
 
     @Column

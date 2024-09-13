@@ -14,6 +14,6 @@ import lombok.*;
 public class AuctionListDto {
     private int auctionId;
     private String title;
-    private String image;
+    private String thumbnail;
     private String category;
 }
