@@ -22,7 +22,24 @@ public class S3Util {
 
     private final AmazonS3 amazonS3;
 
-    // 파일 업로드
+    // 이미지 1개 업로드
+    public String uploadFile(MultipartFile multipartFile) {
+        String fileName = createFileName(multipartFile.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getSize());
+        objectMetadata.setContentType(multipartFile.getContentType());
+
+        try(InputStream inputStream = multipartFile.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        } catch(IOException e) {
+//            throw new BusinessException(ErrorCode.FILE_UPLOAD_ERROR, "파일 업로드에 실패했습니다.");
+        }
+
+        return fileName;
+    }
+
+    // 이미지 복수 업로드
     public List<String> uploadFiles(List<MultipartFile> multipartFile) {
         List<String> fileNameList = new ArrayList<>();
 
