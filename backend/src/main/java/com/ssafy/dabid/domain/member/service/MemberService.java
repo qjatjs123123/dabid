@@ -16,4 +16,6 @@ public interface MemberService {
     CommonResponseDto refresh(RefreshRequestDto dto);
 
     CommonResponseDto checkDuplicate(CheckRequestDto dto);
+
+    CommonResponseDto generateNickname();
 }

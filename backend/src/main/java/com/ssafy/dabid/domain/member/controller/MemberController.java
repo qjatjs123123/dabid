@@ -52,10 +52,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.refresh(dto));
     }
 
-/*    @GetMapping("/random-nickname")
+    @GetMapping("/auth/random-nickname")
     public ResponseEntity<?> randomNickname(){
-        //흠
-    }*/
+        return ResponseEntity.ok(memberService.generateNickname());
+    }
 
     @PostMapping("/auth/check")
     public ResponseEntity<?> checkDuplicate(@RequestBody CheckRequestDto dto){

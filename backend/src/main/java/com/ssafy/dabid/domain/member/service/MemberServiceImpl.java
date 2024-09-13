@@ -1,6 +1,7 @@
 package com.ssafy.dabid.domain.member.service;
 
 import com.ssafy.dabid.domain.member.dto.request.*;
+import com.ssafy.dabid.domain.member.dto.response.RandomNicknameResponseDto;
 import com.ssafy.dabid.domain.member.dto.response.RefreshResponseDto;
 import com.ssafy.dabid.domain.member.dto.response.SignInResponseDto;
 import com.ssafy.dabid.domain.member.entity.Member;
@@ -33,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
+    private final RandomNicknameMapper randomNicknameMapper;
 
     private Map<ValueType, Function<String, Optional<?>>> checkFunctions;
     private Map<ValueType, Pair<String, String>> responseMappings;
@@ -64,6 +66,7 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         //TODO : 금융망 API를 통해 userKey 등록
+        randomNicknameMapper.updateUsed(dto.getNickname());
 
         memberRepository.save(member);
 
@@ -121,5 +124,16 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return CommonResponseDto.fail();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CommonResponseDto generateNickname() {
+        try {
+            return new RandomNicknameResponseDto(mapper.selectRandomNickname());
+        } catch (Exception e){
+            return CommonResponseDto.fail();
+        }
+
     }
 }
