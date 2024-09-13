@@ -69,4 +69,12 @@ public class Member extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return this.getIsActive();
     }
+
+    public void increasePoint(int value){
+        this.point += value;
+    }
+
+    public void decreasePoint(int value){
+        this.point -= value;
+    }
 }
