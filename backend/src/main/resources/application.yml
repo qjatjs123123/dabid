@@ -2,6 +2,11 @@ spring:
   application:
     name: dabid
 
+  # Scheduler ThreadCount
+  quartz:
+    properties:
+      org.quartz.threadPool.threadCount: 20
+
   # MySQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,8 +26,45 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: 'true'
+  #Security
+  security:
+    user:
+      name: admin
+      password: dabid
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+jwt:
+  key: /PrvvKm+CrnZUHBxKhqQNzhvN0QxnhGB1OzR1tV19yM=
+  access:
+    time: 10800
+  refresh:
+    time: 2592000
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA6GBMGEM7RJN3IVWT
+      secret-key: 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
+    s3:
+      bucket: dabid-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 server:
   servlet:
     encoding:
       enabled: 'true'
+
+  data:
+    mongodb:
+#      uri: mongodb://root:dabid@mongo:27017/dabid?authSource=admin
+
+point:
+  buy:
+    deposit: 5000
+
+

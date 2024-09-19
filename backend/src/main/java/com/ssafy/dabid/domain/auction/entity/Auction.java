@@ -25,17 +25,21 @@ public class Auction extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Member member;
 
     @Column
     private String title;
 
     @Column
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @Column
     private String detail;
+
+    @Column
+    private String thumbnail;
 
     @Column
     private int deposit;
@@ -53,4 +57,3 @@ public class Auction extends BaseEntity {
     private LocalDateTime finishedAt;
 
 }
-

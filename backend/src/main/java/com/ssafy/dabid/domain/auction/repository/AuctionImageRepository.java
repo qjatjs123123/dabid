@@ -1,9 +1,13 @@
 package com.ssafy.dabid.domain.auction.repository;
 
-import com.ssafy.dabid.domain.auction.entity.Auction;
-import com.ssafy.dabid.domain.auction.entity.Auction_Image;
+import com.ssafy.dabid.domain.auction.entity.AuctionImage;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AuctionImageRepository extends JpaRepository<Auction_Image, Integer> {
-    Auction_Image findFirstByAuctionOrderByIdAsc(Auction auction);
+import java.util.List;
+
+@Repository
+public interface AuctionImageRepository extends JpaRepository<AuctionImage, Integer> {
+
+    List<AuctionImage> findByAuction_Id(int auctionId);
 }
