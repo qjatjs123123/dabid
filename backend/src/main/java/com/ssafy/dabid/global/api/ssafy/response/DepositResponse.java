@@ -2,17 +2,18 @@ package com.ssafy.dabid.global.api.ssafy.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
+import lombok.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class DepositResponse<T>{
-    @JsonProperty("Header")
-    private T Header;
+@Getter
+@Setter
+public class DepositResponse extends SsafyApiResponse {
+    @Getter
+    @Setter
+    public static class Rec {
+        private String transactionUniqueNo;
+        private String transactionDate;
+    }
 }

@@ -4,6 +4,8 @@ import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import com.ssafy.dabid.global.api.ssafy.request.*;
 import com.ssafy.dabid.global.api.ssafy.response.AccountBalanceResponse;
+import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
+import com.ssafy.dabid.global.api.ssafy.response.DepositResponse;
 import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -20,8 +22,8 @@ public class SsafyApiClient {
     private static String baseURL = "https://finopenapi.ssafy.io/ssafy/api/v1";
 
     // 개인 계좌 생성
-    public SsafyApiResponse createAccount(CreateAccountRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/createDemandDepositAccount", request, SsafyApiResponse.class);
+    public CreateAccountResponse createAccount(CreateAccountRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/createDemandDepositAccount", request, CreateAccountResponse.class);
     }
 
     // 유저키 발급
@@ -30,13 +32,13 @@ public class SsafyApiClient {
     }
 
     // 계좌 입금
-    public SsafyApiResponse depositIn(DepositRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountDeposit", request, SsafyApiResponse.class);
+    public DepositResponse depositIn(DepositRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountDeposit", request, DepositResponse.class);
     }
 
     // 계좌 출금
-    public SsafyApiResponse depositOut(DepositRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", request, SsafyApiResponse.class);
+    public DepositResponse depositOut(DepositRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", request, DepositResponse.class);
     }
 
     // 거래 내역 조회
@@ -51,6 +53,7 @@ public class SsafyApiClient {
 
     private <T> T getSsafyApiResponse(String path, CommonApiRequest ssafyApiRequest, Class<T> responseType) {
         String serializedString = serializeToJson(ssafyApiRequest);
+        System.out.println(serializedString);
 
         return webClient.mutate()
                 .baseUrl(baseURL)
