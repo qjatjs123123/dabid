@@ -50,12 +50,12 @@ public class AuctionService {
         List<AuctionListDto> results = new ArrayList<>();
         for (Auction auction : auctions){
             results.add(
-              AuctionListDto.builder()
-                      .auctionId(auction.getId())
-                      .title(auction.getTitle())
-                      .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
-                      .category(auction.getCategory().toString())
-                      .build()
+                    AuctionListDto.builder()
+                            .auctionId(auction.getId())
+                            .title(auction.getTitle())
+                            .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
+                            .category(auction.getCategory().toString())
+                            .build()
             );
         }
 
