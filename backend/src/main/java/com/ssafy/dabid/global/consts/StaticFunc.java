@@ -2,6 +2,7 @@ package com.ssafy.dabid.global.consts;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 
@@ -36,7 +37,7 @@ public class StaticFunc {
         return date + hour + getNextSerialNumber();
     }
 
-    public static String serializeToJson(SsafyApiRequest ssafyApiRequest) {
+    public static String serializeToJson(CommonApiRequest ssafyApiRequest) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {

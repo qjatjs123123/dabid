@@ -10,4 +10,5 @@ public class StaticConst {
 
     // code
     public static final String SELELCT_ACCOUNT_BALANCE_CODE = "inquireDemandDepositAccountBalance";
+    public static final String CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE = "createDemandDepositAccount";
 }

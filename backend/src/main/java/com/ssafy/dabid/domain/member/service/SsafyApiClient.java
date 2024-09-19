@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.member.service;
 
+import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,11 @@ public class SsafyApiClient {
     private final WebClient webClient;
     private static String baseURL = "https://finopenapi.ssafy.io/ssafy/api/v1";
 
-    public SsafyApiResponse getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest) {
+    public CreateAccountResponse createAccount(CreateAccountRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/createDemandDepositAccount", request, CreateAccountResponse.class);
+    }
+
+    private <T> T getSsafyApiResponse(String path, CommonApiRequest ssafyApiRequest, Class<T> responseType) {
         String serialLizeString = serializeToJson(ssafyApiRequest);
         System.out.println("serialLizeString = " + serialLizeString);
 
@@ -24,12 +29,32 @@ public class SsafyApiClient {
                 .baseUrl(baseURL)
                 .build()
                 .post()
-                .uri("/{path}", path)
+                .uri(uriBuilder -> uriBuilder.path(path).build())
                 .bodyValue(serialLizeString)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse ->
                         Mono.just(new RuntimeException("error")))
-                .bodyToMono(SsafyApiResponse.class)
+                .bodyToMono(responseType)
                 .block();
     }
+
+//    public SsafyApiResponse getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest) {
+//        String serialLizeString = serializeToJson(ssafyApiRequest);
+//        System.out.println("serialLizeString = " + serialLizeString);
+//
+//        return webClient.mutate()
+//                .baseUrl(baseURL)
+//                .build()
+//                .post()
+//                .uri("/{path}", path)
+//                .bodyValue(serialLizeString)
+//                .retrieve()
+//                .onStatus(HttpStatusCode::isError, clientResponse ->
+//                        Mono.just(new RuntimeException("error")))
+//                .bodyToMono(SsafyApiResponse.class)
+//                .block();
+//    }
+//
+
+
 }
