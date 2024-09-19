@@ -2,6 +2,10 @@ package com.ssafy.dabid.domain.member.service;
 
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
+import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
+import com.ssafy.dabid.global.api.ssafy.request.*;
+import com.ssafy.dabid.global.api.ssafy.response.AccountBalanceResponse;
+import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

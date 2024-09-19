@@ -1,10 +1,9 @@
-package com.ssafy.dabid.domain.member.service;
+package com.ssafy.dabid.global.api.ssafy.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import lombok.*;
-import net.minidev.json.JSONObject;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

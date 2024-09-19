@@ -1,4 +1,4 @@
-package com.ssafy.dabid.domain.member.service;
+package com.ssafy.dabid.global.api.ssafy.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DepositResponse<T>{
-    @JsonProperty("Header")
-    private T Header;
+public class CreateAccountResponse<T>{
+    @JsonProperty("REC")
+    private T REC;
 }

@@ -1,4 +1,4 @@
-package com.ssafy.dabid.domain.member.service;
+package com.ssafy.dabid.global.api.ssafy.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,11 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DepositRequest extends CommonApiRequest {
+public class CreateAccountRequest extends CommonApiRequest {
     @JsonProperty("Header")
     private SsafyApiHeaderRequest header;
 
-    private String accountNo;
-    private String transactionBalance;
-    private final String transactionSummary = "다비드";
+    private final String accountTypeUniqueNo = "001-1-70ebcf49336a47";
 }

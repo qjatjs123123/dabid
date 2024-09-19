@@ -1,17 +1,17 @@
-package com.ssafy.dabid.domain.member.service;
+package com.ssafy.dabid.global.api.ssafy;
 
 import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
+import com.ssafy.dabid.global.api.ssafy.request.*;
+import com.ssafy.dabid.global.api.ssafy.response.AccountBalanceResponse;
+import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
-import static com.ssafy.dabid.global.consts.StaticFunc.*;
+import static com.ssafy.dabid.global.consts.StaticFunc.serializeToJson;
 
 @Component
 @RequiredArgsConstructor
@@ -23,17 +23,6 @@ public class SsafyApiClient {
     public SsafyApiResponse createAccount(CreateAccountRequest request) {
         return getSsafyApiResponse("/edu/demandDeposit/createDemandDepositAccount", request, SsafyApiResponse.class);
     }
-//    public apiResponse1 callApi1(){
-//        getSsafyApiResponse(path1, requestDto1, responseType1.class);
-//    }
-//
-//    public apiResponse2 callApi2(){
-//        getSsafyApiResponse(path2, requestDto2, responseType2.class);
-//    }
-//
-/*    public SsafyApiResponse getUserkey(SsafyApiRequest request){
-        return getSsafyApiResponse("member", request, SsafyApiResponse.class);
-    }*/
 
     // 유저키 발급
     public GetUserKeyResponse registerUserKey(GetUserKeyRequest request) {
@@ -61,38 +50,18 @@ public class SsafyApiClient {
     }
 
     private <T> T getSsafyApiResponse(String path, CommonApiRequest ssafyApiRequest, Class<T> responseType) {
-        String serialLizeString = serializeToJson(ssafyApiRequest);
+        String serializedString = serializeToJson(ssafyApiRequest);
 
         return webClient.mutate()
                 .baseUrl(baseURL)
                 .build()
                 .post()
                 .uri(uriBuilder -> uriBuilder.path(path).build())
-                .bodyValue(serialLizeString)
+                .bodyValue(serializedString)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse ->
                         Mono.just(new RuntimeException("error")))
                 .bodyToMono(responseType)
                 .block();
     }
-
-//    public SsafyApiResponse getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest) {
-//        String serialLizeString = serializeToJson(ssafyApiRequest);
-//        System.out.println("serialLizeString = " + serialLizeString);
-//
-//        return webClient.mutate()
-//                .baseUrl(baseURL)
-//                .build()
-//                .post()
-//                .uri("/{path}", path)
-//                .bodyValue(serialLizeString)
-//                .retrieve()
-//                .onStatus(HttpStatusCode::isError, clientResponse ->
-//                        Mono.just(new RuntimeException("error")))
-//                .bodyToMono(SsafyApiResponse.class)
-//                .block();
-//    }
-//
-
-
 }
