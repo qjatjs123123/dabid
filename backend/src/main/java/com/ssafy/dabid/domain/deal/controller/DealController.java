@@ -1,6 +1,7 @@
 package com.ssafy.dabid.domain.deal.controller;
 
 import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
+import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
 import com.ssafy.dabid.domain.deal.service.DealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,10 @@ public class DealController {
 
 
     @PostMapping("/account/seller/{deal-id}")
-    public void selectSellerAccount(@PathVariable("deal-id") int dealId) {
-        dealService.findSellerAccount(dealId, 2);
+    public InquireDemandDepositAccountBalance selectSellerAccount(@PathVariable("deal-id") int dealId) {
+        return dealService.findSellerAccount(dealId, 2);
     }
+
     @GetMapping("/list")
     public ResponseEntity<List<DealResponseDto>> listDeal(){
 //        String email = SecurityUtil.getLoginUsername();

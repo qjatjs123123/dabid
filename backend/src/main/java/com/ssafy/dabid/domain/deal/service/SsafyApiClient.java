@@ -14,9 +14,10 @@ import static com.ssafy.dabid.global.consts.StaticFunc.*;
 @RequiredArgsConstructor
 public class SsafyApiClient {
     private final WebClient webClient;
-    private static String baseURL = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit";
+    private static final String baseURL = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit";
 
-    public SsafyApiResponse getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest) {
+    // 수정된 메서드
+    public <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
         String serialLizeString = serializeToJson(ssafyApiRequest);
 
         return webClient.mutate()
@@ -27,8 +28,8 @@ public class SsafyApiClient {
                 .bodyValue(serialLizeString)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse ->
-                        Mono.just(new RuntimeException("error")))
-                .bodyToMono(SsafyApiResponse.class)
+                        Mono.error(new RuntimeException("Error response received")))
+                .bodyToMono(responseType)
                 .block();
     }
 }
