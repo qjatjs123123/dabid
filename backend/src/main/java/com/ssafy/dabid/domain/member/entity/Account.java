@@ -4,6 +4,8 @@ import com.ssafy.dabid.global.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,5 +25,7 @@ public class Account extends BaseEntity {
     @Column
     private String account_number;
 
+    @Column
+    private LocalDateTime modified_at;
 }
 
