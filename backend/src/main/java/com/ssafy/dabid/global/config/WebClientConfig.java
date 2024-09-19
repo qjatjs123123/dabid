@@ -12,9 +12,11 @@ import reactor.netty.http.client.HttpClient;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static com.ssafy.dabid.global.consts.StaticConst.*;
-import static org.springframework.http.HttpHeaders.*;
-import static org.springframework.http.MediaType.*;
+import static com.ssafy.dabid.global.consts.StaticConst.MAX_MEMORY_SIZE;
+import static com.ssafy.dabid.global.consts.StaticConst.ONE_MINUTE;
+import static org.springframework.http.HttpHeaders.ACCEPT;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Configuration
 public class WebClientConfig {
@@ -39,6 +41,9 @@ public class WebClientConfig {
                         )
                 )
                 .build();
+//        return WebClient.builder()
+//                .baseUrl("https://finopenapi.ssafy.io/ssafy/api/v1")
+//                .build();
     }
 
 }
