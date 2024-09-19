@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,35 +35,37 @@ public class BiddingServiceImpl implements BiddingService {
 
         /* 1. 요청한 사용자(member)와 참여 요청 경매(auction) 정보를 DB에서 가져온다. */
         log.info("참여를 요청한 회원 조회");
-        int memberId = 3;//SecurityUtil.getLoginUsername();
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
+//        int memberId = 3;//SecurityUtil.getLoginUsername();
+//        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info(email);
 
-        /* 계좌 인증 확인 */
-        log.info("계좌 인증 여부 확인");
-        if(!memberAccountRepository.findByMemberId(memberId).getIsActive())
-            throw new IllegalStateException("계좌가 인증되지 않았습니다.");
-
-        /* 포인트 확인 */
-        log.info("포인트 확인");
-        if(member.getPoint() < auction.getDeposit())
-            throw new IllegalStateException("포인트가 충분하지 않습니다.");
-        member.decreasePoint(auction.getDeposit());
-
-        /* 2. 경매 참여 정보를 DB(auction_Info)에 저장하기 위한 정보를 세팅한다. */
-        log.info("경매 참여 등록을 위한 데이터 생성");
-        AuctionInfo auctionInfo = AuctionInfo.builder()
-                .auction(auction)
-                .bid(0)
-                .member(member)
-                .build();
-
-        /* 3. 사용자(member)가 경매 입장비를 지불할 수 있는지 확인하고 포인트를 차감한다. */
-        memberRepository.save(member);
-
-        /* 4. 경매 참여 정보를 DB(auction_Info)에 저장한다. */
-        auctionInfoRepository.save(auctionInfo);
-
-        log.info("joinBidding 종료");
+//        /* 계좌 인증 확인 */
+//        log.info("계좌 인증 여부 확인");
+//        if(!memberAccountRepository.findByMemberId(memberId).getIsActive())
+//            throw new IllegalStateException("계좌가 인증되지 않았습니다.");
+//
+//        /* 포인트 확인 */
+//        log.info("포인트 확인");
+//        if(member.getPoint() < auction.getDeposit())
+//            throw new IllegalStateException("포인트가 충분하지 않습니다.");
+//        member.decreasePoint(auction.getDeposit());
+//
+//        /* 2. 경매 참여 정보를 DB(auction_Info)에 저장하기 위한 정보를 세팅한다. */
+//        log.info("경매 참여 등록을 위한 데이터 생성");
+//        AuctionInfo auctionInfo = AuctionInfo.builder()
+//                .auction(auction)
+//                .bid(0)
+//                .member(member)
+//                .build();
+//
+//        /* 3. 사용자(member)가 경매 입장비를 지불할 수 있는지 확인하고 포인트를 차감한다. */
+//        memberRepository.save(member);
+//
+//        /* 4. 경매 참여 정보를 DB(auction_Info)에 저장한다. */
+//        auctionInfoRepository.save(auctionInfo);
+//
+//        log.info("joinBidding 종료");
     }
 
     // 경매 참여 포기
