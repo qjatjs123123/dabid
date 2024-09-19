@@ -1,33 +1,24 @@
 package com.ssafy.dabid.domain.deal.service;
 
-import com.ssafy.dabid.domain.auction.entity.Auction;
-import com.ssafy.dabid.domain.auction.entity.Auction_Image;
 import com.ssafy.dabid.domain.auction.repository.AuctionImageRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
-import com.ssafy.dabid.domain.deal.dto.request.CreateDepositAccountRequestDto;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
-import com.ssafy.dabid.domain.deal.dto.response.CreateDepositAccountResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
-import com.ssafy.dabid.domain.deal.entity.Account;
+import com.ssafy.dabid.domain.member.entity.Account;
 import com.ssafy.dabid.domain.deal.entity.Deal;
 import com.ssafy.dabid.domain.deal.entity.Status;
-import com.ssafy.dabid.domain.deal.repository.AccountRepository;
 import com.ssafy.dabid.domain.deal.repository.DealRepository;
 import com.ssafy.dabid.domain.member.entity.Member;
+import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static com.ssafy.dabid.global.consts.StaticConst.SELELCT_ACCOUNT_BALANCE_CODE;
 import static com.ssafy.dabid.global.consts.StaticFunc.getSsafyApiHeaderRequest;
@@ -37,12 +28,12 @@ import static com.ssafy.dabid.global.consts.StaticFunc.getSsafyApiHeaderRequest;
 @RequiredArgsConstructor
 public class DealServiceImpl implements DealService {
     private final SsafyApiClient ssafyApiClient;
-    private final AccountRepository accountRepository;
     private final DealRepository dealRepository;
     private final WebClient webClient;
     private final MemberRepository memberRepository;
     private final AuctionRepository auctionRepository;
     private final AuctionImageRepository auctionImageRepository;
+    private final MemberAccountRepository memberAccountRepository;
 
     @Override
     public void findSellerAccount(int dealId, int userKey) {
@@ -54,7 +45,7 @@ public class DealServiceImpl implements DealService {
         Deal deal = dealRepository.findById(dealId);
         int sellerId = deal.getSeller().getId();
 
-        Account userAccount = accountRepository.findByMember_Id(sellerId);
+        Account userAccount = memberAccountRepository.findByMemberId(sellerId);
         SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
                 .header(ssafyApiHeaderRequest)
                 .accountNo(userAccount.getAccount_number())
