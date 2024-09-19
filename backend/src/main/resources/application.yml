@@ -63,6 +63,20 @@ server:
     mongodb:
 #      uri: mongodb://root:dabid@mongo:27017/dabid?authSource=admin
 
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: dabid
+
 point:
   buy:
     deposit: 5000
