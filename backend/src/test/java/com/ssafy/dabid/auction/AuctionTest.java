@@ -39,12 +39,12 @@ public class AuctionTest {
     static void before() {
         member = Member.builder()
                 .id(1)
-                .name("Dummy")
+                //.name("Dummy")
                 .build();
 
         auction1 = Auction.builder()
                 .id(1)
-                .name("auction1")
+                //.name("auction1")
                 .title("title1")
                 .category(Category.A)
                 .member(member)
@@ -52,7 +52,7 @@ public class AuctionTest {
 
         auction2 = Auction.builder()
                 .id(2)
-                .name("auction2")
+                //.name("auction2")
                 .title("titl2")
                 .category(Category.B)
                 .member(member)
@@ -60,7 +60,7 @@ public class AuctionTest {
 
         auction3 = Auction.builder()
                 .id(3)
-                .name("auction3")
+                //.name("auction3")
                 .title("title3")
                 .category(Category.C)
                 .member(member)
