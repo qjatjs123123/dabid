@@ -18,6 +18,8 @@ public class Account {
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
+
+    
     @Column
     private String account_number;
 
