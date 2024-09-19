@@ -30,5 +30,10 @@ class SsafyApiClientTest {
 
         CreateAccountResponse response = ssafyApiClient.createAccount(createAccountRequest);
         System.out.println("response = " + response.getREC());
+
+    void 유저키받기(){
+        SsafyApiRequest request = new SsafyApiRequest(apiKey, "xorjsghkd1015@gmail.com");
+        SsafyApiResponse ssafyApiResponse = ssafyApiClient.getUserkey(request);
+        System.out.println("ssafyApiResponse.getREC() = " + ssafyApiResponse.getUserKey());
     }
 }

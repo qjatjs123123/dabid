@@ -2,6 +2,7 @@ package com.ssafy.dabid.domain.deal.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.dabid.domain.member.dto.request.CommonApiRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SsafyApiRequest {
+public class SsafyApiRequest extends CommonApiRequest {
 //    @JsonProperty("Header")
 //    private SsafyApiHeaderRequest header;
 

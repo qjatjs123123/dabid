@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SsafyApiResponse<T> {
-    @JsonProperty("userKey")
+    @JsonProperty("REC")
     private T REC;
 }
