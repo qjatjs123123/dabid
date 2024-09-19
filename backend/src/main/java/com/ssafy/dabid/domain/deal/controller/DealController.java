@@ -5,10 +5,7 @@ import com.ssafy.dabid.domain.deal.service.DealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,9 +13,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/deal")
 public class DealController {
-
     private final DealService dealService;
 
+    // Spring Security로 ID받아오는 함수
+    public String getCurrentMemberUserKey() {
+        return "feacdeaf-54a3-48f2-b9dc-93368666b86c";
+    }
+
+
+    @PostMapping("/account/seller/{deal-id}")
+    public void selectSellerAccount(@PathVariable("deal-id") int dealId) {
+        dealService.findSellerAccount(dealId, 2);
+    }
     @GetMapping("/list")
     public ResponseEntity<List<DealResponseDto>> listDeal(){
 //        String email = SecurityUtil.getLoginUsername();
@@ -43,5 +49,4 @@ public class DealController {
         String email = "abc@naver.com";
         dealService.createDeal(1, email);
     }
-
 }

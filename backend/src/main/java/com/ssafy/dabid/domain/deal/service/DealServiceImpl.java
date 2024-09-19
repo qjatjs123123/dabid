@@ -5,10 +5,14 @@ import com.ssafy.dabid.domain.auction.entity.Auction_Image;
 import com.ssafy.dabid.domain.auction.repository.AuctionImageRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.deal.dto.request.CreateDepositAccountRequestDto;
-import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
+import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
+import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.CreateDepositAccountResponseDto;
+import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
+import com.ssafy.dabid.domain.deal.entity.Account;
 import com.ssafy.dabid.domain.deal.entity.Deal;
 import com.ssafy.dabid.domain.deal.entity.Status;
+import com.ssafy.dabid.domain.deal.repository.AccountRepository;
 import com.ssafy.dabid.domain.deal.repository.DealRepository;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
@@ -25,91 +29,113 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static com.ssafy.dabid.global.consts.StaticConst.SELELCT_ACCOUNT_BALANCE_CODE;
+import static com.ssafy.dabid.global.consts.StaticFunc.getSsafyApiHeaderRequest;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class DealServiceImpl implements DealService {
-
-    private final WebClient webClient;
+    private final SsafyApiClient ssafyApiClient;
+    private final AccountRepository accountRepository;
     private final DealRepository dealRepository;
+    private final WebClient webClient;
     private final MemberRepository memberRepository;
     private final AuctionRepository auctionRepository;
     private final AuctionImageRepository auctionImageRepository;
 
     @Override
+    public void findSellerAccount(int dealId, int userKey) {
+        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
+                SELELCT_ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
+                "937d7d39-eccc-4741-bf54-af154e279537" //임시 나중에 Security에서 멤버에서 가져올것
+        );
+        Deal deal = dealRepository.findById(dealId);
+        int sellerId = deal.getSeller().getId();
+
+        Account userAccount = accountRepository.findByMember_Id(sellerId);
+        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
+                .header(ssafyApiHeaderRequest)
+                .accountNo(userAccount.getAccount_number())
+                .build();
+        ssafyApiClient.getSsafyApiResponse(SELELCT_ACCOUNT_BALANCE_CODE, ssafyApiRequest);
+    }
+
+    @Override
     public void createDeal(int auctionId, String email) {
 
         // 계좌 생성 SSAFY API 호출
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
-        String userKey = member.getUser_key();
-        log.info("userKey = {}", userKey);
-
-        LocalDateTime now = LocalDateTime.now();
-        String transmissionDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String transmissionTime = now.format(DateTimeFormatter.ofPattern("HHmmss"));
-        String uniqueId = generateUniqueTransactionId(transmissionDate, transmissionTime);
-        log.info("Date = {}", transmissionDate);
-        log.info("Time = {}", transmissionTime);
-        log.info("uniqueId = {}", uniqueId);
-
-        CreateDepositAccountRequestDto.HeaderDto headerDto = CreateDepositAccountRequestDto.HeaderDto.builder()
-                .apiName("createDemandDepositAccount")
-                .transmissionDate(transmissionDate)
-                .transmissionTime(transmissionTime)
-                .institutionCode("00100")
-                .fintechAppNo("001")
-                .apiServiceCode("createDemandDepositAccount")
-                .institutionTransactionUniqueNo(uniqueId)
-                .apiKey("931bc6f77a3f40b4bae76c32f9270080")
-                .userKey(userKey)
-                .build();
-
-        CreateDepositAccountRequestDto requestDto = CreateDepositAccountRequestDto.builder()
-                .header(headerDto)
-                .accountTypeUniqueNo("001-1-70ebcf49336a47")
-                .build();
-
-        try {
-            // 외부 API 호출
-            CreateDepositAccountResponseDto response = createDepositAccount(requestDto);
-            log.info("API 호출 성공");
-
-            Auction auction = auctionRepository.findById(auctionId)
-                    .orElseThrow(() -> new RuntimeException("해당 경매가 존재하지 않습니다."));
-
-            Member buyer = memberRepository.findById(auction.getFirstMemberId())
-                    .orElseThrow(() -> new RuntimeException("해당 구매자가 존재하지 않습니다."));
-
-            Auction_Image image = auctionImageRepository.findFirstByAuctionOrderByIdAsc(auction);
-            if (image == null) {
-                throw new RuntimeException("해당 경매에 이미지가 존재하지 않습니다.");
-            }
-
-            // 거래 데이터 생성
-            Deal deal = Deal.builder()
-                    .seller(auction.getMember())
-                    .buyer(buyer)
-                    .title(auction.getTitle())
-                    .image(image.getImage())
-                    .winning_bid(auction.getSecondBid())
-                    .deposit(auction.getDeposit())
-                    .status(Status.BID_SUCCESS)
-                    .detail(auction.getDetail())
-                    .account(response.getRec().getAccountNo())
-                    .build();
-            dealRepository.save(deal);
-
-        } catch (Exception e) {
-            log.error("API 호출 실패", e);
-            throw new RuntimeException("거래 계좌 생성 중 오류 발생", e);
-        }
+//        Member member = memberRepository.findByEmail(email)
+//                .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
+//        String userKey = member.getUser_key();
+//        log.info("userKey = {}", userKey);
+//
+//        LocalDateTime now = LocalDateTime.now();
+//        String transmissionDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+//        String transmissionTime = now.format(DateTimeFormatter.ofPattern("HHmmss"));
+//        String uniqueId = generateUniqueTransactionId(transmissionDate, transmissionTime);
+//        log.info("Date = {}", transmissionDate);
+//        log.info("Time = {}", transmissionTime);
+//        log.info("uniqueId = {}", uniqueId);
+//
+//        CreateDepositAccountRequestDto.HeaderDto headerDto = CreateDepositAccountRequestDto.HeaderDto.builder()
+//                .apiName("createDemandDepositAccount")
+//                .transmissionDate(transmissionDate)
+//                .transmissionTime(transmissionTime)
+//                .institutionCode("00100")
+//                .fintechAppNo("001")
+//                .apiServiceCode("createDemandDepositAccount")
+//                .institutionTransactionUniqueNo(uniqueId)
+//                .apiKey("931bc6f77a3f40b4bae76c32f9270080")
+//                .userKey(userKey)
+//                .build();
+//
+//        CreateDepositAccountRequestDto requestDto = CreateDepositAccountRequestDto.builder()
+//                .header(headerDto)
+//                .accountTypeUniqueNo("001-1-70ebcf49336a47")
+//                .build();
+//
+//        try {
+//            // 외부 API 호출
+//            CreateDepositAccountResponseDto response = createDepositAccount(requestDto);
+//            log.info("API 호출 성공");
+//
+//            Auction auction = auctionRepository.findById(auctionId)
+//                    .orElseThrow(() -> new RuntimeException("해당 경매가 존재하지 않습니다."));
+//
+//            Member buyer = memberRepository.findById(auction.getFirstMemberId())
+//                    .orElseThrow(() -> new RuntimeException("해당 구매자가 존재하지 않습니다."));
+//
+//            Auction_Image image = auctionImageRepository.findFirstByAuctionOrderByIdAsc(auction);
+//            if (image == null) {
+//                throw new RuntimeException("해당 경매에 이미지가 존재하지 않습니다.");
+//            }
+//
+//            // 거래 데이터 생성
+//            Deal deal = Deal.builder()
+//                    .seller(auction.getMember())
+//                    .buyer(buyer)
+//                    .title(auction.getTitle())
+//                    .image(image.getImage())
+//                    .winning_bid(auction.getSecondBid())
+//                    .deposit(auction.getDeposit())
+//                    .status(Status.BID_SUCCESS)
+//                    .detail(auction.getDetail())
+//                    .account(response.getRec().getAccountNo())
+//                    .build();
+//            dealRepository.save(deal);
+//
+//        } catch (Exception e) {
+//            log.error("API 호출 실패", e);
+//            throw new RuntimeException("거래 계좌 생성 중 오류 발생", e);
+//        }
     }
 
     @Override
     public List<DealResponseDto> listDeal(String email) {
-         Member member = memberRepository.findByEmail(email)
-                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
         log.info("닉네임 : {}", member.getNickname());
 
         List<Deal> list = dealRepository.findAllBySellerOrBuyer(member, member);
@@ -152,8 +178,7 @@ public class DealServiceImpl implements DealService {
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
         log.info("닉네임 : {}", member.getNickname());
 
-        Deal deal = dealRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 거래가 존재하지 않습니다."));
+        Deal deal = dealRepository.findById(id);
 
         // tracking_number가 null이 아니면
         if(deal.getTrackingNumber() != null){
@@ -179,29 +204,29 @@ public class DealServiceImpl implements DealService {
         return dto;
     }
 
-    public CreateDepositAccountResponseDto createDepositAccount(CreateDepositAccountRequestDto requestDto){
-        return webClient.post()
-                .uri("/edu/demandDeposit/createDemandDepositAccount")
-                .bodyValue(requestDto)
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    log.error("클라이언트 오류: " + clientResponse.statusCode());
-                    return clientResponse.bodyToMono(String.class)
-                            .flatMap(errorBody -> Mono.error(new RuntimeException("클라이언트 오류: " + errorBody)));
-                })
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
-                    log.error("서버 오류: " + clientResponse.statusCode());
-                    return clientResponse.bodyToMono(String.class)
-                            .flatMap(errorBody -> Mono.error(new RuntimeException("서버 오류: " + errorBody)));
-                })
-                .bodyToMono(CreateDepositAccountResponseDto.class)
-                .block();
+//    public CreateDepositAccountResponseDto createDepositAccount(CreateDepositAccountRequestDto requestDto){
+//        return webClient.post()
+//                .uri("/edu/demandDeposit/createDemandDepositAccount")
+//                .bodyValue(requestDto)
+//                .retrieve()
+//                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+//                    log.error("클라이언트 오류: " + clientResponse.statusCode());
+//                    return clientResponse.bodyToMono(String.class)
+//                            .flatMap(errorBody -> Mono.error(new RuntimeException("클라이언트 오류: " + errorBody)));
+//                })
+//                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+//                    log.error("서버 오류: " + clientResponse.statusCode());
+//                    return clientResponse.bodyToMono(String.class)
+//                            .flatMap(errorBody -> Mono.error(new RuntimeException("서버 오류: " + errorBody)));
+//                })
+//                .bodyToMono(CreateDepositAccountResponseDto.class)
+//                .block();
+//
+//    }
 
-    }
-
-    private String generateUniqueTransactionId(String date, String time) {
-        Random random = new Random();
-        int randomNum = 100000 + random.nextInt(900000);
-        return date + time + randomNum;
-    }
+//    private String generateUniqueTransactionId(String date, String time) {
+//        Random random = new Random();
+//        int randomNum = 100000 + random.nextInt(900000);
+//        return date + time + randomNum;
+//    }
 }
