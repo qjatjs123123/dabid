@@ -17,11 +17,11 @@ public class Deal extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Member seller;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Member buyer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member seller;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member buyer;
 
     @Column
     private String title;
