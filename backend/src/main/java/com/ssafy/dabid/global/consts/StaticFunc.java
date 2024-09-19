@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
-import com.ssafy.dabid.domain.member.dto.request.CommonApiRequest;
+import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -47,6 +47,17 @@ public class StaticFunc {
             e.printStackTrace();
             // 예외 발생 시 빈 JSON 객체를 반환
             return "{}";
+        }
+    }
+
+    public static <T> T deserializeFromJson(JSONObject json, Class<T> clazz) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try{
+            return objectMapper.readValue(json.toString(), clazz);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

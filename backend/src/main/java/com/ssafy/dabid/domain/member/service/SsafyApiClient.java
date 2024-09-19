@@ -3,7 +3,6 @@ package com.ssafy.dabid.domain.member.service;
 import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
-import com.ssafy.dabid.domain.member.dto.request.CommonApiRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -21,8 +20,8 @@ public class SsafyApiClient {
     private static String baseURL = "https://finopenapi.ssafy.io/ssafy/api/v1";
 
     // 개인 계좌 생성
-    public CreateAccountResponse createAccount(CreateAccountRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/createDemandDepositAccount", request, CreateAccountResponse.class);
+    public SsafyApiResponse createAccount(CreateAccountRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/createDemandDepositAccount", request, SsafyApiResponse.class);
     }
 //    public apiResponse1 callApi1(){
 //        getSsafyApiResponse(path1, requestDto1, responseType1.class);
@@ -42,18 +41,18 @@ public class SsafyApiClient {
     }
 
     // 계좌 입금
-    public DepositResponse depositIn(DepositRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountDeposit", request, DepositResponse.class);
+    public SsafyApiResponse depositIn(DepositRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountDeposit", request, SsafyApiResponse.class);
     }
 
     // 계좌 출금
-    public DepositResponse depositOut(DepositRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", request, DepositResponse.class);
+    public SsafyApiResponse depositOut(DepositRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", request, SsafyApiResponse.class);
     }
 
     // 거래 내역 조회
-    public TransactionHistoryResponse transactionHistory (TransactionHistoryRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/inquireTransactionHistoryList", request, TransactionHistoryResponse.class);
+    public SsafyApiResponse transactionHistory (TransactionHistoryRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/inquireTransactionHistoryList", request, SsafyApiResponse.class);
     }
 
     // 계좌 잔액 조회

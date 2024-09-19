@@ -1,6 +1,7 @@
 package com.ssafy.dabid.domain.member.service;
 
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
+import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,7 @@ class SsafyApiClientTest {
     @Test
     void 유저키받기() {
         GetUserKeyRequest getUserKeyRequest = new GetUserKeyRequest();
-        getUserKeyRequest.setUserId("test000@test.com");
+        getUserKeyRequest.setUserId("test001@test.com");
         GetUserKeyResponse response = ssafyApiClient.registerUserKey(getUserKeyRequest);
         System.out.println("response = " + response.getUserKey());
     }
@@ -33,13 +34,8 @@ class SsafyApiClientTest {
 
         createAccountRequest.setHeader(header);
 
-        CreateAccountResponse response = ssafyApiClient.createAccount(createAccountRequest);
-        System.out.println("response = " + response.getREC());
-
-    void 유저키받기(){
-        SsafyApiRequest request = new SsafyApiRequest(apiKey, "xorjsghkd1015@gmail.com");
-        SsafyApiResponse ssafyApiResponse = ssafyApiClient.getUserkey(request);
-        System.out.println("ssafyApiResponse.getREC() = " + ssafyApiResponse.getUserKey());
+        SsafyApiResponse response = ssafyApiClient.createAccount(createAccountRequest);
+        System.out.println("response = " + response);
     }
 
     @Test
@@ -56,8 +52,8 @@ class SsafyApiClientTest {
         depositRequest.setAccountNo("0018520954400580");
         depositRequest.setTransactionBalance("1000000");
 
-        DepositResponse response = ssafyApiClient.depositIn(depositRequest);
-        System.out.println("response = " + response.getHeader());
+        SsafyApiResponse response = ssafyApiClient.depositIn(depositRequest);
+        System.out.println("response = " + response);
     }
 
     @Test
@@ -74,8 +70,8 @@ class SsafyApiClientTest {
         depositRequest.setAccountNo("0018520954400580");
         depositRequest.setTransactionBalance("100");
 
-        DepositResponse response = ssafyApiClient.depositOut(depositRequest);
-        System.out.println("response = " + response.getHeader());
+        SsafyApiResponse response = ssafyApiClient.depositOut(depositRequest);
+        System.out.println("response = " + response);
     }
 
     @Test
@@ -90,8 +86,9 @@ class SsafyApiClientTest {
         transactionHistoryRequest.setHeader(header);
         transactionHistoryRequest.setAccountNo("0018520954400580");
 
-        TransactionHistoryResponse<String> response = ssafyApiClient.transactionHistory(transactionHistoryRequest);
-        System.out.println("response = " + response.getREC());
+        SsafyApiResponse response = ssafyApiClient.transactionHistory(transactionHistoryRequest);
+        System.out.println("response = " + response);
+
     }
 
     @Test
@@ -106,8 +103,10 @@ class SsafyApiClientTest {
         accountBalanceRequest.setHeader(header);
         accountBalanceRequest.setAccountNo("0018520954400580");
 
+//        SsafyApiResponse<AccountBalanceResponse> response = ssafyApiClient.accountBalance(accountBalanceRequest);
         AccountBalanceResponse response = ssafyApiClient.accountBalance(accountBalanceRequest);
-        System.out.println("response = " + response.getREC());
+        System.out.println("response = " + response.getRec().getAccountBalance());
+        System.out.println("response = " + response.getHeader().getResponseMessage());
     }
 
 }
