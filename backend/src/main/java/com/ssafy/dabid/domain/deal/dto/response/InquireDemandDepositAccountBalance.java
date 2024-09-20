@@ -1,14 +1,15 @@
 package com.ssafy.dabid.domain.deal.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor  // 기본 생성자 추가
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InquireDemandDepositAccountBalance {
 
     @JsonProperty("REC")
@@ -24,4 +25,5 @@ public class InquireDemandDepositAccountBalance {
         @JsonProperty("accountBalance")
         private String accountBalance;
     }
+
 }
