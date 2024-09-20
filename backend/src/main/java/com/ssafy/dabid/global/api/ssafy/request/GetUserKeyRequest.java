@@ -1,6 +1,6 @@
 package com.ssafy.dabid.global.api.ssafy.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
+import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.global.consts.StaticConst;
 import lombok.*;
 
@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetUserKeyRequest extends CommonApiRequest {
+public class GetUserKeyRequest extends SsafyApiRequest {
     private String userId;
     private final String apiKey = StaticConst.apiKey;
 }

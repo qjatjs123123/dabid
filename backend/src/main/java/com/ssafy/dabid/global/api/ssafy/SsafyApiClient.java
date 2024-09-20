@@ -1,12 +1,9 @@
 package com.ssafy.dabid.global.api.ssafy;
 
-import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
+import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import com.ssafy.dabid.global.api.ssafy.request.*;
-import com.ssafy.dabid.global.api.ssafy.response.AccountBalanceResponse;
-import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
-import com.ssafy.dabid.global.api.ssafy.response.DepositResponse;
-import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
+import com.ssafy.dabid.global.api.ssafy.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -42,8 +39,8 @@ public class SsafyApiClient {
     }
 
     // 거래 내역 조회
-    public SsafyApiResponse transactionHistory (TransactionHistoryRequest request) {
-        return getSsafyApiResponse("/edu/demandDeposit/inquireTransactionHistoryList", request, SsafyApiResponse.class);
+    public TransactionHistoryResponse transactionHistory (TransactionHistoryRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/inquireTransactionHistoryList", request, TransactionHistoryResponse.class);
     }
 
     // 계좌 잔액 조회
@@ -51,9 +48,8 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/edu/demandDeposit/inquireDemandDepositAccountBalance", request, AccountBalanceResponse.class);
     }
 
-    private <T> T getSsafyApiResponse(String path, CommonApiRequest ssafyApiRequest, Class<T> responseType) {
+    private <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
         String serializedString = serializeToJson(ssafyApiRequest);
-        System.out.println(serializedString);
 
         return webClient.mutate()
                 .baseUrl(baseURL)

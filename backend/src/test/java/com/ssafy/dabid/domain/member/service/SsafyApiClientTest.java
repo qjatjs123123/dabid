@@ -91,7 +91,8 @@ class SsafyApiClientTest {
 
         TransactionHistoryResponse response = ssafyApiClient.transactionHistory(transactionHistoryRequest);
         System.out.println("response = " + response);
-
+        System.out.println("response.Rec.List.size = " + response.getRec().getList().size());
+        response.getRec().getList().forEach(item -> System.out.println(item.getTransactionUniqueNo() + " " + item.getTransactionTypeName()));
     }
 
     @Test
@@ -107,7 +108,7 @@ class SsafyApiClientTest {
         accountBalanceRequest.setAccountNo("0018520954400580");
 
         AccountBalanceResponse response = ssafyApiClient.accountBalance(accountBalanceRequest);
-        System.out.println("response = " + response.getRec().getAccountBalance());
+        System.out.println("response = " + response.getAccountBalance());
         System.out.println("response = " + response.getHeader().getResponseMessage());
     }
 

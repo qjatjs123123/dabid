@@ -2,9 +2,8 @@ package com.ssafy.dabid.global.consts;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.dabid.domain.deal.dto.request.CommonApiRequest;
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
+import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
@@ -38,7 +37,7 @@ public class StaticFunc {
         return date + hour + getNextSerialNumber();
     }
 
-    public static String serializeToJson(CommonApiRequest ssafyApiRequest) {
+    public static String serializeToJson(SsafyApiRequest ssafyApiRequest) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
@@ -61,29 +60,29 @@ public class StaticFunc {
         }
     }
 
-    public static SsafyApiRequest getSsafyApiRequest(
-            SsafyApiHeaderRequest header,
-            String accountNo,
-            Object transactionBalance, // 실제 사용할 타입으로 변환 필요
-            String transactionSummary,
-            String depositAccountNo,
-            String depositTransactionSummary,
-            String withdrawalAccountNo,
-            String withdrawalTransactionSummary,
-            String accountTypeUniqueNo
-    ) {
-        return new SsafyApiRequest(
-//                header,
-//                accountNo,
-//                transactionBalance,
-//                transactionSummary,
-//                depositAccountNo,
-//                depositTransactionSummary,
-//                withdrawalAccountNo,
-//                withdrawalTransactionSummary,
-//                accountTypeUniqueNo
-        );
-    }
+//    public static SsafyApiRequest getSsafyApiRequest(
+//            SsafyApiHeaderRequest header,
+//            String accountNo,
+//            Object transactionBalance, // 실제 사용할 타입으로 변환 필요
+//            String transactionSummary,
+//            String depositAccountNo,
+//            String depositTransactionSummary,
+//            String withdrawalAccountNo,
+//            String withdrawalTransactionSummary,
+//            String accountTypeUniqueNo
+//    ) {
+//        return new SsafyApiRequest(
+////                header,
+////                accountNo,
+////                transactionBalance,
+////                transactionSummary,
+////                depositAccountNo,
+////                depositTransactionSummary,
+////                withdrawalAccountNo,
+////                withdrawalTransactionSummary,
+////                accountTypeUniqueNo
+//        );
+//    }
 
     public static SsafyApiHeaderRequest getSsafyApiHeaderRequest(
             String apiName,

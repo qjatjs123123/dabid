@@ -6,22 +6,19 @@ import com.ssafy.dabid.domain.deal.dto.response.SsafyApiHeaderResponse;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import lombok.*;
 
+import java.util.Map;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreateAccountResponse {
-
-    @JsonProperty("Header")
-    private SsafyApiHeaderResponse header;
+public class CreateAccountResponse extends SsafyApiResponse {
+    private String bankCode;
+    private String accountNo;
 
     @JsonProperty("REC")
-    private Rec rec;
-
-    @Getter
-    @Setter
-    public static class Rec {
-        private String bankCode;
-        private String accountNo;
+    private void unpackNested(Map<String,String> map) {
+        this.bankCode = map.get("bankCode");
+        this.accountNo = map.get("accountNo");
     }
 }
