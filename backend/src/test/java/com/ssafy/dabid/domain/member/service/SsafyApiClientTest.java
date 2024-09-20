@@ -1,170 +1,133 @@
 package com.ssafy.dabid.domain.member.service;
 
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
-import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
-import com.ssafy.dabid.global.api.ssafy.request.*;
 import com.ssafy.dabid.global.api.ssafy.response.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static com.ssafy.dabid.global.consts.StaticConst.*;
-import static com.ssafy.dabid.global.consts.StaticFunc.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class SsafyApiClientTest {
     @Autowired
     SsafyApiClient ssafyApiClient;
 
-//    @Test
-//    void 유저키받기() {
-//        GetUserKeyRequest getUserKeyRequest = new GetUserKeyRequest();
-//        getUserKeyRequest.setUserId("test001@test.com");
-//        GetUserKeyResponse response = ssafyApiClient.registerUserKey(getUserKeyRequest);
-//        System.out.println("response = " + response.getUserKey());
-//    }
+    @Test
+    void 유저키받기() {
+        String userId = "test3120011@test.com";
+        GetUserKeyResponse response = ssafyApiClient.registerUserKey(userId);
+        System.out.println("response = " + response.getUserKey());
+    }
 
     @Test
     void 계좌만들기(){
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
-
         String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
-                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
-                userKey);
-
-        createAccountRequest.setHeader(header);
-
-        CreateAccountResponse response = ssafyApiClient.createAccount(createAccountRequest);
+        CreateAccountResponse response = ssafyApiClient.createAccount(userKey);
         System.out.println("response = " + response.getHeader());
-        System.out.println("response = " + response.getAccountNo());
+        System.out.println("response = " + response.getRec().getAccountNo());
     }
 
     @Test
     void 입금() {
-        DepositRequest depositRequest = new DepositRequest();
         String userKey = "937d7d39-eccc-4741-bf54-af154e279537";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                DEPOSIT_IN_CODE,
-                DEPOSIT_IN_CODE,
-                userKey);
+        String accountNo = "0016368455041861";
+        String transactionBalance = "1000";
 
-        depositRequest.setHeader(header);
-        depositRequest.setAccountNo("0016368455041861");
-        depositRequest.setTransactionBalance("1000000000000");
-
-        DepositResponse response = ssafyApiClient.depositIn(depositRequest);
-        System.out.println("response = " + response);
+        DepositResponse response = ssafyApiClient.depositIn(userKey, accountNo, transactionBalance);
+        System.out.println("결과 : " + response.getHeader().getResponseMessage());
     }
 
     @Test
     void 출금() {
-        DepositRequest depositRequest = new DepositRequest();
-        String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+        String userKey = "937d7d39-eccc-4741-bf54-af154e279537";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                DEPOSIT_OUT_CODE,
-                DEPOSIT_OUT_CODE,
-                userKey);
+        String accountNo = "0016368455041861";
+        String transactionBalance = "1000";
 
-        depositRequest.setHeader(header);
-        depositRequest.setAccountNo("0018520954400580");
-        depositRequest.setTransactionBalance("100");
-
-        DepositResponse response = ssafyApiClient.depositOut(depositRequest);
-        System.out.println("response = " + response);
+        DepositResponse response = ssafyApiClient.depositOut(userKey, accountNo, transactionBalance);
+        System.out.println("response = " + response.getRec().getTransactionUniqueNo());
     }
 
     @Test
     void 계좌거래내역조회() {
-        TransactionHistoryRequest transactionHistoryRequest = new TransactionHistoryRequest();
         String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                TRANSACTION_HISTORY_CODE,
-                TRANSACTION_HISTORY_CODE,
-                userKey);
-        transactionHistoryRequest.setHeader(header);
-        transactionHistoryRequest.setAccountNo("0018520954400580");
+        String accountNo = "0018520954400580";
 
-        TransactionHistoryResponse response = ssafyApiClient.transactionHistory(transactionHistoryRequest);
-        System.out.println("response = " + response);
+        TransactionHistoryResponse response = ssafyApiClient.transactionHistory(userKey, accountNo);
         System.out.println("response.Rec.List.size = " + response.getRec().getList().size());
         response.getRec().getList().forEach(item -> System.out.println(item.getTransactionUniqueNo() + " " + item.getTransactionTypeName() + " " + item.getTransactionSummary()));
     }
 
     @Test
     void 계좌잔액조회() {
-        AccountBalanceRequest accountBalanceRequest = new AccountBalanceRequest();
         String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+        String accountNo = "0018520954400580";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                ACCOUNT_BALANCE_CODE,
-                ACCOUNT_BALANCE_CODE,
-                userKey);
-        accountBalanceRequest.setHeader(header);
-        accountBalanceRequest.setAccountNo("0018520954400580");
-
-        AccountBalanceResponse response = ssafyApiClient.accountBalance(accountBalanceRequest);
-        System.out.println("response = " + response.getAccountBalance());
+        AccountBalanceResponse response = ssafyApiClient.accountBalance(userKey, accountNo);
+        System.out.println("response = " + response.getRec().getAccountBalance());
         System.out.println("response = " + response.getHeader().getResponseMessage());
     }
 
     @Test
     void 계좌1원송금() {
-        AccountAuthRequest accountAuthRequest = new AccountAuthRequest();
+
         String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+        String accountNo = "0018520954400580";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                ACCOUNT_AUTH_CODE,
-                ACCOUNT_AUTH_CODE,
-                userKey);
-        accountAuthRequest.setHeader(header);
-        accountAuthRequest.setAccountNo("0018520954400580");
-
-        AccountAuthResponse response = ssafyApiClient.accountAuth(accountAuthRequest);
+        AccountAuthResponse response = ssafyApiClient.accountAuth(userKey, accountNo);
         System.out.println("response = " + response.getHeader().getResponseMessage());
-        System.out.println("response = " + response.getTransactionUnique());
-        System.out.println("response = " + response.getAccountNo());
+        System.out.println("response = " + response.getRec().getAccountNo());
     }
 
     @Test
     void 계좌1원송금검증() {
-        CheckAuthCodeRequest checkAuthCodeRequest = new CheckAuthCodeRequest();
         String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+        String accountNo = "0018520954400580";
+        String authCode = "7361";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                CHECK_AUTH_CODE,
-                CHECK_AUTH_CODE,
-                userKey);
-        checkAuthCodeRequest.setHeader(header);
-        checkAuthCodeRequest.setAccountNo("0018520954400580");
-        checkAuthCodeRequest.setAuthCode("3774");
+        CheckAuthCodeResponse response = ssafyApiClient.checkAuth(userKey, accountNo, authCode);
+        assertEquals("SUCCESS", response.getRec().getStatus());
+    }
+    
+    @Test
+    void 유저키생성_계좌생성_계좌인증(){
 
-        CheckAuthCodeResponse response = ssafyApiClient.checkAuth(checkAuthCodeRequest);
-        System.out.println("response = " + response.getHeader().getResponseMessage());
-        System.out.println("response = " + response.getStatus());
+        //유저키 발급
+        String email = "rPwhkdlswmdemrkwk@gmail.com";
+        GetUserKeyResponse keyResponse = ssafyApiClient.registerUserKey(email);
+        String userKey = keyResponse.getUserKey();
+
+        //계좌 생성
+        CreateAccountResponse accountResponse = ssafyApiClient.createAccount(userKey);
+        String accountNo = accountResponse.getRec().getAccountNo();
+
+        //1원 송금
+        AccountAuthResponse response1 = ssafyApiClient.accountAuth(userKey, accountNo);
+        assertEquals("H0000", response1.getHeader().getResponseCode());
+        
+        //첫 번째 거래내역에서 인증코드 추출
+        TransactionHistoryResponse response2 = ssafyApiClient.transactionHistory(userKey, accountNo);
+
+        String summary = response2.getRec().getList().get(0).getTransactionSummary();
+        String authCode = summary.substring(summary.length() - 4);
+
+        //인증코드 비교
+        CheckAuthCodeResponse response3 = ssafyApiClient.checkAuth(userKey, accountNo, authCode);
+        assertEquals("SUCCESS", response3.getRec().getStatus());
     }
 
     @Test
     void 계좌이체() {
-        TransferRequest transferRequest = new TransferRequest();
         String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd"; // 출금 계좌 예금주 userkey
+        String depositAccountNo = "0016368455041861";
+        String withdrawalAccountNo = "0018520954400580";
+        String transactionBalance = "10000";
 
-        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
-                TRANSFER_CODE,
-                TRANSFER_CODE,
-                userKey);
-
-        transferRequest.setHeader(header);
-        transferRequest.setDepositAccountNo("0016368455041861");  // 입금 계좌
-        transferRequest.setWithdrawalAccountNo("0018520954400580"); // 출금 계좌
-        transferRequest.setTransactionBalance("10000");
-
-        TransferResponse response = ssafyApiClient.depositOut(transferRequest);
+        TransferResponse response = ssafyApiClient.deposit(userKey, depositAccountNo, withdrawalAccountNo, transactionBalance);
         System.out.println("response = " + response);
         System.out.println("response.Rec.List.size = " + response.getRec().size());
         response.getRec().forEach(item -> System.out.println(item.getAccountNo() + " " + item.getTransactionTypeName()));

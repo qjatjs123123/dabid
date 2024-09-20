@@ -108,6 +108,6 @@ public class AuctionTest {
     void getAuction() {
         Mockito.when(auctionJpaRepository.findById(1)).thenReturn(Optional.of(auction1));
 
-        Assertions.assertEquals(auction1.getTitle(), service.getAuction(1, 1).getTitle());
+        Assertions.assertEquals(auction1.getTitle(), service.getAuction(1).getTitle());
     }
 }

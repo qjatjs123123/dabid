@@ -21,7 +21,6 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberServiceImpl memberServiceImpl;
 
     @PostMapping("/auth/sign-up")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto dto) {
