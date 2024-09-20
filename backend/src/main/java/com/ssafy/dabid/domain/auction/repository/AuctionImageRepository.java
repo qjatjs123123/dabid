@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.auction.repository;
 
+import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.entity.AuctionImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
