@@ -62,7 +62,7 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/edu/accountAuth/checkAuthCode", request, CheckAuthCodeResponse.class);
     }
 
-    private <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
+    public <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
         String serializedString = serializeToJson(ssafyApiRequest);
         System.out.println(serializedString);
         return webClient.mutate()

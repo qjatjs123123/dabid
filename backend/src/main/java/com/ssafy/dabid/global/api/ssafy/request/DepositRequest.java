@@ -12,7 +12,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 public class DepositRequest extends SsafyApiRequest {
     @JsonProperty("Header")
     private SsafyApiHeaderRequest header;

@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 public class GetUserKeyRequest extends SsafyApiRequest {
     private String userId;
     private final String apiKey = StaticConst.apiKey;

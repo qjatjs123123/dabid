@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 public class CheckAuthCodeRequest extends SsafyApiRequest {
     @JsonProperty("Header")
     private SsafyApiHeaderRequest header;

@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 public class TransactionHistoryRequest extends SsafyApiRequest {
     @JsonProperty("Header")
     private SsafyApiHeaderRequest header;
