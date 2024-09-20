@@ -24,7 +24,7 @@ public class SsafyApiClient {
     }
 
     // 유저키 발급
-    public GetUserKeyResponse registerUserKey(GetUserKeyRequest request) {
+    public GetUserKeyResponse getUserKey(GetUserKeyRequest request) {
         return getSsafyApiResponse("/member", request, GetUserKeyResponse.class);
     }
 

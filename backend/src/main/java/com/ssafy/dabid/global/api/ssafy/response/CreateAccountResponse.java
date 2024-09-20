@@ -15,10 +15,20 @@ import java.util.Map;
 public class CreateAccountResponse extends SsafyApiResponse {
     private String bankCode;
     private String accountNo;
+    private Currency currency;
 
     @JsonProperty("REC")
-    private void unpackNested(Map<String,String> map) {
-        this.bankCode = map.get("bankCode");
-        this.accountNo = map.get("accountNo");
+    private void unpackNested(Map<String,Object> map) {
+        this.bankCode = String.valueOf(map.get("bankCode"));
+        this.accountNo = String.valueOf(map.get("accountNo"));
+        Map<String, String> currencyMap = (Map<String, String>) map.get("currency");
+        this.currency = new Currency(currencyMap.get("currency"), currencyMap.get("currencyName"));
+    }
+
+    @AllArgsConstructor
+    @Getter
+    private static class Currency {
+        private String currency;
+        private String currencyName;
     }
 }
