@@ -2,12 +2,14 @@ package com.ssafy.dabid.domain.deal.service;
 
 import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
+import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.*;
 import com.ssafy.dabid.domain.deal.dto.response.BuyerBalanceAndAccount;
 import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
+import com.ssafy.dabid.domain.deal.entity.CarrierId;
 import com.ssafy.dabid.domain.member.entity.Account;
 import com.ssafy.dabid.domain.deal.entity.Deal;
 import com.ssafy.dabid.domain.deal.entity.Status;
@@ -37,11 +39,27 @@ public class DealServiceImpl implements DealService {
     private final MemberRepository memberRepository;
     private final AuctionRepository auctionRepository;
     private final MemberAccountRepository memberAccountRepository;
+    private final DeliveryTrackerAPIClient deliveryTrackerAPIClient;
     private final S3Util s3Util;
 
+
     @Override
-    public String findDeliveryStatus(String carrierId, String trackingNumber) {
-        return "";
+    public Status findDeliveryStatus(CourierRequest courierRequest, int dealId) {
+        String status = deliveryTrackerAPIClient.trackPackage(courierRequest);
+        Status newStatus = null;
+
+        if (status.isEmpty()) return Status.ERROR;
+
+        if (status.equals(Status.DELIVERED)) newStatus = Status.DELIVERED;
+        else newStatus = Status.IN_TRANSIT;
+
+        Deal deal = dealRepository.findById(dealId);
+        deal.setStatus(newStatus);
+        deal.setCarrier_id(courierRequest.getCarrierId());
+        deal.setTrackingNumber(courierRequest.getTrackingNumber());
+        dealRepository.save(deal);
+
+        return newStatus;
     }
 
     @Override
