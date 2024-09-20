@@ -92,7 +92,7 @@ class SsafyApiClientTest {
         TransactionHistoryResponse response = ssafyApiClient.transactionHistory(transactionHistoryRequest);
         System.out.println("response = " + response);
         System.out.println("response.Rec.List.size = " + response.getRec().getList().size());
-        response.getRec().getList().forEach(item -> System.out.println(item.getTransactionUniqueNo() + " " + item.getTransactionTypeName()));
+        response.getRec().getList().forEach(item -> System.out.println(item.getTransactionUniqueNo() + " " + item.getTransactionTypeName() + " " + item.getTransactionSummary()));
     }
 
     @Test
@@ -110,6 +110,42 @@ class SsafyApiClientTest {
         AccountBalanceResponse response = ssafyApiClient.accountBalance(accountBalanceRequest);
         System.out.println("response = " + response.getAccountBalance());
         System.out.println("response = " + response.getHeader().getResponseMessage());
+    }
+
+    @Test
+    void 계좌1원송금() {
+        AccountAuthRequest accountAuthRequest = new AccountAuthRequest();
+        String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+
+        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
+                ACCOUNT_AUTH_CODE,
+                ACCOUNT_AUTH_CODE,
+                userKey);
+        accountAuthRequest.setHeader(header);
+        accountAuthRequest.setAccountNo("0018520954400580");
+
+        AccountAuthResponse response = ssafyApiClient.accountAuth(accountAuthRequest);
+        System.out.println("response = " + response.getHeader().getResponseMessage());
+        System.out.println("response = " + response.getTransactionUnique());
+        System.out.println("response = " + response.getAccountNo());
+    }
+
+    @Test
+    void 계좌1원송금검증() {
+        CheckAuthCodeRequest checkAuthCodeRequest = new CheckAuthCodeRequest();
+        String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+
+        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
+                CHECK_AUTH_CODE,
+                CHECK_AUTH_CODE,
+                userKey);
+        checkAuthCodeRequest.setHeader(header);
+        checkAuthCodeRequest.setAccountNo("0018520954400580");
+        checkAuthCodeRequest.setAuthCode("3774");
+
+        CheckAuthCodeResponse response = ssafyApiClient.checkAuth(checkAuthCodeRequest);
+        System.out.println("response = " + response.getHeader().getResponseMessage());
+        System.out.println("response = " + response.getStatus());
     }
 
 }

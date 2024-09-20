@@ -1,7 +1,6 @@
 package com.ssafy.dabid.global.api.ssafy;
 
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
-import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import com.ssafy.dabid.global.api.ssafy.request.*;
 import com.ssafy.dabid.global.api.ssafy.response.*;
 import lombok.RequiredArgsConstructor;
@@ -48,9 +47,19 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/edu/demandDeposit/inquireDemandDepositAccountBalance", request, AccountBalanceResponse.class);
     }
 
+    // 1원 송금
+    public AccountAuthResponse accountAuth (AccountAuthRequest request) {
+        return getSsafyApiResponse("/edu/accountAuth/openAccountAuth", request, AccountAuthResponse.class);
+    }
+
+    // 1원 송금 인증
+    public CheckAuthCodeResponse checkAuth (CheckAuthCodeRequest request) {
+        return getSsafyApiResponse("/edu/accountAuth/checkAuthCode", request, CheckAuthCodeResponse.class);
+    }
+
     private <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
         String serializedString = serializeToJson(ssafyApiRequest);
-
+        System.out.println(serializedString);
         return webClient.mutate()
                 .baseUrl(baseURL)
                 .build()
