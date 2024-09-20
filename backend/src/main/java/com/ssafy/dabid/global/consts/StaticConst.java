@@ -10,4 +10,13 @@ public class StaticConst {
 
     // code
     public static final String SELELCT_ACCOUNT_BALANCE_CODE = "inquireDemandDepositAccountBalance";
+    public static final String CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE = "createDemandDepositAccount";
+    public static final String DEPOSIT_IN_CODE = "updateDemandDepositAccountDeposit";
+    public static final String DEPOSIT_OUT_CODE = "updateDemandDepositAccountWithdrawal";
+    public static final String TRANSACTION_HISTORY_CODE = "inquireTransactionHistoryList";
+    public static final String ACCOUNT_BALANCE_CODE = "inquireDemandDepositAccountBalance";
+    public static final String ACCOUNT_AUTH_CODE = "openAccountAuth";
+    public static final String CHECK_AUTH_CODE = "checkAuthCode";
+    public static final String TRANSFER_CODE = "updateDemandDepositAccountTransfer";
+
 }
