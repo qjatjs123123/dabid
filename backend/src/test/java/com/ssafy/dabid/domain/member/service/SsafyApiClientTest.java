@@ -39,12 +39,13 @@ class SsafyApiClientTest {
 
         CreateAccountResponse response = ssafyApiClient.createAccount(createAccountRequest);
         System.out.println("response = " + response.getHeader());
+        System.out.println("response = " + response.getAccountNo());
     }
 
     @Test
     void 입금() {
         DepositRequest depositRequest = new DepositRequest();
-        String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+        String userKey = "937d7d39-eccc-4741-bf54-af154e279537";
 
         SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
                 DEPOSIT_IN_CODE,
@@ -52,8 +53,8 @@ class SsafyApiClientTest {
                 userKey);
 
         depositRequest.setHeader(header);
-        depositRequest.setAccountNo("0018520954400580");
-        depositRequest.setTransactionBalance("1000000");
+        depositRequest.setAccountNo("0016368455041861");
+        depositRequest.setTransactionBalance("1000000000000");
 
         DepositResponse response = ssafyApiClient.depositIn(depositRequest);
         System.out.println("response = " + response);
@@ -148,4 +149,24 @@ class SsafyApiClientTest {
         System.out.println("response = " + response.getStatus());
     }
 
+    @Test
+    void 계좌이체() {
+        TransferRequest transferRequest = new TransferRequest();
+        String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd"; // 출금 계좌 예금주 userkey
+
+        SsafyApiHeaderRequest header = getSsafyApiHeaderRequest(
+                TRANSFER_CODE,
+                TRANSFER_CODE,
+                userKey);
+
+        transferRequest.setHeader(header);
+        transferRequest.setDepositAccountNo("0016368455041861");  // 입금 계좌
+        transferRequest.setWithdrawalAccountNo("0018520954400580"); // 출금 계좌
+        transferRequest.setTransactionBalance("10000");
+
+        TransferResponse response = ssafyApiClient.depositOut(transferRequest);
+        System.out.println("response = " + response);
+        System.out.println("response.Rec.List.size = " + response.getRec().size());
+        response.getRec().forEach(item -> System.out.println(item.getAccountNo() + " " + item.getTransactionTypeName()));
+    }
 }

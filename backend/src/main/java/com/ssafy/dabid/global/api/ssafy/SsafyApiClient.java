@@ -37,6 +37,11 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", request, DepositResponse.class);
     }
 
+    // 계좌 이체
+    public TransferResponse depositOut(TransferRequest request) {
+        return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountTransfer", request, TransferResponse.class);
+    }
+
     // 거래 내역 조회
     public TransactionHistoryResponse transactionHistory (TransactionHistoryRequest request) {
         return getSsafyApiResponse("/edu/demandDeposit/inquireTransactionHistoryList", request, TransactionHistoryResponse.class);

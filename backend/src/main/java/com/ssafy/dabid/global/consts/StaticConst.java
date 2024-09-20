@@ -17,4 +17,6 @@ public class StaticConst {
     public static final String ACCOUNT_BALANCE_CODE = "inquireDemandDepositAccountBalance";
     public static final String ACCOUNT_AUTH_CODE = "openAccountAuth";
     public static final String CHECK_AUTH_CODE = "checkAuthCode";
+    public static final String TRANSFER_CODE = "updateDemandDepositAccountTransfer";
+
 }
