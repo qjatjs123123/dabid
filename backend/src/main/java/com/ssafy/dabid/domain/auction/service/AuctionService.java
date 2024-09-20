@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -63,8 +64,14 @@ public class AuctionService {
         return results;
     }
 
-    public AuctionDto getAuction(int auctionId, int memberId){
+    public AuctionDto getAuction(int auctionId){
         log.info("getAuction 시작");
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("사용자 정보 읽어오기: " + email);
+
+        int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
+
         log.info("auctionId: " + auctionId + " 조회");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 Auction"));
 
@@ -96,8 +103,14 @@ public class AuctionService {
         return result;
     }
 
-    public void registPost(RegistrationAuctionDto dto, int memberId) throws SchedulerException {
+    public void registPost(RegistrationAuctionDto dto) throws SchedulerException {
         log.info("registPost 시작");
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("사용자 정보 읽어오기: " + email);
+
+        int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
+
 
         log.info("계좌 인증 확인");
         if(!memberAccountRepository.findByMemberId(memberId).getIsActive()) {
