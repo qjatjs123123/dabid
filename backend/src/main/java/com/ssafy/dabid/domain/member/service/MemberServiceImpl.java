@@ -151,6 +151,5 @@ public class MemberServiceImpl implements MemberService {
         } catch (Exception e){
             return CommonResponseDto.fail();
         }
-
     }
 }
