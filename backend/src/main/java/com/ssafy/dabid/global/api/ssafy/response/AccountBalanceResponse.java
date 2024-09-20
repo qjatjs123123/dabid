@@ -29,5 +29,7 @@ public class AccountBalanceResponse extends SsafyApiResponse {
         this.currency = map.get("currency");
         this.accountExpiryDate = map.get("accountExpiryDate");
         this.accountBalance = Long.valueOf(map.get("accountBalance"));
+
+
     }
 }

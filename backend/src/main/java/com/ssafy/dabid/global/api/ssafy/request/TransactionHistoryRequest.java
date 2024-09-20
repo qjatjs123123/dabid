@@ -15,10 +15,10 @@ import lombok.*;
 public class TransactionHistoryRequest extends SsafyApiRequest {
     @JsonProperty("Header")
     private SsafyApiHeaderRequest header;
-
     private String accountNo;
     private final String startDate = "20240901";
     private final String endDate = "20241231";
     private final String transactionType = "A";
     private final String orderByType = "DESC";
+
 }

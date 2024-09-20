@@ -15,4 +15,6 @@ public class StaticConst {
     public static final String DEPOSIT_OUT_CODE = "updateDemandDepositAccountWithdrawal";
     public static final String TRANSACTION_HISTORY_CODE = "inquireTransactionHistoryList";
     public static final String ACCOUNT_BALANCE_CODE = "inquireDemandDepositAccountBalance";
+    public static final String ACCOUNT_AUTH_CODE = "openAccountAuth";
+    public static final String CHECK_AUTH_CODE = "checkAuthCode";
 }
