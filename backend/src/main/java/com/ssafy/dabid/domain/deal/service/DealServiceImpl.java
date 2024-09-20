@@ -38,6 +38,11 @@ public class DealServiceImpl implements DealService {
     private final MemberAccountRepository memberAccountRepository;
 
     @Override
+    public String findDeliveryStatus(String carrierId, String trackingNumber) {
+        return "";
+    }
+
+    @Override
     public InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey) {
         SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
                 SELELCT_ACCOUNT_BALANCE_CODE,
@@ -46,7 +51,7 @@ public class DealServiceImpl implements DealService {
         );
 
         Deal deal = dealRepository.findById(dealId);
-        
+
         String dealAccount = deal.getAccount();
 
         SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()

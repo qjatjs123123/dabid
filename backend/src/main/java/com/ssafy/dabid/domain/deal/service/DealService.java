@@ -7,6 +7,8 @@ import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalan
 import java.util.List;
 
 public interface DealService {
+    String findDeliveryStatus(String carrierId, String trackingNumber);
+
     InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey);
 
     BuyerBalanceAndAccount findBuyerAccount(int dealId, int userKey);
