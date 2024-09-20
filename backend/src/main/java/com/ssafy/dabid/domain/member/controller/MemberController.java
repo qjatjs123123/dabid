@@ -41,7 +41,7 @@ public class MemberController {
     public ResponseEntity signOut(@RequestBody Map<String, String> map){
         String email = map.get("email");
         log.info("Sign Out for user with email : " + email);
-        
+
         //리프레시 토큰을 삭제
         return ResponseEntity.ok(memberService.signOut(email));
     }

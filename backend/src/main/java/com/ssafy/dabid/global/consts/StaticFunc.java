@@ -38,7 +38,7 @@ public class StaticFunc {
     }
 
     public static String serializeToJson(SsafyApiRequest ssafyApiRequest) {
-        ObjectMapper objectMapper = new ObjectMapper();
+         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
             return objectMapper.writeValueAsString(ssafyApiRequest);
@@ -49,40 +49,29 @@ public class StaticFunc {
         }
     }
 
-    public static <T> T deserializeFromJson(JSONObject json, Class<T> clazz) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try{
-            return objectMapper.readValue(json.toString(), clazz);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static SsafyApiRequest getSsafyApiRequest(
+            SsafyApiHeaderRequest header,
+            String accountNo,
+            Object transactionBalance, // 실제 사용할 타입으로 변환 필요
+            String transactionSummary,
+            String depositAccountNo,
+            String depositTransactionSummary,
+            String withdrawalAccountNo,
+            String withdrawalTransactionSummary,
+            String accountTypeUniqueNo
+    ) {
+        return new SsafyApiRequest(
+                header,
+                accountNo,
+                transactionBalance,
+                transactionSummary,
+                depositAccountNo,
+                depositTransactionSummary,
+                withdrawalAccountNo,
+                withdrawalTransactionSummary,
+                accountTypeUniqueNo
+        );
     }
-
-//    public static SsafyApiRequest getSsafyApiRequest(
-//            SsafyApiHeaderRequest header,
-//            String accountNo,
-//            Object transactionBalance, // 실제 사용할 타입으로 변환 필요
-//            String transactionSummary,
-//            String depositAccountNo,
-//            String depositTransactionSummary,
-//            String withdrawalAccountNo,
-//            String withdrawalTransactionSummary,
-//            String accountTypeUniqueNo
-//    ) {
-//        return new SsafyApiRequest(
-////                header,
-////                accountNo,
-////                transactionBalance,
-////                transactionSummary,
-////                depositAccountNo,
-////                depositTransactionSummary,
-////                withdrawalAccountNo,
-////                withdrawalTransactionSummary,
-////                accountTypeUniqueNo
-//        );
-//    }
 
     public static SsafyApiHeaderRequest getSsafyApiHeaderRequest(
             String apiName,
