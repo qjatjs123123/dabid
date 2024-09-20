@@ -11,8 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -34,12 +37,13 @@ public class BiddingServiceImpl implements BiddingService {
 
         /* 1. 요청한 사용자(member)와 참여 요청 경매(auction) 정보를 DB에서 가져온다. */
         log.info("참여를 요청한 회원 조회");
-        int memberId = 3;//SecurityUtil.getLoginUsername();
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info(email);
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
 
         /* 계좌 인증 확인 */
         log.info("계좌 인증 여부 확인");
-        if(!memberAccountRepository.findByMemberId(memberId).getIsActive())
+        if(!memberAccountRepository.findByMemberId(member.getId()).getIsActive())
             throw new IllegalStateException("계좌가 인증되지 않았습니다.");
 
         /* 포인트 확인 */
@@ -75,15 +79,19 @@ public class BiddingServiceImpl implements BiddingService {
 
         /* 1. 요청한 사용자(member)와 참여 포기 요청 경매(auction) 정보를 DB에서 가져온다. */
         log.info("경매 참여 포기 신청한 회원 조회");
-        int memberId = 3; //SecurityUtil.getLoginUsername();
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
-        
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info(email);
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
+        if(!Objects.equals(auction.getMember().getId(), member.getId())) {
+            throw new IllegalArgumentException("경매 등록자가 아니기에 포기가 불가능합니다.");
+        }
+
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         log.info("경매 참여 포기 가능 여부 확인");
-        if(auction.getFirstMemberId() == memberId) {
+        if(auction.getFirstMemberId() == member.getId()) {
             throw new IllegalArgumentException("1등 상태에서 참여 포기가 불가능합니다.");
         }
-        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 AuctionInfo 입니다."));
+        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, member.getId()).orElseThrow(() -> new NullPointerException("존재하지 않는 AuctionInfo 입니다."));
 
         /* 3. 사용자의 경매 참여 정보를 DB(auction_Info)서 삭제한다. */
         log.info("경매 참여 기록 삭제 시작");
@@ -103,9 +111,11 @@ public class BiddingServiceImpl implements BiddingService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
         
         /* 1. 요청한 사용자(member) 정보를 경매 참여자 정보 DB(auction_info)에서 가져온다. */
-        log.info("경매 입찰 신청한 회원 조회");
-        int memberId = 3;//SecurityUtil.getLoginUsername();
-        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElseThrow(() -> new NullPointerException("존재하지 않는 AuctionInfo 입니다."));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info(email);
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
+
+        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, member.getId()).orElseThrow(() -> new NullPointerException("존재하지 않는 AuctionInfo 입니다."));
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         log.info("입찰 신청한 회원의 입찰금 갱신 시작");
@@ -130,7 +140,7 @@ public class BiddingServiceImpl implements BiddingService {
             /*
             로직 - 기존 auction.getFirstMemberId()의 사용자에게 낙찰 유력 뺐김을 CoolSMS 알림
             */
-            auction.setFirstMemberId(memberId);
+            auction.setFirstMemberId(member.getId());
             auction.setFirstBid(bid);
             auctionJpaRepository.save(auction);
 

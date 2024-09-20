@@ -27,16 +27,12 @@ public class AuctionController {
 
     @GetMapping("/{auctionId}")
     public ResponseEntity<?> getAuction(HttpServletRequest request, @PathVariable("auctionId") int auctionId){
-//        int memberId = Integer.parseInt((String) request.getAttribute("memberId"));
-        int memberId = 2;
-        return new ResponseEntity<>(service.getAuction(auctionId, memberId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAuction(auctionId), HttpStatus.OK);
     }
 
     @PostMapping("")
     public ResponseEntity<?> registPost(@ModelAttribute RegistrationAuctionDto dto) throws SchedulerException {
-        //        int memberId = Integer.parseInt((String) request.getAttribute("memberId"));
-        int memberId = 1;
-        service.registPost(dto, memberId);
+        service.registPost(dto);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -47,13 +43,4 @@ public class AuctionController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @PostMapping("/test-image")
-    public void testImage(@ModelAttribute TestImageDto testImageDto) {
-        List<String> imageList = s3Util.uploadFiles(testImageDto.getImages());
-        for(String image : imageList){
-            System.out.println(image);
-        }
-    }
-
 }
