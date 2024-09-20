@@ -1,5 +1,7 @@
 package com.ssafy.dabid.domain.deal.controller;
 
+import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
+import com.ssafy.dabid.domain.deal.dto.response.BuyerBalanceAndAccount;
 import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
 import com.ssafy.dabid.domain.deal.service.DealService;
@@ -26,6 +28,18 @@ public class DealController {
     public InquireDemandDepositAccountBalance selectSellerAccount(@PathVariable("deal-id") int dealId) {
         return dealService.findSellerAccount(dealId, 2);
     }
+
+    @PostMapping("/account/buyer/{deal-id}")
+    public BuyerBalanceAndAccount selectBuyerAccount(@PathVariable("deal-id") int dealId) {
+        return dealService.findBuyerAccount(dealId, 2);
+    }
+
+    @PostMapping("/courier/{deal-id}")
+    public void insertCourier(@PathVariable("deal-id") Long dealId,
+            @RequestBody CourierRequest courierRequest) {
+
+    }
+
 
     @GetMapping("/list")
     public ResponseEntity<List<DealResponseDto>> listDeal(){

@@ -19,7 +19,7 @@ public class SsafyApiClient {
     // 수정된 메서드
     public <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
         String serialLizeString = serializeToJson(ssafyApiRequest);
-
+        System.out.println(serialLizeString);
         return webClient.mutate()
                 .baseUrl(baseURL)
                 .build()

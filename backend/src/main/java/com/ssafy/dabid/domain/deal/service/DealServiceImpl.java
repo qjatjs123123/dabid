@@ -4,6 +4,7 @@ import com.ssafy.dabid.domain.auction.repository.AuctionImageRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
+import com.ssafy.dabid.domain.deal.dto.response.BuyerBalanceAndAccount;
 import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
 import com.ssafy.dabid.domain.member.entity.Account;
@@ -37,6 +38,11 @@ public class DealServiceImpl implements DealService {
     private final MemberAccountRepository memberAccountRepository;
 
     @Override
+    public String findDeliveryStatus(String carrierId, String trackingNumber) {
+        return "";
+    }
+
+    @Override
     public InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey) {
         SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
                 SELELCT_ACCOUNT_BALANCE_CODE,
@@ -60,6 +66,42 @@ public class DealServiceImpl implements DealService {
         );
 
         return response;
+    }
+
+    @Override
+    public BuyerBalanceAndAccount findBuyerAccount(int dealId, int userKey) {
+        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
+                SELELCT_ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
+                "71b2ece2-981e-452a-8412-7c6aecbaa2e1" //임시 나중에 Security에서 멤버에서 가져올것
+        );
+
+        Deal deal = dealRepository.findById(dealId);
+
+        int buyer_id = deal.getBuyer().getId();
+
+        Account buyer_info = memberAccountRepository.findByMemberId(buyer_id);
+        String buyer_account = buyer_info.getAccount_number();
+
+
+        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
+                .header(ssafyApiHeaderRequest)
+                .accountNo(buyer_account)
+                .build();
+
+        InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
+                SELELCT_ACCOUNT_BALANCE_CODE,
+                ssafyApiRequest,
+                InquireDemandDepositAccountBalance.class
+        );
+
+        BuyerBalanceAndAccount buyerInfo = BuyerBalanceAndAccount.builder()
+                .buyer_balance(response.getRec().getAccountBalance())
+                .deal_account(deal.getAccount())
+                .winning_bid(deal.getWinning_bid())
+                .build();
+
+        return buyerInfo;
     }
 
     @Override
