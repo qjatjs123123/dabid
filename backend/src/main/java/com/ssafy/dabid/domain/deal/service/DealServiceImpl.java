@@ -142,8 +142,8 @@ public class DealServiceImpl implements DealService {
     public CreateDemandDepositAccount createAccount(String userKey) {
 
         SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                CREATE_ACCOUNT_CODE,
-                CREATE_ACCOUNT_CODE,
+                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
+                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
                 userKey
         );
 
@@ -153,7 +153,7 @@ public class DealServiceImpl implements DealService {
                 .build();
 
         CreateDemandDepositAccount response = ssafyApiClient.getSsafyApiResponse(
-                CREATE_ACCOUNT_CODE,
+                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
                 ssafyApiRequest,
                 CreateDemandDepositAccount.class
         );
@@ -252,8 +252,8 @@ public class DealServiceImpl implements DealService {
         Deal deal = dealRepository.findById(dealId);
 
         SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                TRANSFER_ACCOUNT_BALANCE_CODE,
-                TRANSFER_ACCOUNT_BALANCE_CODE,
+                TRANSFER_CODE,
+                TRANSFER_CODE,
                 userKey
         );
 
@@ -266,7 +266,7 @@ public class DealServiceImpl implements DealService {
 
         try {
             UpdateDemandDepositAccountTransfer response = ssafyApiClient.getSsafyApiResponse(
-                    TRANSFER_ACCOUNT_BALANCE_CODE,
+                    TRANSFER_CODE,
                     ssafyApiRequest,
                     UpdateDemandDepositAccountTransfer.class
             );
