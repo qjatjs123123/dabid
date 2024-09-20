@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SsafyApiResponse<T> {
+    @JsonProperty("Header")
+    private SsafyApiHeaderResponse header;
+
     @JsonProperty("REC")
     private T REC;
 }

@@ -4,12 +4,16 @@ import com.ssafy.dabid.domain.member.dto.request.*;
 import com.ssafy.dabid.domain.member.dto.response.RandomNicknameResponseDto;
 import com.ssafy.dabid.domain.member.dto.response.RefreshResponseDto;
 import com.ssafy.dabid.domain.member.dto.response.SignInResponseDto;
+import com.ssafy.dabid.domain.member.entity.Account;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.entity.Role;
+import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.domain.member.repository.RandomNicknameMapper;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 import com.ssafy.dabid.global.api.ssafy.request.GetUserKeyRequest;
+import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
+import com.ssafy.dabid.global.api.ssafy.response.DepositResponse;
 import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
@@ -42,6 +46,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
     private final RandomNicknameMapper randomNicknameMapper;
+    private final MemberAccountRepository memberAccountRepository;
 
     private Map<ValueType, Function<String, Optional<?>>> checkFunctions;
     private Map<ValueType, Pair<String, String>> responseMappings;
@@ -81,17 +86,31 @@ public class MemberServiceImpl implements MemberService {
         String userKey = generateKey(member.getEmail());
         member.addKey(userKey);
 
-        //TODO : member_account 엔티티 기준으로 계좌 생성 후 repository에 저장
+        //계좌 생성 후 repository에 저장
+        String accountNo = generateAccount(userKey);
+        Account account = Account
+                .builder()
+                .account_number(accountNo)
+                .member(member)
+                .build();
 
+        memberAccountRepository.save(account);
+        
+        //서비스 이용을 위한 기본금 지급
+        ssafyApiClient.depositIn(userKey, accountNo, "1000000");
         memberRepository.save(member);
 
         return new CommonResponseDto();
     }
 
     private String generateKey(String email){
-        GetUserKeyRequest requestBody = new GetUserKeyRequest(email);
-        GetUserKeyResponse responseBody = ssafyApiClient.getUserKey(requestBody);
-        return responseBody.getUserKey();
+        GetUserKeyResponse response = ssafyApiClient.registerUserKey(email);
+        return response.getUserKey();
+    }
+
+    private String generateAccount(String userKey){
+        CreateAccountResponse response = ssafyApiClient.createAccount(userKey);
+        return response.getRec().getAccountNo();
     }
 
     @Override
