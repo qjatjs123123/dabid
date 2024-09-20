@@ -3,6 +3,7 @@ package com.ssafy.dabid.domain.job.component;
 import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
+import com.ssafy.dabid.domain.deal.service.DealService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
@@ -18,6 +19,7 @@ public class DabidJob implements Job {
 
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionService auctionService;
+    private final DealService dealService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -45,6 +47,7 @@ public class DabidJob implements Job {
         else { // 경매 참여자가 존재하는 경우
             auctionService.returnBuyerPointWhenExpired(auctionId, auction.getFirstMemberId(), auction.getDeposit());
             // 거래, 채팅 생성, 거래용 가상계좌 생성
+            dealService.createDeal(auctionId);
             // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
             //              -> 판매자에게 "니 거래로 넘어감!"
             log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");

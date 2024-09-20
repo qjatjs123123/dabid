@@ -11,4 +11,6 @@ public interface MemberAccountRepository extends JpaRepository<Account, Integer>
     @Query("select ma from Account ma " +
             "where ma.member.id = :memberId")
     Account findByMemberId(int memberId);
+
+    Account findByMember(Member member);
 }
