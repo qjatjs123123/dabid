@@ -6,7 +6,9 @@ import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
 import com.ssafy.dabid.domain.deal.dto.response.ListDealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.UpdateDemandDepositAccountTransfer;
+import com.ssafy.dabid.domain.deal.entity.Status;
 import com.ssafy.dabid.domain.deal.service.DealService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,9 +42,10 @@ public class DealController {
     }
 
     @PostMapping("/courier/{deal-id}")
-    public void insertCourier(@PathVariable("deal-id") Long dealId,
-            @RequestBody CourierRequest courierRequest) {
+    public Status insertCourier(@PathVariable("deal-id") int dealId,
+                                @RequestBody @Valid CourierRequest courierRequest) {
 
+        return dealService.findDeliveryStatus(courierRequest, dealId);
     }
 
 
