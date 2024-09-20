@@ -12,6 +12,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     url: jdbc:mysql://localhost:3306/dabid
+    #url: jdbc:mysql://mysql:3306/dabid #docker전용
     password: dabid
   # SQL Encoding
   sql:
@@ -59,9 +60,23 @@ server:
     encoding:
       enabled: 'true'
 
-  data:
-    mongodb:
-#      uri: mongodb://root:dabid@mongo:27017/dabid?authSource=admin
+data:
+  mongodb:
+#    uri: mongodb://root:dabid@mongodb:27017/dabid?authSource=admin
+
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: dabid
 
 point:
   buy:
