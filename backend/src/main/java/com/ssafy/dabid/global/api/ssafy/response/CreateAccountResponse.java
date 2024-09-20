@@ -19,15 +19,15 @@ public class CreateAccountResponse extends SsafyApiResponse {
     private Currency currency;
 
     @JsonProperty("REC")
-    private void unpackNested(Map<String, Object> rec) {
-        this.bankCode = (String) rec.get("bankCode");
-        this.accountNo = (String) rec.get("accountNo");
-        Map<String, String> currencyMap = (Map<String, String>) rec.get("currency");
-        this.currency = new Currency();
-        this.currency.currency = currencyMap.get("currency");
-        this.currency.currencyName = currencyMap.get("currencyName");
+    private void unpackNested(Map<String,Object> map) {
+        this.bankCode = String.valueOf(map.get("bankCode"));
+        this.accountNo = String.valueOf(map.get("accountNo"));
+        Map<String, String> currencyMap = (Map<String, String>) map.get("currency");
+        this.currency = new Currency(currencyMap.get("currency"), currencyMap.get("currencyName"));
     }
 
+    @AllArgsConstructor
+    @Getter
     private static class Currency {
         private String currency;
         private String currencyName;

@@ -79,4 +79,6 @@ public class Member extends BaseEntity implements UserDetails {
     public void decreasePoint(int value){
         this.point -= value;
     }
+
+    public void addKey(String userKey) { this.userKey = userKey; }
 }

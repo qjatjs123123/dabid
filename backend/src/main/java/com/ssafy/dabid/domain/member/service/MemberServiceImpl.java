@@ -8,6 +8,9 @@ import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.entity.Role;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.domain.member.repository.RandomNicknameMapper;
+import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
+import com.ssafy.dabid.global.api.ssafy.request.GetUserKeyRequest;
+import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
 import com.ssafy.dabid.global.status.StatusMessage;
@@ -15,6 +18,8 @@ import com.ssafy.dabid.global.utils.JwtUtils;
 import com.ssafy.dabid.global.utils.TokenType;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,8 +34,10 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Transactional
 public class MemberServiceImpl implements MemberService {
+    private static final Logger log = LoggerFactory.getLogger(MemberServiceImpl.class);
     private final MemberRepository memberRepository;
     private final RandomNicknameMapper mapper;
+    private final SsafyApiClient ssafyApiClient;
 
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
@@ -56,6 +63,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public CommonResponseDto signUp(SignUpRequestDto dto) {
+        log.info("Sign-up user with email {}", dto.getEmail());
+        //이메일, 휴대폰번호 중복 체크를 다시 해야할까?
         Member member = Member
                 .builder()
                 .email(dto.getEmail())
@@ -64,18 +73,26 @@ public class MemberServiceImpl implements MemberService {
                 .nickname(dto.getNickname())
                 .phoneNumber(dto.getPhoneNumber())
                 .build();
-
-        //TODO : 금융망 API를 통해 userKey 등록
+        
+        //랜덤 생성 닉네임에 포함되는 닉네임일 경우 사용 여부 갱신
         randomNicknameMapper.updateUsed(dto.getNickname());
+
+        //금융망 API를 통해 userKey 등록
+        String userKey = generateKey(member.getEmail());
+        member.addKey(userKey);
+
+        //TODO : member_account 엔티티 기준으로 계좌 생성 후 repository에 저장
 
         memberRepository.save(member);
 
         return new CommonResponseDto();
     }
 
-    /*private String genereateKey(String email){
-        WebClient로 API를 호출
-    }*/
+    private String generateKey(String email){
+        GetUserKeyRequest requestBody = new GetUserKeyRequest(email);
+        GetUserKeyResponse responseBody = ssafyApiClient.getUserKey(requestBody);
+        return responseBody.getUserKey();
+    }
 
     @Override
     public CommonResponseDto signIn(SignInRequestDto dto) {
