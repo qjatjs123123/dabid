@@ -25,7 +25,7 @@ public class Account extends BaseEntity {
     @Column
     private String account_number;
 
-//    @Column
-//    private LocalDateTime modified_at;
+    @Column
+    private LocalDateTime modified_at;
 }
 

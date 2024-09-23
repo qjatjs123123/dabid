@@ -65,8 +65,8 @@ public class DealServiceImpl implements DealService {
     @Override
     public InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey) {
         SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                ACCOUNT_BALANCE_CODE,
-                ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
                 "937d7d39-eccc-4741-bf54-af154e279537" //임시 나중에 Security에서 멤버에서 가져올것
         );
 
@@ -80,7 +80,7 @@ public class DealServiceImpl implements DealService {
                 .build();
 
         InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
-                ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
                 ssafyApiRequest,
                 InquireDemandDepositAccountBalance.class
         );
@@ -91,8 +91,8 @@ public class DealServiceImpl implements DealService {
     @Override
     public BuyerBalanceAndAccount findBuyerAccount(int dealId, int userKey) {
         SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                ACCOUNT_BALANCE_CODE,
-                ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
                 "71b2ece2-981e-452a-8412-7c6aecbaa2e1" //임시 나중에 Security에서 멤버에서 가져올것
         );
 
@@ -110,7 +110,7 @@ public class DealServiceImpl implements DealService {
                 .build();
 
         InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
-                ACCOUNT_BALANCE_CODE,
+                SELELCT_ACCOUNT_BALANCE_CODE,
                 ssafyApiRequest,
                 InquireDemandDepositAccountBalance.class
         );
@@ -167,6 +167,7 @@ public class DealServiceImpl implements DealService {
 
         SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
                 .header(ssafyApiHeaderRequest)
+                .accountTypeUniqueNo(ACCOUNTTYPUNIQUENO)
                 .build();
 
         CreateDemandDepositAccount response = ssafyApiClient.getSsafyApiResponse(
@@ -277,7 +278,7 @@ public class DealServiceImpl implements DealService {
         SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
                 .header(ssafyApiHeaderRequest)
                 .depositAccountNo(deal.getAccount())
-                .transactionBalance(String.valueOf(deal.getWinning_bid()))
+                .transactionBalance(deal.getWinning_bid())
                 .withdrawalAccountNo(buyer_account.getAccount_number())
                 .build();
 

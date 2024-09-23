@@ -2,7 +2,6 @@ package com.ssafy.dabid.global.api.ssafy.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.dabid.domain.deal.dto.response.SsafyApiHeaderResponse;
 import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +13,15 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CheckAuthCodeResponse {
-
-    @JsonProperty("Header")
-    private SsafyApiHeaderResponse header;
+public class CheckAuthCodeResponse extends SsafyApiResponse {
+    private String status;
+    private String transactionUniqueNo;
+    private String accountNo;
 
     @JsonProperty("REC")
-    private Rec rec;
-
-    @Getter
-    @Setter
-    @NoArgsConstructor  // 기본 생성자 추가
-    public static class Rec {
-        private String status;
-        private String transactionUniqueNo;
-        private String accountNo;
+    private void unpackNested(Map<String,String> map) {
+        this.status = map.get("status");
+        this.transactionUniqueNo = map.get("transactionUniqueNo");
+        this.accountNo = map.get("accountNo");
     }
 }

@@ -6,5 +6,4 @@ public interface StatusCode {
     String DUPLICATE_EMAIL = "DE";
     String DUPLICATE_NICKNAME = "DN";
     String DUPLICATE_PHONE_NUMBER = "DP";
-    String NOT_ENOUGH_POINTS = "NEP";
 }

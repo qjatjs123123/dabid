@@ -1,6 +1,5 @@
 package com.ssafy.dabid.domain.member.service;
 
-import com.ssafy.dabid.domain.member.dto.PointDto;
 import com.ssafy.dabid.domain.member.dto.request.CheckRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.RefreshRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignInRequestDto;
@@ -19,8 +18,4 @@ public interface MemberService {
     CommonResponseDto checkDuplicate(CheckRequestDto dto);
 
     CommonResponseDto generateNickname();
-
-    CommonResponseDto pointIn(PointDto dto);
-
-    CommonResponseDto pointOut(PointDto dto);
 }
