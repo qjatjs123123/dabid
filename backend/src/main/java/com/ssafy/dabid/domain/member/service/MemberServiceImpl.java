@@ -2,9 +2,7 @@ package com.ssafy.dabid.domain.member.service;
 
 import com.ssafy.dabid.domain.member.dto.PointDto;
 import com.ssafy.dabid.domain.member.dto.request.*;
-import com.ssafy.dabid.domain.member.dto.response.RandomNicknameResponseDto;
-import com.ssafy.dabid.domain.member.dto.response.RefreshResponseDto;
-import com.ssafy.dabid.domain.member.dto.response.SignInResponseDto;
+import com.ssafy.dabid.domain.member.dto.response.*;
 import com.ssafy.dabid.domain.member.entity.Account;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.entity.Role;
@@ -13,10 +11,7 @@ import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.domain.member.repository.RandomNicknameMapper;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 import com.ssafy.dabid.global.api.ssafy.request.GetUserKeyRequest;
-import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
-import com.ssafy.dabid.global.api.ssafy.response.DepositResponse;
-import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
-import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
+import com.ssafy.dabid.global.api.ssafy.response.*;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
 import com.ssafy.dabid.global.status.StatusMessage;
@@ -33,9 +28,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_ACCOUNT;
 import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_USER_KEY;
@@ -100,6 +97,8 @@ public class MemberServiceImpl implements MemberService {
                 .account_number(accountNo)
                 .member(member)
                 .build();
+
+        account.kill();
 
         memberAccountRepository.save(account);
         
@@ -184,11 +183,16 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public CommonResponseDto pointIn(PointDto dto) {
         String transactionBalance = dto.getAmount();
-        String userAccountNo = dto.getAccount();
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String userKey = member.getUserKey();
+        Account account = memberAccountRepository.findByMember(member);
+
+        if (!account.getIsActive()) {
+            return new CommonResponseDto(StatusCode.NOT_VERIFIED_ACCOUNT, StatusMessage.NOT_VERIFIED_ACCOUNT);
+        }
+        String userAccountNo = account.getAccount_number();
 
         TransferResponse response = ssafyApiClient.deposit(userKey, ADMIN_ACCOUNT, userAccountNo, transactionBalance);
         if (response.getHeader().getResponseCode().equals("H0000")) {
@@ -203,14 +207,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public CommonResponseDto pointOut(PointDto dto) {
         String transactionBalance = dto.getAmount();
-        String userAccountNo = dto.getAccount();
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        Account account = memberAccountRepository.findByMember(member);
+
+        if (!account.getIsActive()) {
+            return new CommonResponseDto(StatusCode.NOT_VERIFIED_ACCOUNT, StatusMessage.NOT_VERIFIED_ACCOUNT);
+        }
+
         if (Integer.parseInt(transactionBalance) > member.getPoint()) {
             return new CommonResponseDto(StatusCode.NOT_ENOUGH_POINTS, StatusMessage.NOT_ENOUGH_POINTS);
         }
+        String userAccountNo = account.getAccount_number();
 
         TransferResponse response = ssafyApiClient.deposit(ADMIN_USER_KEY, userAccountNo, ADMIN_ACCOUNT, transactionBalance);
         if (response.getHeader().getResponseCode().equals("H0000")) {
@@ -221,4 +231,48 @@ public class MemberServiceImpl implements MemberService {
         log.error(response.getHeader().getResponseMessage());
         return CommonResponseDto.fail();
     }
+
+    @Override
+    public CommonResponseDto transaction() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Account account = memberAccountRepository.findByMember(member);
+        String accountNo = account.getAccount_number();
+        String userKey = member.getUserKey();
+
+        TransactionHistoryResponse response = ssafyApiClient.transactionHistory(userKey, accountNo);
+        TransactionResponseDto dto = new TransactionResponseDto();
+
+        List<TransactionResponseDto.HistoryItem> list = response.getRec().getList().stream()
+                .map(item -> TransactionResponseDto.HistoryItem.builder()
+                        .transactionDate(item.getTransactionDate())
+                        .transactionTime(item.getTransactionTime())
+                        .transactionTypeName(item.getTransactionTypeName())
+                        .transactionAccountNo(item.getTransactionAccountNo())
+                        .transactionBalance(item.getTransactionBalance())
+                        .transactionAfterBalance(item.getTransactionAfterBalance())
+                        .transactionSummary(item.getTransactionSummary())
+                        .build()).toList();
+
+        dto.setList(list);
+        return dto;
+    }
+
+    @Override
+    public CommonResponseDto balance() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Account account = memberAccountRepository.findByMember(member);
+        String accountNo = account.getAccount_number();
+        String userKey = member.getUserKey();
+
+        AccountBalanceResponse response = ssafyApiClient.accountBalance(userKey, accountNo);
+        BalanceResponseDto dto = new BalanceResponseDto();
+        dto.setBalance(String.valueOf(response.getRec().getAccountBalance()));
+
+        return dto;
+    }
+
 }
