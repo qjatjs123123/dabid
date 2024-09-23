@@ -14,7 +14,7 @@ public class StaticConst {
     public static final String TRANSACTION_TYPE = "A";
     public static final String ORDER_BY_TYPE = "DESC";
     public static final String ADMIN_USER_KEY = "937d7d39-eccc-4741-bf54-af154e279537";
-
+    public static final String ADMIN_ACCOUNT = "0016368455041861";
     public static final String DELIVERY_TRACKER_CLIENT_ID = "7lbeq73am80t54r3rs7l6vjnnv";
     public static final String DELIVERY_TRACKER_CLIENT_PW = "103eufmav4298s8ms4581nkffhmajqg20qmbmco1uoig535775j8";
     // code

@@ -5,6 +5,7 @@ import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
 import com.ssafy.dabid.global.api.ssafy.request.*;
 import com.ssafy.dabid.global.api.ssafy.response.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,6 +15,7 @@ import static com.ssafy.dabid.global.consts.StaticConst.*;
 import static com.ssafy.dabid.global.consts.StaticFunc.getSsafyApiHeaderRequest;
 import static com.ssafy.dabid.global.consts.StaticFunc.serializeToJson;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SsafyApiClient {
@@ -42,6 +44,9 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/edu/demandDeposit/createDemandDepositAccount", request, CreateAccountResponse.class);
     }
 
+    /**
+     * @param accountNo 입금 계좌
+     * */
     // 계좌 입금
     public DepositResponse depositIn(String userKey, String accountNo, String transactionBalance) {
 
@@ -54,6 +59,9 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountDeposit", request, DepositResponse.class);
     }
 
+    /**
+     * @param accountNo 출금 계좌
+     * */
     // 계좌 출금
     public DepositResponse depositOut(String userKey, String accountNo, String transactionBalance) {
 
@@ -66,6 +74,10 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/edu/demandDeposit/updateDemandDepositAccountWithdrawal", request, DepositResponse.class);
     }
 
+    /**
+     * @param depositAccountNo 입급 계좌
+     * @param withdrawalAccountNo 출금 계좌
+     * */
     // 계좌 이체
     public TransferResponse deposit(String userKey, String depositAccountNo, String withdrawalAccountNo, String transactionBalance) {
 

@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.member.service;
 
+import com.ssafy.dabid.domain.member.dto.PointDto;
 import com.ssafy.dabid.domain.member.dto.request.SignUpRequestDto;
 import com.ssafy.dabid.domain.member.dto.response.RandomNicknameResponseDto;
 import com.ssafy.dabid.domain.member.entity.Account;
@@ -50,7 +51,7 @@ class MemberServiceImplTest {
         RandomNicknameResponseDto randomNicknameResponseDto = (RandomNicknameResponseDto) memberService.generateNickname();
 
         SignUpRequestDto dto = new SignUpRequestDto();
-        dto.setEmail("gksqjsehdksTmsdlapdlf@gmail.com");
+        dto.setEmail("email123@gmail.com");
         dto.setPassword("password");
         dto.setNickname(randomNicknameResponseDto.getNickname());
         memberService.signUp(dto);
@@ -68,4 +69,12 @@ class MemberServiceImplTest {
 
         assertEquals(1000000, accountBalanceResponse.getRec().getAccountBalance());
     }
+
+//    @Test
+//    void 포인트충전() {
+//        PointDto dto = new PointDto();
+//        dto.setAccount("0018520954400580");
+//        dto.setAmount("1000");
+//
+//    }
 }

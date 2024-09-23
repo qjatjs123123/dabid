@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.member.service;
 
+import com.ssafy.dabid.domain.member.dto.PointDto;
 import com.ssafy.dabid.domain.member.dto.request.*;
 import com.ssafy.dabid.domain.member.dto.response.RandomNicknameResponseDto;
 import com.ssafy.dabid.domain.member.dto.response.RefreshResponseDto;
@@ -15,6 +16,7 @@ import com.ssafy.dabid.global.api.ssafy.request.GetUserKeyRequest;
 import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
 import com.ssafy.dabid.global.api.ssafy.response.DepositResponse;
 import com.ssafy.dabid.global.api.ssafy.response.GetUserKeyResponse;
+import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
 import com.ssafy.dabid.global.status.StatusMessage;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+
+import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_ACCOUNT;
+import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_USER_KEY;
+
 
 @Service
 @RequiredArgsConstructor
@@ -170,5 +177,48 @@ public class MemberServiceImpl implements MemberService {
         } catch (Exception e){
             return CommonResponseDto.fail();
         }
+    }
+
+
+
+    @Override
+    public CommonResponseDto pointIn(PointDto dto) {
+        String transactionBalance = dto.getAmount();
+        String userAccountNo = dto.getAccount();
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String userKey = member.getUserKey();
+
+        TransferResponse response = ssafyApiClient.deposit(userKey, ADMIN_ACCOUNT, userAccountNo, transactionBalance);
+        if (response.getHeader().getResponseCode().equals("H0000")) {
+            member.increasePoint(Integer.parseInt(transactionBalance));
+            return new CommonResponseDto();
+        }
+
+        log.error(response.getHeader().getResponseMessage());
+        return CommonResponseDto.fail();
+    }
+
+    @Override
+    public CommonResponseDto pointOut(PointDto dto) {
+        String transactionBalance = dto.getAmount();
+        String userAccountNo = dto.getAccount();
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (Integer.parseInt(transactionBalance) > member.getPoint()) {
+            return new CommonResponseDto(StatusCode.NOT_ENOUGH_POINTS, StatusMessage.NOT_ENOUGH_POINTS);
+        }
+
+        TransferResponse response = ssafyApiClient.deposit(ADMIN_USER_KEY, userAccountNo, ADMIN_ACCOUNT, transactionBalance);
+        if (response.getHeader().getResponseCode().equals("H0000")) {
+            member.decreasePoint(Integer.parseInt(transactionBalance));
+            return new CommonResponseDto();
+        }
+
+        log.error(response.getHeader().getResponseMessage());
+        return CommonResponseDto.fail();
     }
 }
