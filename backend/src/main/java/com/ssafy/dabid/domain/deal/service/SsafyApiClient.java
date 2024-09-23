@@ -10,8 +10,8 @@
 //
 //import static com.ssafy.dabid.global.consts.StaticFunc.*;
 //
-//@Component
-//@RequiredArgsConstructor
+////@Component
+////@RequiredArgsConstructor
 //public class SsafyApiClient {
 //    private final WebClient webClient;
 //    private static final String baseURL = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit";

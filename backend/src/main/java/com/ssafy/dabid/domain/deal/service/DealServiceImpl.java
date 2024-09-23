@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.ssafy.dabid.global.consts.StaticConst.*;
@@ -42,6 +43,7 @@ public class DealServiceImpl implements DealService {
     private final DeliveryTrackerAPIClient deliveryTrackerAPIClient;
     private final S3Util s3Util;
 
+    private static final String baseURL = "/edu/demandDeposit/";
 
     @Override
     public Status findDeliveryStatus(CourierRequest courierRequest, int dealId) {
@@ -159,6 +161,7 @@ public class DealServiceImpl implements DealService {
     @Override
     public CreateDemandDepositAccount createAccount(String userKey) {
 
+        String path = baseURL + CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE;
         SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
                 CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
                 CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
@@ -171,7 +174,7 @@ public class DealServiceImpl implements DealService {
                 .build();
 
         CreateDemandDepositAccount response = ssafyApiClient.getSsafyApiResponse(
-                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
+                path,
                 ssafyApiRequest,
                 CreateDemandDepositAccount.class
         );
@@ -231,11 +234,23 @@ public class DealServiceImpl implements DealService {
         log.info("닉네임 : {}", member.getNickname());
 
         Deal deal = dealRepository.findById(id);
+        log.info("호출 전 상태 : {}", deal.getStatus());
 
         // tracking_number가 null이 아니면
         if(deal.getTrackingNumber() != null){
+
             // 택배 현황 조회 API 호출
+            CarrierId carrierId = deal.getCarrier_id();
+            String trackingNumber = deal.getTrackingNumber();
+            CourierRequest request = CourierRequest.builder()
+                    .carrierId(carrierId).trackingNumber(trackingNumber).build();
+            String status = deliveryTrackerAPIClient.trackPackage(request);
+            log.info("호출 후 상태 : {}", status);
+
             //  status 갱신
+            deal.setStatus(Status.valueOf(status));
+            log.info("호출 후 상태 : {}", deal.getStatus());
+            dealRepository.save(deal);
         }
 
         DealResponseDto dto = DealResponseDto.builder()
@@ -256,6 +271,8 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public DealResponseDto transferBalance(String email, int dealId) {
+
+        String path = baseURL + TRANSFER_CODE;
 
         Member buyer = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
@@ -284,7 +301,7 @@ public class DealServiceImpl implements DealService {
 
         try {
             UpdateDemandDepositAccountTransfer response = ssafyApiClient.getSsafyApiResponse(
-                    TRANSFER_CODE,
+                    path,
                     ssafyApiRequest,
                     UpdateDemandDepositAccountTransfer.class
             );

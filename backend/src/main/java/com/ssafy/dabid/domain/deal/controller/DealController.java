@@ -74,11 +74,4 @@ public class DealController {
         return dealService.transferBalance(email, dealId);
     }
 
-//    @GetMapping("/test")
-//    public void test(){
-////        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-////        log.info("email: {}", email);
-//        dealService.createDeal(1);
-//    }
-
 }
