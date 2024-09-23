@@ -14,7 +14,7 @@ public interface DealService {
 
     InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey);
     public void createDeal(int auctionId);
-    public CreateDemandDepositAccount createAccount(String userKey);
+//    public CreateDemandDepositAccount createAccount(String userKey);
     public List<ListDealResponseDto> listDeal(String email);
     BuyerBalanceAndAccount findBuyerAccount(int dealId, int userKey);
     public DealResponseDto detailDeal(String email, int id);

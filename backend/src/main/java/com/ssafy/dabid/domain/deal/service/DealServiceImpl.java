@@ -3,8 +3,8 @@ package com.ssafy.dabid.domain.deal.service;
 import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
+import com.ssafy.dabid.global.api.ssafy.request.SsafyApiHeaderRequest;
+import com.ssafy.dabid.global.api.ssafy.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.*;
 import com.ssafy.dabid.domain.deal.dto.response.BuyerBalanceAndAccount;
 import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
@@ -17,15 +17,17 @@ import com.ssafy.dabid.domain.deal.repository.DealRepository;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
+import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
+import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
 import com.ssafy.dabid.global.utils.S3Util;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.ssafy.dabid.global.consts.StaticConst.*;
@@ -138,7 +140,7 @@ public class DealServiceImpl implements DealService {
                 .orElseThrow(() -> new RuntimeException("해당 구매자가 존재하지 않습니다."));
 
         // 거래용 가상계좌 생성 (관리자 계정)
-        CreateDemandDepositAccount response = createAccount(ADMIN_USER_KEY);
+        CreateAccountResponse response = ssafyApiClient.createAccount(ADMIN_USER_KEY);
         String accountNo = response.getRec().getAccountNo();
         log.info("계좌번호 = {}", accountNo);
 
@@ -157,29 +159,29 @@ public class DealServiceImpl implements DealService {
         dealRepository.save(deal);
     }
 
-    // 계좌 생성
-    @Override
-    public CreateDemandDepositAccount createAccount(String userKey) {
-
-        String path = baseURL + CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE;
-        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
-                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
-                userKey
-        );
-
-        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
-                .header(ssafyApiHeaderRequest)
-                .build();
-
-        CreateDemandDepositAccount response = ssafyApiClient.getSsafyApiResponse(
-                path,
-                ssafyApiRequest,
-                CreateDemandDepositAccount.class
-        );
-
-        return response;
-    }
+//    // 계좌 생성
+//    @Override
+//    public CreateDemandDepositAccount createAccount(String userKey) {
+//
+//        String path = baseURL + CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE;
+//        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
+//                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
+//                CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE,
+//                userKey
+//        );
+//
+//        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
+//                .header(ssafyApiHeaderRequest)
+//                .build();
+//
+//        CreateDemandDepositAccount response = ssafyApiClient.getSsafyApiResponse(
+//                path,
+//                ssafyApiRequest,
+//                CreateDemandDepositAccount.class
+//        );
+//
+//        return response;
+//    }
 
 
     @Override
@@ -284,32 +286,29 @@ public class DealServiceImpl implements DealService {
         log.info("구매자 계좌 : {}", buyer_account.getAccount_number());
 
         Deal deal = dealRepository.findById(dealId);
+//
+//
+//
+//        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
+//                TRANSFER_CODE,
+//                TRANSFER_CODE,
+//                userKey
+//        );
+//
+//        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
+//                .header(ssafyApiHeaderRequest)
+//                .depositAccountNo(deal.getAccount())
+//                .transactionBalance(String.valueOf(deal.getWinning_bid()))
+//                .withdrawalAccountNo(buyer_account.getAccount_number())
+//                .build();
 
-        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                TRANSFER_CODE,
-                TRANSFER_CODE,
-                userKey
-        );
+        TransferResponse response = ssafyApiClient.deposit(userKey, deal.getAccount(), buyer_account.getAccount_number(), String.valueOf(deal.getWinning_bid()));
 
-        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
-                .header(ssafyApiHeaderRequest)
-                .depositAccountNo(deal.getAccount())
-                .transactionBalance(String.valueOf(deal.getWinning_bid()))
-                .withdrawalAccountNo(buyer_account.getAccount_number())
-                .build();
-
-        try {
-            UpdateDemandDepositAccountTransfer response = ssafyApiClient.getSsafyApiResponse(
-                    path,
-                    ssafyApiRequest,
-                    UpdateDemandDepositAccountTransfer.class
-            );
-
+        if(response.getHeader().getResponseCode().equals("H0000")){
             deal.setStatus(Status.PAYMENT_COMPLETE);
 
-        } catch (RuntimeException e) {
-            log.error("이체 중 오류 발생: {}", e.getMessage());
-            throw e;
+        } else{
+            throw new RuntimeException("계좌 이체에 실패했습니다.");
         }
 
         DealResponseDto dto = DealResponseDto.builder()

@@ -2,7 +2,7 @@ package com.ssafy.dabid.global.api.ssafy.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.dabid.domain.deal.dto.response.SsafyApiHeaderResponse;
+import com.ssafy.dabid.global.api.ssafy.response.SsafyApiHeaderResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

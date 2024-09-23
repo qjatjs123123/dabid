@@ -2,8 +2,8 @@ package com.ssafy.dabid.global.consts;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
+import com.ssafy.dabid.global.api.ssafy.request.SsafyApiHeaderRequest;
+import com.ssafy.dabid.global.api.ssafy.request.SsafyApiRequest;
 import net.minidev.json.JSONObject;
 
 import java.time.LocalDate;
