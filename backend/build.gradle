@@ -45,6 +45,10 @@ dependencies {
 	//mybatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
+	// opencsv
+	implementation 'com.opencsv:opencsv:5.9'
+
+
 	//jwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'

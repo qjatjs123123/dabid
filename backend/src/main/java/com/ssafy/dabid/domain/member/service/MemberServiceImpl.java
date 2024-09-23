@@ -244,6 +244,8 @@ public class MemberServiceImpl implements MemberService {
         TransactionHistoryResponse response = ssafyApiClient.transactionHistory(userKey, accountNo);
         TransactionResponseDto dto = new TransactionResponseDto();
 
+        List<TransactionHistoryResponse.Rec.HistoryItem> list1 = response.getRec().getList();
+
         List<TransactionResponseDto.HistoryItem> list = response.getRec().getList().stream()
                 .map(item -> TransactionResponseDto.HistoryItem.builder()
                         .transactionDate(item.getTransactionDate())

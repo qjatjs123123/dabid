@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface InquiryImageRepository extends JpaRepository<InquiryImage, Integer> {
-    List<InquiryImage> findByInquiryId(int inquiryId);
+    List<InquiryImage> findByInquiry_Id(int inquiryId);
 }

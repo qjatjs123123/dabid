@@ -1,19 +1,27 @@
 package com.ssafy.dabid.domain.inquiry.service;
 
-import com.ssafy.dabid.domain.auction.entity.AuctionImage;
+import com.opencsv.CSVWriter;
+import com.ssafy.dabid.domain.auction.entity.Category;
 import com.ssafy.dabid.domain.inquiry.dto.InquiryRequestDto;
-import com.ssafy.dabid.domain.inquiry.entity.Category;
+import com.ssafy.dabid.domain.inquiry.dto.InquiryResponseDto;
 import com.ssafy.dabid.domain.inquiry.entity.Inquiry;
 import com.ssafy.dabid.domain.inquiry.entity.InquiryImage;
 import com.ssafy.dabid.domain.inquiry.repository.InquiryImageRepository;
 import com.ssafy.dabid.domain.inquiry.repository.InquiryRepository;
+import com.ssafy.dabid.domain.member.dto.response.TransactionResponseDto;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.utils.S3Util;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,10 +36,8 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     public CommonResponseDto createInquiry(InquiryRequestDto dto) {
-        Member member = memberRepository.findById(dto.getMemberId()).orElse(null);
-        if(member == null) {
-            return CommonResponseDto.fail();
-        }
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않는 Member"));
 
         Inquiry inquiry = Inquiry.createInquiry(dto, member);
 
@@ -48,5 +54,83 @@ public class InquiryServiceImpl implements InquiryService {
         }
 
         return new CommonResponseDto();
+    }
+
+    @Override
+    public CommonResponseDto getMyInquiry(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않는 Member"));
+        InquiryResponseDto dto = new InquiryResponseDto();
+        List<InquiryResponseDto.InquiryItem> itemList = new ArrayList<>();
+
+        List<Inquiry> inquiryList = inquiryRepository.findByMember(member);
+
+        for(Inquiry inquiry : inquiryList) {
+            InquiryResponseDto.InquiryItem item = new InquiryResponseDto.InquiryItem();
+            item.setTitle(inquiry.getTitle());
+            item.setContent(inquiry.getContent());
+            item.setCategory(inquiry.getCategory().name());
+            item.setInquiryId(inquiry.getId());
+
+            List<String> imageUrlList = new ArrayList<>();
+            List<InquiryImage> imageList = inquiryImageRepository.findByInquiry_Id(inquiry.getId());
+            for(InquiryImage image : imageList) {
+                imageUrlList.add(s3Util.generateFileUrl(image.getImageUrl()));
+            }
+            item.setImageUrls(imageUrlList);
+            itemList.add(item);
+        }
+        dto.setList(itemList);
+
+        return dto;
+    }
+
+    private List<InquiryResponseDto.InquiryItem>  getInquiry() {
+        List<InquiryResponseDto.InquiryItem> itemList = new ArrayList<>();
+
+        List<Inquiry> inquiryList = inquiryRepository.findAll();
+
+        for(Inquiry inquiry : inquiryList) {
+            InquiryResponseDto.InquiryItem item = new InquiryResponseDto.InquiryItem();
+            item.setTitle(inquiry.getTitle());
+            item.setContent(inquiry.getContent());
+            item.setCategory(inquiry.getCategory().name());
+            item.setInquiryId(inquiry.getId());
+
+            List<String> imageUrlList = new ArrayList<>();
+            List<InquiryImage> imageList = inquiryImageRepository.findByInquiry_Id(inquiry.getId());
+            for(InquiryImage image : imageList) {
+                imageUrlList.add(s3Util.generateFileUrl(image.getImageUrl()));
+            }
+            item.setImageUrls(imageUrlList);
+            itemList.add(item);
+        }
+        return itemList;
+    }
+
+
+    public String writeCsv() throws IOException {
+        String filePath = System.getProperty("user.home")+"/Downloads/inquiries.csv";
+        List<InquiryResponseDto.InquiryItem> dtos = getInquiry();
+
+        try (FileWriter writer = new FileWriter(filePath, Charset.forName("EUC-KR"));
+             CSVWriter csvWriter = new CSVWriter(writer)) {
+
+            String[] header = {"ID", "제목", "내용", "카테고리", "이미지"};
+            csvWriter.writeNext(header);
+
+            for (InquiryResponseDto.InquiryItem dto : dtos) {
+                String[] data = {
+                        String.valueOf(dto.getInquiryId()),
+                        dto.getTitle(),
+                        dto.getContent(),
+                        dto.getCategory(),
+                        String.join(", ", dto.getImageUrls())
+                };
+                csvWriter.writeNext(data);
+            }
+        }
+
+        return filePath;
     }
 }

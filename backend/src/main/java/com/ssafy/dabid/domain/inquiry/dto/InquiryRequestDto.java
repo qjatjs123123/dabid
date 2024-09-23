@@ -14,8 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class InquiryRequestDto {
 
-    private Integer memberId;
-
     private String title;
 
     private String content;
