@@ -17,6 +17,8 @@ import com.ssafy.dabid.domain.deal.repository.DealRepository;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
+import com.ssafy.dabid.global.api.ssafy.request.TransferRequest;
+import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
 import com.ssafy.dabid.global.utils.S3Util;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 import jakarta.transaction.Transactional;
@@ -75,15 +77,34 @@ public class DealServiceImpl implements DealService {
         int buyer_id = deal.getBuyer().getId();
         int seller_id = deal.getSeller().getId();
         int deposit = deal.getDeposit();
+        int winning_bid = deal.getWinning_bid();
+        String  deal_account = deal.getAccount();
 
-        // 구매자 낙찰금 보증금 환급
         Member buyer = memberRepository.findById(buyer_id)
                 .orElseThrow(() -> new NoSuchElementException("구매자를 찾을 수 없습니다."));
-
         Member seller = memberRepository.findById(seller_id)
                 .orElseThrow(() -> new NoSuchElementException("판매자를 찾을 수 없습니다."));
 
-        
+        // 구매자 낙찰금 보증금 환급
+        buyer.increasePoint(buyer.getPoint() + deposit);
+        // 거래 비활성화
+        deal.kill();
+        // 거래 완료 상태
+        deal.setStatus(Status.TRANSACTION_DONE);
+
+        // 가상 계좌에 있는 돈을 판매자 계좌에 입금
+        Account seller_account = memberAccountRepository.findByMember(seller);
+
+        SsafyApiRequest transferRequest = TransferRequest.builder()
+                .depositAccountNo(seller_account.getAccount_number())
+                .withdrawalAccountNo(deal_account)
+                .transactionBalance(winning_bid)
+                .build();
+
+        TransferResponse transferResponse = ssafyApiClient.depositOut(transferRequest);
+
+        if (transferResponse.getREC() == null)
+            throw new NoSuchElementException("전송 응답에서 REC 값을 찾을 수 없습니다.");
 
     }
 
