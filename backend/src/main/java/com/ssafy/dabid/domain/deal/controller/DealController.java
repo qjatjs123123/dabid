@@ -44,10 +44,14 @@ public class DealController {
     @PostMapping("/courier/{deal-id}")
     public Status insertCourier(@PathVariable("deal-id") int dealId,
                                 @RequestBody @Valid CourierRequest courierRequest) {
-
         return dealService.findDeliveryStatus(courierRequest, dealId);
     }
 
+    @PostMapping("/close/{deal-id}")
+    public ResponseEntity<String>  closeDeal(@PathVariable("deal-id") int dealId) {
+        dealService.closeDealTransaction(dealId);
+        return ResponseEntity.ok("거래가 성공적으로 종료되었습니다.");
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<ListDealResponseDto>> listDeal(){

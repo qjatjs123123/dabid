@@ -21,8 +21,12 @@ import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
 import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
+import com.ssafy.dabid.global.api.ssafy.request.TransferRequest;
+import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
 import com.ssafy.dabid.global.utils.S3Util;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
+import jakarta.transaction.Transactional;
+import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,8 @@ import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static com.ssafy.dabid.global.consts.StaticConst.*;
 import static com.ssafy.dabid.global.consts.StaticFunc.getSsafyApiHeaderRequest;
@@ -64,13 +70,48 @@ public class DealServiceImpl implements DealService {
         if (status.equals(Status.DELIVERED)) newStatus = Status.DELIVERED;
         else newStatus = Status.IN_TRANSIT;
 
-        Deal deal = dealRepository.findById(dealId);
+        Deal deal = dealRepository.findById(dealId)
+                .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
         deal.setStatus(newStatus);
         deal.setCarrier_id(courierRequest.getCarrierId());
         deal.setTrackingNumber(courierRequest.getTrackingNumber());
         dealRepository.save(deal);
 
         return newStatus;
+    }
+
+    @Override
+    @Transactional
+    public void closeDealTransaction(int dealId) {
+        Deal deal = dealRepository.findById(dealId)
+                .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
+        int buyer_id = deal.getBuyer().getId();
+        int seller_id = deal.getSeller().getId();
+        int deposit = deal.getDeposit();
+        int winning_bid = deal.getWinning_bid();
+        String  deal_account = deal.getAccount();
+
+        Member buyer = memberRepository.findById(buyer_id)
+                .orElseThrow(() -> new NoSuchElementException("구매자를 찾을 수 없습니다."));
+        Member seller = memberRepository.findById(seller_id)
+                .orElseThrow(() -> new NoSuchElementException("판매자를 찾을 수 없습니다."));
+
+        // 구매자 낙찰금 보증금 환급
+        buyer.increasePoint(deposit);
+        memberRepository.save(buyer);
+        // 거래 비활성화
+        deal.kill();
+        // 거래 완료 상태
+        deal.setStatus(Status.TRANSACTION_DONE);
+
+        // 가상 계좌에 있는 돈을 판매자 계좌에 입금
+        Account seller_account = memberAccountRepository.findByMember(seller);
+
+        TransferResponse transferResponse = ssafyApiClient.deposit(ADMIN_USER_KEY, seller_account.getAccount_number(), deal_account, String.valueOf(winning_bid));
+
+        if (transferResponse.getRec() == null)
+            throw new NoSuchElementException("전송 응답에서 REC 값을 찾을 수 없습니다.");
+
     }
 
     @Override
@@ -81,7 +122,8 @@ public class DealServiceImpl implements DealService {
                 "937d7d39-eccc-4741-bf54-af154e279537" //임시 나중에 Security에서 멤버에서 가져올것
         );
 
-        Deal deal = dealRepository.findById(dealId);
+        Deal deal = dealRepository.findById(dealId)
+                .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
 
         String dealAccount = deal.getAccount();
 
@@ -107,7 +149,8 @@ public class DealServiceImpl implements DealService {
                 "71b2ece2-981e-452a-8412-7c6aecbaa2e1" //임시 나중에 Security에서 멤버에서 가져올것
         );
 
-        Deal deal = dealRepository.findById(dealId);
+        Deal deal = dealRepository.findById(dealId)
+                .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
 
         int buyer_id = deal.getBuyer().getId();
 
@@ -217,9 +260,11 @@ public class DealServiceImpl implements DealService {
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
         log.info("닉네임 : {}", member.getNickname());
 
-        Deal deal = dealRepository.findById(id);
-        log.info("호출 전 상태 : {}", deal.getStatus());
 
+
+        Deal deal = dealRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
+        log.info("호출 전 상태 : {}", deal.getStatus());
         // tracking_number가 null이 아니면
         if(deal.getTrackingNumber() != null){
 
@@ -268,7 +313,8 @@ public class DealServiceImpl implements DealService {
         Account buyer_account = memberAccountRepository.findByMember(buyer);
         log.info("구매자 계좌 : {}", buyer_account.getAccount_number());
 
-        Deal deal = dealRepository.findById(dealId);
+        Deal deal = dealRepository.findById(dealId)
+                .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
 
         TransferResponse response = ssafyApiClient.deposit(userKey, deal.getAccount(), buyer_account.getAccount_number(), String.valueOf(deal.getWinning_bid()));
 
