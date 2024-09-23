@@ -49,29 +49,31 @@ public class StaticFunc {
         }
     }
 
-    public static SsafyApiRequest getSsafyApiRequest(
-            SsafyApiHeaderRequest header,
-            String accountNo,
-            Object transactionBalance, // 실제 사용할 타입으로 변환 필요
-            String transactionSummary,
-            String depositAccountNo,
-            String depositTransactionSummary,
-            String withdrawalAccountNo,
-            String withdrawalTransactionSummary,
-            String accountTypeUniqueNo
-    ) {
-        return new SsafyApiRequest(
-                header,
-                accountNo,
-                transactionBalance,
-                transactionSummary,
-                depositAccountNo,
-                depositTransactionSummary,
-                withdrawalAccountNo,
-                withdrawalTransactionSummary,
-                accountTypeUniqueNo
-        );
-    }
+//    public static SsafyApiRequest getSsafyApiRequest(
+//            SsafyApiHeaderRequest header,
+//            String accountNo,
+//            String transactionBalance, // 실제 사용할 타입으로 변환 필요
+//            String transactionSummary,
+//            String depositAccountNo,
+//            String depositTransactionSummary,
+//            String withdrawalAccountNo,
+//            String withdrawalTransactionSummary,
+//            String authCode,
+//            String userId
+//    ) {
+//        return new SsafyApiRequest(
+//                header,
+//                accountNo,
+//                transactionBalance,
+//                transactionSummary,
+//                depositAccountNo,
+//                depositTransactionSummary,
+//                withdrawalAccountNo,
+//                withdrawalTransactionSummary,
+//                authCode,
+//                userId
+//        );
+//    }
 
     public static SsafyApiHeaderRequest getSsafyApiHeaderRequest(
             String apiName,

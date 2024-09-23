@@ -39,7 +39,7 @@ public class Member extends BaseEntity implements UserDetails {
     private String imageUrl;
 
     @ColumnDefault("0")
-    private Integer point;
+    private int point;
 
     @Enumerated(EnumType.STRING)
     private Role role;
