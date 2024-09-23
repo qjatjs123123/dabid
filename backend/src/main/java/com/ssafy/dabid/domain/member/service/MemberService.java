@@ -23,4 +23,8 @@ public interface MemberService {
     CommonResponseDto pointIn(PointDto dto);
 
     CommonResponseDto pointOut(PointDto dto);
+
+    CommonResponseDto transaction();
+
+    CommonResponseDto balance();
 }

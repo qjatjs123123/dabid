@@ -74,4 +74,13 @@ public class MemberController {
         return ResponseEntity.ok(memberService.pointOut(dto));
     }
 
+    @GetMapping("/transaction")
+    public ResponseEntity<?> transaction(){
+        return ResponseEntity.ok(memberService.transaction());
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<?> balance(){
+        return ResponseEntity.ok(memberService.balance());
+    }
 }

@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PointDto {
-    private String account;
+//    private String account;
     private String amount;
 }
