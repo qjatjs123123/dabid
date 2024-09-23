@@ -2,6 +2,11 @@ spring:
   application:
     name: dabid
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
   # Scheduler ThreadCount
   quartz:
     properties:
@@ -81,5 +86,4 @@ management:
 point:
   buy:
     deposit: 5000
-
 
