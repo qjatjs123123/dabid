@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.member.controller;
 
+import com.ssafy.dabid.domain.member.dto.PointDto;
 import com.ssafy.dabid.domain.member.dto.request.CheckRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.RefreshRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignInRequestDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -21,7 +23,6 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberServiceImpl memberServiceImpl;
 
     @PostMapping("/auth/sign-up")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto dto) {
@@ -61,5 +62,25 @@ public class MemberController {
     @PostMapping("/auth/check")
     public ResponseEntity<?> checkDuplicate(@RequestBody CheckRequestDto dto){
         return ResponseEntity.ok(memberService.checkDuplicate(dto));
+    }
+
+    @PostMapping("/point-in")
+    public ResponseEntity<?> pointIn(@RequestBody PointDto dto) {
+        return ResponseEntity.ok(memberService.pointIn(dto));
+    }
+
+    @PostMapping("/point-out")
+    public ResponseEntity<?> pointOut(@RequestBody PointDto dto) {
+        return ResponseEntity.ok(memberService.pointOut(dto));
+    }
+
+    @GetMapping("/transaction")
+    public ResponseEntity<?> transaction(){
+        return ResponseEntity.ok(memberService.transaction());
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<?> balance(){
+        return ResponseEntity.ok(memberService.balance());
     }
 }

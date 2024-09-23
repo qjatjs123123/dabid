@@ -78,11 +78,11 @@ public class DealController {
         return dealService.transferBalance(email, dealId);
     }
 
-//    @GetMapping("/test")
-//    public void test(){
-////        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-////        log.info("email: {}", email);
-//        dealService.createDeal(1);
-//    }
+    // 스케줄러 임의 실행 테스트 start
+    @GetMapping("/test/{auctionId}")
+    public void testMakeDeal(@PathVariable int auctionId) {
+        dealService.testMakeDeal(auctionId);
+    }
+    // 스케줄러 임의 실행 테스트 end
 
 }

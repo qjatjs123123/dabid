@@ -10,8 +10,8 @@
 //@ToString
 //@Builder
 //@Document(indexName = "item")
-//@Mapping(mappingPath = "static/elastic-mapping.json")
-//@Setting(settingPath = "static/elastic-token.json")
+////@Mapping(mappingPath = "static/elastic-mapping.json")
+////@Setting(settingPath = "static/elastic-token.json")
 //public class ItemDocument {
 //
 //    @Id

@@ -14,10 +14,14 @@ public interface DealService {
     void closeDealTransaction(int dealId);
     InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey);
     public void createDeal(int auctionId);
-    public CreateDemandDepositAccount createAccount(String userKey);
+//    public CreateDemandDepositAccount createAccount(String userKey);
     public List<ListDealResponseDto> listDeal(String email);
     BuyerBalanceAndAccount findBuyerAccount(int dealId, int userKey);
     public DealResponseDto detailDeal(String email, int id);
     DealResponseDto transferBalance(String email, int dealId);
+
+    // 스케줄러 임의 실행 테스트 start
+    public void testMakeDeal(int auctionId);
+    // 스케줄러 임의 실행 테스트 end
 }
 
