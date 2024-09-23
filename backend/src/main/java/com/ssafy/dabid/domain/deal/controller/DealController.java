@@ -44,10 +44,13 @@ public class DealController {
     @PostMapping("/courier/{deal-id}")
     public Status insertCourier(@PathVariable("deal-id") int dealId,
                                 @RequestBody @Valid CourierRequest courierRequest) {
-
         return dealService.findDeliveryStatus(courierRequest, dealId);
     }
+    @PostMapping("/api/deal/close/{deal-id}")
+    public Status closeDeal(@PathVariable("deal-id") int dealId) {
 
+        return null;
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<ListDealResponseDto>> listDeal(){

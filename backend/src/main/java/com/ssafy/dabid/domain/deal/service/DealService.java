@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface DealService {
     Status findDeliveryStatus(CourierRequest courierRequest, int dealId);
-
+    void closeDealTransaction(int dealId);
     InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey);
     public void createDeal(int auctionId);
     public CreateDemandDepositAccount createAccount(String userKey);

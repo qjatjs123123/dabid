@@ -8,10 +8,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DealRepository extends JpaRepository<Deal, String>{
-    Deal findById(int id);
+    Optional<Deal> findById(int id);
     List<Deal> findAllBySellerOrBuyer(Member Seller, Member Buyer);
 
 }
