@@ -1,7 +1,9 @@
 package com.ssafy.dabid.domain.deal.service;
 
 import com.ssafy.dabid.domain.auction.entity.Auction;
+import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
+import com.ssafy.dabid.domain.auction.service.AuctionService;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
 import com.ssafy.dabid.global.api.ssafy.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.global.api.ssafy.request.SsafyApiRequest;
@@ -44,6 +46,11 @@ public class DealServiceImpl implements DealService {
     private final MemberAccountRepository memberAccountRepository;
     private final DeliveryTrackerAPIClient deliveryTrackerAPIClient;
     private final S3Util s3Util;
+
+    // 스케줄러 임의 실행 테스트 start
+    private final AuctionJpaRepository auctionJpaRepository;
+    private final AuctionService auctionService;
+    // 스케줄러 임의 실행 테스트 end
 
     private static final String baseURL = "/edu/demandDeposit/";
 
@@ -327,4 +334,32 @@ public class DealServiceImpl implements DealService {
         return dto;
     }
 
+    // 스케줄러 임의 실행 테스트 start
+    public void testMakeDeal(int auctionId) {
+        log.info("스케쥴러 테스트 호출 - endAuctionAndMakeDeal 시작");
+
+        // 경매 key를 통해 스케줄링을 실행할 경매를 알아냄
+        Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
+
+        if(auction.getFirstMemberId() == -1) { // 경매 참여자가 존재하지 않은 경우
+            auctionService.returnSellerPoint(auctionId);
+            // 알림 CoolSMS -> 판매자에게 "니 유감. 아무도 입찰안함"
+
+            log.info("경매 참여자가 존재하지 않는 경우의 스케쥴러 동작 완료");
+        }
+        else { // 경매 참여자가 존재하는 경우
+            auctionService.returnBuyerPointWhenExpired(auctionId, auction.getFirstMemberId(), auction.getDeposit());
+            // 거래, 채팅 생성, 거래용 가상계좌 생성
+            createDeal(auctionId);
+            // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
+            //              -> 판매자에게 "니 거래로 넘어감!"
+            log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");
+        }
+
+        auction.kill();
+        auctionJpaRepository.save(auction);
+
+        log.info("스케쥴러 테스트 호출 - endAuctionAndMakeDeal 종료");
+    }
+    // 스케줄러 임의 실행 테스트 start
 }

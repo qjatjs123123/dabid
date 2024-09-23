@@ -19,5 +19,9 @@ public interface DealService {
     BuyerBalanceAndAccount findBuyerAccount(int dealId, int userKey);
     public DealResponseDto detailDeal(String email, int id);
     DealResponseDto transferBalance(String email, int dealId);
+
+    // 스케줄러 임의 실행 테스트 start
+    public void testMakeDeal(int auctionId);
+    // 스케줄러 임의 실행 테스트 end
 }
 
