@@ -8,4 +8,5 @@ public interface StatusCode {
     String DUPLICATE_PHONE_NUMBER = "DP";
     String NOT_ENOUGH_POINTS = "NEP";
     String NOT_VERIFIED_ACCOUNT = "NVA";
+    String EXTERNAL_API_ERROR = "EAE";
 }

@@ -10,7 +10,6 @@ import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.domain.member.repository.RandomNicknameMapper;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
-import com.ssafy.dabid.global.api.ssafy.request.GetUserKeyRequest;
 import com.ssafy.dabid.global.api.ssafy.response.*;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
@@ -32,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_ACCOUNT;
 import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_USER_KEY;
@@ -233,6 +231,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CommonResponseDto transaction() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -260,6 +259,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CommonResponseDto balance() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -275,4 +275,44 @@ public class MemberServiceImpl implements MemberService {
         return dto;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public CommonResponseDto requestAuth() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Account account = memberAccountRepository.findByMember(member);
+        String accountNo = account.getAccount_number();
+        String userKey = member.getUserKey();
+
+        try {
+            AccountAuthResponse response = ssafyApiClient.accountAuth(userKey, accountNo);
+            if(response.getHeader().getResponseCode().equals("H0000"))
+                return new CommonResponseDto();
+            return new CommonResponseDto(StatusCode.EXTERNAL_API_ERROR, StatusCode.EXTERNAL_API_ERROR);
+        } catch (Exception e) {
+            return CommonResponseDto.fail();
+        }
+    }
+
+    @Override
+    public CommonResponseDto checkAuth(AuthCheckRequestDto dto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        Account account = memberAccountRepository.findByMember(member);
+        String accountNo = account.getAccount_number();
+        String userKey = member.getUserKey();
+        CheckAuthCodeResponse response = ssafyApiClient.checkAuth(userKey, accountNo, dto.getCode());
+
+        try{
+            if(response.getRec().getStatus().equals("SUCCESS")){
+                account.validate();
+                return new CommonResponseDto();
+            }
+            return CommonResponseDto.fail();
+        } catch (Exception e) {
+            return CommonResponseDto.fail();
+        }
+    }
 }
