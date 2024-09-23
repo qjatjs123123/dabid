@@ -25,7 +25,12 @@ public class Account extends BaseEntity {
     @Column
     private String account_number;
 
-//    @Column
+    @Override
+    public void validate() {
+        super.validate();
+    }
+
+    //    @Column
 //    private LocalDateTime modified_at;
 }
 

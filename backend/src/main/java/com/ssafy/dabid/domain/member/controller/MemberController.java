@@ -1,17 +1,15 @@
 package com.ssafy.dabid.domain.member.controller;
 
+import com.ssafy.dabid.domain.member.dto.request.AuthCheckRequestDto;
 import com.ssafy.dabid.domain.member.dto.PointDto;
 import com.ssafy.dabid.domain.member.dto.request.CheckRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.RefreshRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignInRequestDto;
 import com.ssafy.dabid.domain.member.dto.request.SignUpRequestDto;
 import com.ssafy.dabid.domain.member.service.MemberService;
-import com.ssafy.dabid.domain.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -82,5 +80,15 @@ public class MemberController {
     @GetMapping("/balance")
     public ResponseEntity<?> balance(){
         return ResponseEntity.ok(memberService.balance());
+    }
+
+    @PostMapping("/account-request")
+    public ResponseEntity<?> accountAuth(){
+        return ResponseEntity.ok(memberService.requestAuth());
+    }
+
+    @PostMapping("/account-check")
+    public ResponseEntity<?> checkAuth(@RequestBody AuthCheckRequestDto dto){
+        return ResponseEntity.ok(memberService.checkAuth(dto));
     }
 }
