@@ -5,3 +5,5 @@
 ## 참고 사항
 - 
 - 
+
+Closes %{issues}, %{title}
