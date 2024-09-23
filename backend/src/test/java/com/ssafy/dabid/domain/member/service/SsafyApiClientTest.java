@@ -53,9 +53,9 @@ class SsafyApiClientTest {
 
     @Test
     void 계좌거래내역조회() {
-        String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
+        String userKey = "8eb95dff-2fed-4323-b9e0-af4f1b295a10";
 
-        String accountNo = "0018520954400580";
+        String accountNo = "0017999083224741";
 
         TransactionHistoryResponse response = ssafyApiClient.transactionHistory(userKey, accountNo);
         System.out.println("response.Rec.List.size = " + response.getRec().getList().size());
@@ -64,8 +64,8 @@ class SsafyApiClientTest {
 
     @Test
     void 계좌잔액조회() {
-        String userKey = "7dfbfe9f-755c-4e43-ac4c-cd15998085fd";
-        String accountNo = "0018520954400580";
+        String userKey = "8eb95dff-2fed-4323-b9e0-af4f1b295a10";
+        String accountNo = "0017999083224741";
 
         AccountBalanceResponse response = ssafyApiClient.accountBalance(userKey, accountNo);
         System.out.println("response = " + response.getRec().getAccountBalance());
