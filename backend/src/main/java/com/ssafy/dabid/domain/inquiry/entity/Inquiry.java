@@ -36,6 +36,4 @@ public class Inquiry extends BaseEntity {
         inquiry.category = Category.valueOf(inquiryRequestDto.getCategory());
         return inquiry;
     }
-
-
 }

@@ -84,11 +84,11 @@ public class MemberServiceImpl implements MemberService {
         //랜덤 생성 닉네임에 포함되는 닉네임일 경우 사용 여부 갱신
         randomNicknameMapper.updateUsed(dto.getNickname());
 
-        //금융망 API를 통해 userKey 등록
+        //금융망 API 를 통해 userKey 등록
         String userKey = generateKey(member.getEmail());
         member.addKey(userKey);
 
-        //계좌 생성 후 repository에 저장
+        //계좌 생성 후 repository 에 저장
         String accountNo = generateAccount(userKey);
         Account account = Account
                 .builder()
@@ -282,6 +282,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Account account = memberAccountRepository.findByMember(member);
+        if(account.getIsActive()){
+            return new CommonResponseDto("AV", "Already Validated.");
+        }
+
         String accountNo = account.getAccount_number();
         String userKey = member.getUserKey();
 
@@ -301,6 +305,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Account account = memberAccountRepository.findByMember(member);
+        if(account.getIsActive()){
+            return new CommonResponseDto("AV", "Already Validated.");
+        }
+
         String accountNo = account.getAccount_number();
         String userKey = member.getUserKey();
         CheckAuthCodeResponse response = ssafyApiClient.checkAuth(userKey, accountNo, dto.getCode());
