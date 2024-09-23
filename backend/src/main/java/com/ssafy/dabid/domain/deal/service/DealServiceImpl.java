@@ -313,6 +313,7 @@ public class DealServiceImpl implements DealService {
 
         if(response.getHeader().getResponseCode().equals("H0000")){
             deal.setStatus(Status.PAYMENT_COMPLETE);
+            dealRepository.save(deal);
 
         } else{
             throw new RuntimeException("계좌 이체에 실패했습니다.");
