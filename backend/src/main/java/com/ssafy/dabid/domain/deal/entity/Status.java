@@ -5,6 +5,7 @@ public enum Status {
     PAYMENT_COMPLETE,   // 입금완료
     IN_TRANSIT,        // 배달 중
     DELIVERED,  // 배달완료
-    TRANSACTION_DONE    // 거래 완료
+    TRANSACTION_DONE ,
+    ERROR// 거래 완료
 }
 

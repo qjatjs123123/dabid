@@ -7,6 +7,11 @@ spring:
     rest:
       uris: http://elasticsearch:9200
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
   # Scheduler ThreadCount
   quartz:
     properties:
@@ -16,14 +21,15 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://172.26.161.164:3306/dabid
-    #url: jdbc:mysql://mysql:3306/dabid #docker전용
+    url: jdbc:mysql://localhost:3306/dabid
+
     password: dabid
   # SQL Encoding
   sql:
     init:
       encoding: UTF-8
       mode: always
+
   #JPA
   jpa:
     properties:
@@ -41,7 +47,7 @@ spring:
   #MongoDB
   data:
     mongodb:
-      uri: mongodb://root:dabid@172.26.161.164:27017/dabid?authSource=admin
+      uri: mongodb://root:dabid@localhost:27017/dabid?authSource=admin
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -87,5 +93,4 @@ management:
 point:
   buy:
     deposit: 5000
-
 

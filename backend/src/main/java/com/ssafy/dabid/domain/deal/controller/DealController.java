@@ -6,7 +6,9 @@ import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
 import com.ssafy.dabid.domain.deal.dto.response.ListDealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.UpdateDemandDepositAccountTransfer;
+import com.ssafy.dabid.domain.deal.entity.Status;
 import com.ssafy.dabid.domain.deal.service.DealService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,11 +42,16 @@ public class DealController {
     }
 
     @PostMapping("/courier/{deal-id}")
-    public void insertCourier(@PathVariable("deal-id") Long dealId,
-            @RequestBody CourierRequest courierRequest) {
-
+    public Status insertCourier(@PathVariable("deal-id") int dealId,
+                                @RequestBody @Valid CourierRequest courierRequest) {
+        return dealService.findDeliveryStatus(courierRequest, dealId);
     }
 
+    @PostMapping("/close/{deal-id}")
+    public ResponseEntity<String>  closeDeal(@PathVariable("deal-id") int dealId) {
+        dealService.closeDealTransaction(dealId);
+        return ResponseEntity.ok("거래가 성공적으로 종료되었습니다.");
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<ListDealResponseDto>> listDeal(){
@@ -71,11 +78,11 @@ public class DealController {
         return dealService.transferBalance(email, dealId);
     }
 
-//    @GetMapping("/test")
-//    public void test(){
-////        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-////        log.info("email: {}", email);
-//        dealService.createDeal(1);
-//    }
+    // 스케줄러 임의 실행 테스트 start
+    @GetMapping("/test/{auctionId}")
+    public void testMakeDeal(@PathVariable int auctionId) {
+        dealService.testMakeDeal(auctionId);
+    }
+    // 스케줄러 임의 실행 테스트 end
 
 }
