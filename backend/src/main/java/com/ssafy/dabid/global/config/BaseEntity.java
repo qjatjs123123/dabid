@@ -27,4 +27,7 @@ public class BaseEntity {
     public void kill(){
         isActive = false;
     }
+
+    //계좌 인증에만 사용
+    protected void validate() { isActive = true; }
 }

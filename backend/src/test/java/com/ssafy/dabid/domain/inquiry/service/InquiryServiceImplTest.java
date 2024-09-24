@@ -28,7 +28,6 @@ class InquiryServiceImplTest {
         dto.setTitle("111");
         dto.setContent("222");
         dto.setCategory("DEAL");
-        dto.setMemberId(1);
 
         // when
         inquiryService.createInquiry(dto);
