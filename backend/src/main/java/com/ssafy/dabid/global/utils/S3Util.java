@@ -44,7 +44,10 @@ public class S3Util {
         List<String> fileNameList = new ArrayList<>();
 
         multipartFile.forEach(file -> {
-            String fileName = createFileName(file.getOriginalFilename());
+            String originalFileName = file.getOriginalFilename();
+            if(originalFileName == null || originalFileName.isEmpty())
+                return;
+            String fileName = createFileName(originalFileName);
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
