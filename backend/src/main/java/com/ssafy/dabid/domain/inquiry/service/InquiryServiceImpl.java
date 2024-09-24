@@ -14,6 +14,14 @@ import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.utils.S3Util;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +37,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class InquiryServiceImpl implements InquiryService {
 
+    private static final Logger log = LoggerFactory.getLogger(InquiryServiceImpl.class);
     private final InquiryRepository inquiryRepository;
     private final MemberRepository memberRepository;
     private final InquiryImageRepository inquiryImageRepository;
@@ -132,5 +141,37 @@ public class InquiryServiceImpl implements InquiryService {
         }
 
         return filePath;
+    }
+
+    @Override
+    public Workbook createExcelFile() {
+        Workbook wb = new SXSSFWorkbook();
+        Sheet sheet = wb.createSheet();
+
+        List<InquiryResponseDto.InquiryItem> inquiryItems = getInquiry();
+
+        String[] header = {"ID", "제목", "내용", "카테고리", "이미지"};
+        Row headerRow = sheet.createRow(0);
+        for (int i = 0; i < header.length; i++)
+            headerRow.createCell(i).setCellValue(header[i]);
+
+        for(int i = 0; i < inquiryItems.size(); i++) {
+            Row bodyRow = sheet.createRow(1 + i);
+
+            //코드 리팩토링 필요
+            InquiryResponseDto.InquiryItem item = inquiryItems.get(i);
+            Cell id = bodyRow.createCell(0);
+            id.setCellValue(item.getInquiryId());
+            Cell title = bodyRow.createCell(1);
+            title.setCellValue(item.getTitle());
+            Cell content = bodyRow.createCell(2);
+            content.setCellValue(item.getContent());
+            Cell category = bodyRow.createCell(3);
+            category.setCellValue(item.getCategory());
+            Cell imageUrls = bodyRow.createCell(4);
+            imageUrls.setCellValue(String.join(", ", item.getImageUrls()));
+        }
+
+        return wb;
     }
 }
