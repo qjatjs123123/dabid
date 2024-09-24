@@ -37,7 +37,7 @@ public class Deal extends BaseEntity {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Status status = Status.BID_SUCCESS; ;
+    private Status status = Status.BID_SUCCESS;
 
     @Column
     @Enumerated(EnumType.STRING)

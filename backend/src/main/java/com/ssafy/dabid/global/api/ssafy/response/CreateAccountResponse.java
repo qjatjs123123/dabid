@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
-import com.ssafy.dabid.domain.deal.dto.response.SsafyApiHeaderResponse;
-import com.ssafy.dabid.domain.deal.dto.response.SsafyApiResponse;
+import com.ssafy.dabid.global.api.ssafy.response.SsafyApiHeaderResponse;
+import com.ssafy.dabid.global.api.ssafy.response.SsafyApiResponse;
 import lombok.*;
 
 import java.util.Map;

@@ -35,7 +35,6 @@ import java.util.function.Function;
 import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_ACCOUNT;
 import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_USER_KEY;
 
-
 @Service
 @RequiredArgsConstructor
 @Transactional

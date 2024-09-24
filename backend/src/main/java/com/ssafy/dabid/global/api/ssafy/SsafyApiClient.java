@@ -1,7 +1,7 @@
 package com.ssafy.dabid.global.api.ssafy;
 
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiHeaderRequest;
-import com.ssafy.dabid.domain.deal.dto.request.SsafyApiRequest;
+import com.ssafy.dabid.global.api.ssafy.request.SsafyApiHeaderRequest;
+import com.ssafy.dabid.global.api.ssafy.request.SsafyApiRequest;
 import com.ssafy.dabid.global.api.ssafy.request.*;
 import com.ssafy.dabid.global.api.ssafy.response.*;
 import lombok.RequiredArgsConstructor;
@@ -147,7 +147,7 @@ public class SsafyApiClient {
     public <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
     //private <T> T getSsafyApiResponse(String path, SsafyApiRequest ssafyApiRequest, Class<T> responseType) {
         String serializedString = serializeToJson(ssafyApiRequest);
-
+        log.info(ssafyApiRequest.toString());
         return webClient.mutate()
                 .baseUrl(baseURL)
                 .build()

@@ -27,4 +27,6 @@ public class StaticConst {
     public static final String CHECK_AUTH_CODE = "checkAuthCode";
     public static final String TRANSFER_CODE = "updateDemandDepositAccountTransfer";
 
+
+
 }
