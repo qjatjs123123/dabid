@@ -4,7 +4,7 @@ import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.entity.AuctionDocument;
 import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
-import com.ssafy.dabid.domain.auction.service.AuctionServiceImpl;
+import com.ssafy.dabid.domain.auction.service.AuctionService;
 import com.ssafy.dabid.domain.deal.service.DealService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class DabidJob implements Job {
 
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionElasticSearchRepository auctionElasticSearchRepository;
-    private final AuctionServiceImpl auctionServiceImpl;
+    private final AuctionService auctionService;
     private final DealService dealService;
 
     @Override
@@ -42,13 +42,13 @@ public class DabidJob implements Job {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
         if(auction.getFirstMemberId() == -1) { // 경매 참여자가 존재하지 않은 경우
-            auctionServiceImpl.returnSellerPoint(auctionId);
+            auctionService.returnSellerPoint(auctionId);
             // 알림 CoolSMS -> 판매자에게 "니 유감. 아무도 입찰안함"
 
             log.info("경매 참여자가 존재하지 않는 경우의 스케쥴러 동작 완료");
         }
         else { // 경매 참여자가 존재하는 경우
-            auctionServiceImpl.returnBuyerPointWhenExpired(auctionId, auction.getFirstMemberId(), auction.getDeposit());
+            auctionService.returnBuyerPointWhenExpired(auctionId, auction.getFirstMemberId(), auction.getDeposit());
             // 거래, 채팅 생성, 거래용 가상계좌 생성
             dealService.createDeal(auctionId);
             // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"

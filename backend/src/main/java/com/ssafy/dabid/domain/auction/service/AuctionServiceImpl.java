@@ -65,6 +65,7 @@ public class AuctionServiceImpl implements AuctionService{
 //        return results;
 //    }
 
+    @Override
     public List<AuctionListDto> getAuctions(){
         log.info("getAuctions 시작");
         log.info("Active Auction 조회");
@@ -89,6 +90,7 @@ public class AuctionServiceImpl implements AuctionService{
         return results;
     }
 
+    @Override
     public AuctionDto getAuction(int auctionId){
         log.info("getAuction 시작");
 
@@ -128,6 +130,7 @@ public class AuctionServiceImpl implements AuctionService{
         return result;
     }
 
+    @Override
     public void registPost(RegistrationAuctionDto dto) throws SchedulerException {
         log.info("registPost 시작");
 
@@ -186,6 +189,7 @@ public class AuctionServiceImpl implements AuctionService{
         schedulerService.endAuctionAndMakeDeal(auction.getId(), auction.getCreatedAt(), auction.getFinishedAt());
     }
 
+    @Override
     public void inActivatePost(int auctionId) throws SchedulerException {
         log.info("inActivePost 시작");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 auction"));
@@ -212,6 +216,7 @@ public class AuctionServiceImpl implements AuctionService{
         schedulerService.deleteAuctionJob(auctionId);
     }
 
+    @Override
     public boolean isExistParticipant(int auctionId){
         return auctionInfoRepository.countByAuctionId(auctionId) > 0;
     }
@@ -220,6 +225,7 @@ public class AuctionServiceImpl implements AuctionService{
      * 경매 중도 포기 - 판매자 보증금 먹고, 입찰자에게 돌려주기
      * @param auctionId
      */
+    @Override
     public void returnBuyerPointWhenGiveUp(int auctionId, int buyerDeposit){
         List<Member> members = memberRepository.findParticipantByAuctionId(auctionId);
 
@@ -233,6 +239,7 @@ public class AuctionServiceImpl implements AuctionService{
      * 경매 기간 만료 - 1등 빼고 입찰자에게 돌려주기
      * @param auctionId
      */
+    @Override
     public void returnBuyerPointWhenExpired(int auctionId, int firstMemberId, int buyerDeposit){
         List<Member> members = memberRepository.findParticipantByAuctionId(auctionId);
 
@@ -248,6 +255,7 @@ public class AuctionServiceImpl implements AuctionService{
      * 판매자에게 돌려주기
      * @param auctionId
      */
+    @Override
     public void returnSellerPoint(int auctionId){
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 Auction"));
 
