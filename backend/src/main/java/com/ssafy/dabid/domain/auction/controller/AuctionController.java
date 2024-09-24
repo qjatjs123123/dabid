@@ -1,8 +1,7 @@
 package com.ssafy.dabid.domain.auction.controller;
 
 import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
-import com.ssafy.dabid.domain.auction.dto.request.TestImageDto;
-import com.ssafy.dabid.domain.auction.service.AuctionService;
+import com.ssafy.dabid.domain.auction.service.AuctionServiceImpl;
 import com.ssafy.dabid.global.utils.S3Util;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/auctions")
 @RequiredArgsConstructor
 public class AuctionController {
-    private final AuctionService service;
+    private final AuctionServiceImpl service;
     private final S3Util s3Util;
 
     @GetMapping("")

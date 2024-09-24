@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface AuctionInfoMongoRepository extends MongoRepository<AuctionInfo, Integer> {
+    @Query(value = "{auctionId:?0, memberId:?1}")
     Optional<AuctionInfo> findByAuctionIdAndMemberId(int auctionId, int memberId);
 
     @Query(value="{auctionId:?0}", count = true)
