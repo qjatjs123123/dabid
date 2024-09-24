@@ -4,6 +4,7 @@ import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
 import com.ssafy.dabid.domain.auction.entity.*;
+import com.ssafy.dabid.domain.auction.mapper.AuctionMapper;
 import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionImageRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
@@ -28,6 +29,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuctionServiceImpl implements AuctionService{
+    private final AuctionMapper auctionMapper;
     @Value("${point.buy.deposit}")
     private int deposit;
 
@@ -167,6 +169,7 @@ public class AuctionServiceImpl implements AuctionService{
                 .build();
 
         auction = auctionJpaRepository.save(auction);
+        AuctionDocument auctionDocument = auctionElasticSearchRepository.save(auctionMapper.toDocument(auction));
 
         log.info("경매 images 리스트 저장");
         for(String image : imageList) {
@@ -197,6 +200,11 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("auctionId: " + auctionId + " kill");
         auction.kill();
         auctionJpaRepository.save(auction);
+
+        AuctionDocument auctionDocument = auctionElasticSearchRepository.findById(String.valueOf(auction.getId())).orElse(null);
+        if(auctionDocument != null) {
+            auctionElasticSearchRepository.delete(auctionDocument);
+        }
 
         log.info("inActivePost 삭제");
 
