@@ -12,7 +12,7 @@
 //    @Override
 //    public ClientConfiguration clientConfiguration() {
 //        return ClientConfiguration.builder()
-//                .connectedTo("localhost:9200")
+//                .connectedTo("172.26.161.164:9200")
 //                .build();
 //    }
 //}

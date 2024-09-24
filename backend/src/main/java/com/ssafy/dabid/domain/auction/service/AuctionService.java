@@ -3,10 +3,9 @@ package com.ssafy.dabid.domain.auction.service;
 import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
-import com.ssafy.dabid.domain.auction.entity.Auction;
-import com.ssafy.dabid.domain.auction.entity.AuctionImage;
-import com.ssafy.dabid.domain.auction.entity.AuctionInfo;
-import com.ssafy.dabid.domain.auction.entity.Category;
+import com.ssafy.dabid.domain.auction.entity.*;
+import com.ssafy.dabid.domain.auction.mapper.AuctionMapper;
+import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionImageRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
@@ -30,32 +29,59 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuctionService {
+
     @Value("${point.buy.deposit}")
     private int deposit;
 
     private final AuctionJpaRepository auctionJpaRepository;
+    private final AuctionElasticSearchRepository auctionElasticSearchRepository;
     private final AuctionInfoRepository auctionInfoRepository;
     private final AuctionImageRepository auctionImageRepository;
+    private final AuctionMapper auctionMapper;
     private final MemberRepository memberRepository;
     private final MemberAccountRepository memberAccountRepository;
 
     private final QuartzSchedulerService schedulerService;
     private final S3Util s3Util;
 
+//    public List<AuctionListDto> getAuctions(){
+//        log.info("getAuctions 시작");
+//        log.info("Active Auction 조회");
+//        List<Auction> auctions = auctionJpaRepository.findAllAuctions();
+//
+//        log.info("조회된 Auction을 AuctionListDto로 변환");
+//        List<AuctionListDto> results = new ArrayList<>();
+//        for (Auction auction : auctions){
+//            results.add(
+//                    AuctionListDto.builder()
+//                            .auctionId(auction.getId())
+//                            .title(auction.getTitle())
+//                            .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
+//                            .category(auction.getCategory().toString())
+//                            .build()
+//            );
+//        }
+//
+//        log.info("getAuctions 종료");
+//        return results;
+//    }
+
     public List<AuctionListDto> getAuctions(){
         log.info("getAuctions 시작");
         log.info("Active Auction 조회");
-        List<Auction> auctions = auctionJpaRepository.findAllAuctions();
+        List<AuctionDocument> auctions = auctionElasticSearchRepository.findAllByOrderByCreatedAtDesc();
 
         log.info("조회된 Auction을 AuctionListDto로 변환");
         List<AuctionListDto> results = new ArrayList<>();
-        for (Auction auction : auctions){
+        for (AuctionDocument auctionDocument : auctions){
             results.add(
                     AuctionListDto.builder()
-                            .auctionId(auction.getId())
-                            .title(auction.getTitle())
-                            .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
-                            .category(auction.getCategory().toString())
+                            .auctionId(auctionDocument.getId())
+                            .title(auctionDocument.getTitle())
+                            .thumbnail(s3Util.generateFileUrl(auctionDocument.getThumbnail()))
+                            .secondBid(auctionDocument.getSecondBid())
+                            .finishedAt(auctionDocument.getFinishedAt())
+                            .createdAt(auctionDocument.getCreatedAt())
                             .build()
             );
         }
@@ -144,6 +170,7 @@ public class AuctionService {
                 .build();
 
         auction = auctionJpaRepository.save(auction);
+        auctionElasticSearchRepository.save(auctionMapper.toDocument(auction));
 
         log.info("경매 images 리스트 저장");
         for(String image : imageList) {
@@ -179,6 +206,11 @@ public class AuctionService {
 
         // 경매 물품 중도 삭제 시, 경매 종료 시 동작하는 Job Scheduler도 같이 삭제
         schedulerService.deleteAuctionJob(auctionId);
+
+        AuctionDocument auctionDocument = auctionElasticSearchRepository.findById(String.valueOf(auctionId)).orElse(null);
+        if(auctionDocument != null) {
+            auctionElasticSearchRepository.delete(auctionDocument);
+        }
     }
 
     public boolean isExistParticipant(int auctionId){
