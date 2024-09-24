@@ -117,7 +117,7 @@ public class InquiryServiceImpl implements InquiryService {
         return itemList;
     }
 
-
+    @Override
     public String writeCsv() throws IOException {
         String filePath = System.getProperty("user.home")+"/Downloads/inquiries.csv";
         List<InquiryResponseDto.InquiryItem> dtos = getInquiry();

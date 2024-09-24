@@ -20,7 +20,6 @@ public class InquiryController {
 
     @PostMapping("/")
     public ResponseEntity<?> create(@ModelAttribute InquiryRequestDto dto) {
-
         return ResponseEntity.ok(inquiryService.createInquiry(dto));
     }
 
