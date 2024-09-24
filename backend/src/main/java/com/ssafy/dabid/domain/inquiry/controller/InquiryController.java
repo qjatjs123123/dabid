@@ -4,10 +4,7 @@ import com.ssafy.dabid.domain.inquiry.dto.InquiryRequestDto;
 import com.ssafy.dabid.domain.inquiry.service.InquiryService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.extractor.ExcelExtractor;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +41,6 @@ public class InquiryController {
 
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-
             try (OutputStream outputStream = response.getOutputStream()) {
                 wb.write(outputStream);
             }
