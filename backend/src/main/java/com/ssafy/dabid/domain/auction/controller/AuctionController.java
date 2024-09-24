@@ -1,7 +1,6 @@
 package com.ssafy.dabid.domain.auction.controller;
 
 import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
-import com.ssafy.dabid.domain.auction.dto.request.TestImageDto;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
 import com.ssafy.dabid.global.utils.S3Util;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,8 +9,6 @@ import org.quartz.SchedulerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/auctions")
@@ -26,7 +23,7 @@ public class AuctionController {
     }
 
     @GetMapping("/{auctionId}")
-    public ResponseEntity<?> getAuction(HttpServletRequest request, @PathVariable("auctionId") int auctionId){
+    public ResponseEntity<?> getAuction(HttpServletRequest request, @PathVariable("auctionId") int auctionId) throws SchedulerException {
         return new ResponseEntity<>(service.getAuction(auctionId), HttpStatus.OK);
     }
 

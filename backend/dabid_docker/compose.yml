@@ -1,0 +1,132 @@
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.38
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: dabid
+      MYSQL_DATABASE: dabid
+      TZ: 'Asia/Seoul'
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    ports:
+      - 3306:3306
+    depends_on: 
+      - elasticsearch
+      - kibana
+      - logstash
+    networks:
+      - back-bridge
+      
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: dabid
+      MONGO_INITDB_DATABASE: dabid
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - back-bridge
+      
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--web.enable-lifecycle'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+    networks:
+      - back-bridge
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - back-bridge
+      
+  #app:
+    #container_name: dabid
+    #image: dabid_backend
+    #build: .
+    #depends_on:
+    #  - mysql
+    #  - mongodb
+    #  - elasticsearch
+    #ports:
+    #  - "8080:8080"
+    #networks:
+    #  - back-bridge
+
+  elasticsearch:
+    build:
+      context: .
+      args:
+        VERSION: 8.6.2
+    container_name: elasticsearch
+    # image: elasticsearch:8.6.2
+    environment:
+      - xpack.security.enabled=false
+      - node.name=single-node
+      - cluster.name=backtony
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - back-bridge
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    #command: >
+    #  sh -c "bin/elasticsearch-plugin install analysis-nori && bin/elasticsearch"
+
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:8.6.2
+    volumes:
+      - ./logstash/config:/usr/share/logstash/config
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - 5000:5000
+      - 9600:9600
+    depends_on: 
+      - elasticsearch
+    networks:
+      - back-bridge
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:8.6.2
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    # Elasticsearch Start Dependency
+    depends_on:
+      - elasticsearch
+    networks:
+      - back-bridge
+
+networks:
+  back-bridge:
+    driver: bridge
+    
+volumes:
+  mongo_data:

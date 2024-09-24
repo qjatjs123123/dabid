@@ -2,6 +2,11 @@ spring:
   application:
     name: dabid
 
+  # Elasticsearch
+  elasticsearch:
+    rest:
+      uris: http://elasticsearch:9200
+
   servlet:
     multipart:
       max-file-size: 5MB
@@ -16,8 +21,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/dabid
-#    url: jdbc:mysql://mysql:3306/dabid #docker전용
+    url: jdbc:mysql://172.26.161.164:3306/dabid
+
     password: dabid
   # SQL Encoding
   sql:
@@ -39,6 +44,10 @@ spring:
     user:
       name: admin
       password: dabid
+  #MongoDB
+  data:
+    mongodb:
+      uri: mongodb://root:dabid@172.26.161.164:27017/dabid?authSource=admin
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -66,10 +75,6 @@ server:
   servlet:
     encoding:
       enabled: 'true'
-
-data:
-  mongodb:
-#    uri: mongodb://root:dabid@mongodb:27017/dabid?authSource=admin
 
 management:
   server:
