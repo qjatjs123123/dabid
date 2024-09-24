@@ -101,10 +101,9 @@ public class DealController {
     }
 
 //    // 메시지 조회
-//    @GetMapping("/chat/{dealId}")
-//    public ChatMessage getChatMessage(@PathVariable int dealId,
-//                                      @RequestParam(required = false) int cursor) {
-//
-//    }
+    @GetMapping("/chat/{dealId}/messages")
+    public List<ChatMessage> getChatMessage(@PathVariable int dealId) {
+        return dealService.getChatMessage(dealId);
+    }
 
 }

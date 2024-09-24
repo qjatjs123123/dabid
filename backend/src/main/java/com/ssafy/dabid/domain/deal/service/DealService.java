@@ -5,6 +5,7 @@ import com.ssafy.dabid.domain.deal.dto.response.*;
 import com.ssafy.dabid.domain.deal.dto.response.BuyerBalanceAndAccount;
 import com.ssafy.dabid.domain.deal.dto.response.DealResponseDto;
 import com.ssafy.dabid.domain.deal.dto.response.InquireDemandDepositAccountBalance;
+import com.ssafy.dabid.domain.deal.entity.ChatMessage;
 import com.ssafy.dabid.domain.deal.entity.Status;
 
 import java.util.List;
@@ -23,5 +24,7 @@ public interface DealService {
     // 스케줄러 임의 실행 테스트 start
     public void testMakeDeal(int auctionId);
     // 스케줄러 임의 실행 테스트 end
+
+    List<ChatMessage> getChatMessage(int dealId);
 }
 
