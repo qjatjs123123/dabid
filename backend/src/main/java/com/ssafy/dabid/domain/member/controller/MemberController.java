@@ -1,11 +1,7 @@
 package com.ssafy.dabid.domain.member.controller;
 
-import com.ssafy.dabid.domain.member.dto.request.AuthCheckRequestDto;
+import com.ssafy.dabid.domain.member.dto.request.*;
 import com.ssafy.dabid.domain.member.dto.PointDto;
-import com.ssafy.dabid.domain.member.dto.request.CheckRequestDto;
-import com.ssafy.dabid.domain.member.dto.request.RefreshRequestDto;
-import com.ssafy.dabid.domain.member.dto.request.SignInRequestDto;
-import com.ssafy.dabid.domain.member.dto.request.SignUpRequestDto;
 import com.ssafy.dabid.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,13 +78,23 @@ public class MemberController {
         return ResponseEntity.ok(memberService.balance());
     }
 
-    @PostMapping("/account-request")
+    @PostMapping("/account-auth")
     public ResponseEntity<?> accountAuth(){
-        return ResponseEntity.ok(memberService.requestAuth());
+        return ResponseEntity.ok(memberService.requestAccountAuth());
     }
 
     @PostMapping("/account-check")
     public ResponseEntity<?> checkAuth(@RequestBody AuthCheckRequestDto dto){
-        return ResponseEntity.ok(memberService.checkAuth(dto));
+        return ResponseEntity.ok(memberService.checkAccountAuth(dto));
+    }
+
+    @PostMapping("/phone-auth")
+    public ResponseEntity<?> phoneAuth(@RequestBody PhoneAuthRequestDto dto){
+        return ResponseEntity.ok(memberService.requestPhoneAuth(dto));
+    }
+
+    @PostMapping("/phone-check")
+    public ResponseEntity<?> phoneCheck(@RequestBody CheckPhoneAuthRequestDto dto){
+        return ResponseEntity.ok(memberService.checkPhoneAuth(dto));
     }
 }
