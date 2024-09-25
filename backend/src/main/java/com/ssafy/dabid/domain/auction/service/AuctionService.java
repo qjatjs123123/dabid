@@ -12,4 +12,12 @@ public interface AuctionService {
     AuctionDto getAuction(int auctionId) throws SchedulerException;
     void registPost(RegistrationAuctionDto dto) throws SchedulerException;
     void inActivatePost(int auctionId) throws SchedulerException;
+
+    boolean isExistParticipant(int auctionId);
+
+    void returnBuyerPointWhenGiveUp(int auctionId, int buyerDeposit);
+
+    void returnBuyerPointWhenExpired(int auctionId, int firstMemberId, int buyerDeposit);
+
+    void returnSellerPoint(int auctionId);
 }
