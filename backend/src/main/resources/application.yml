@@ -21,7 +21,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://172.26.161.164:3306/dabid
+    url: jdbc:mysql://172.31.76.123:3306/dabid
 
     password: dabid
   # SQL Encoding
@@ -47,7 +47,7 @@ spring:
   #MongoDB
   data:
     mongodb:
-      uri: mongodb://root:dabid@172.26.161.164:27017/dabid?authSource=admin
+      uri: mongodb://root:dabid@172.31.76.123:27017/dabid?authSource=admin
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
