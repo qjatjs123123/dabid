@@ -5,7 +5,7 @@ spring:
   # Elasticsearch
   elasticsearch:
     rest:
-      uris: http://elasticsearch:9200
+      uris: http://13.124.170.198:9200
 
   servlet:
     multipart:
@@ -21,7 +21,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://172.23.40.252:3306/dabid
+    url: jdbc:mysql://13.124.170.198:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
 
     password: dabid
   # SQL Encoding
@@ -44,10 +44,11 @@ spring:
     user:
       name: admin
       password: dabid
+
   #MongoDB
   data:
     mongodb:
-      uri: mongodb://root:dabid@172.23.40.252:27017/dabid?authSource=admin
+      uri: mongodb://root:dabid@13.124.170.198:27017/dabid?authSource=admin
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
