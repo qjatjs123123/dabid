@@ -56,7 +56,8 @@ public class SecurityConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.addAllowedOrigin("http://j11a505.p.ssafy.io");
+//        corsConfiguration.addAllowedOrigin("http://j11a505.p.ssafy.io");
+        corsConfiguration.addAllowedOrigin("http://localhost:5173");// 잠시 추가
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
 

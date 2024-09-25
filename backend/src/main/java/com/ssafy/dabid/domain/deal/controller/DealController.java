@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/deal")
+@CrossOrigin(origins = "http://localhost:5173") // 특정 출처 허용
 public class DealController {
     private final DealService dealService;
 

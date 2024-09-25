@@ -1,4 +1,4 @@
-import DealContent from '../components/Deal/DealContent';
+import DealContent from './components/DealContent';
 
 const Deal = () => {
   return <DealContent />;
