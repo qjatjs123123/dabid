@@ -104,10 +104,11 @@ server:
   servlet:
     encoding:
       enabled: 'true'
+  port: 4040
 
 management:
   server:
-    port: 8080
+    port: 4040
   endpoints:
     web:
       exposure:
@@ -117,7 +118,7 @@ management:
       prometheus:
         enabled: true
     tags:
-      application: dabid
+      application: backend
 
 point:
   buy:
