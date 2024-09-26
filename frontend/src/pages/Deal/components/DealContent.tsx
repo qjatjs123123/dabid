@@ -1,12 +1,25 @@
-import useDealContentList from '../../../business/hooks/useDeal/useDealContentList';
+interface DealProps {
+  deal: {
+    id: number;
+    seller_nickname: string;
+    title: string;
+    detail: string;
+    image: string;
+    winning_bid: number;
+    status: string;
+    isTimerVisible: boolean;
+  };
+}
 
-const DealContent = () => {
-  const { data: dealContentList, error, isLoading } = useDealContentList();
-
-  console.log(dealContentList);
+const DealContent: React.FC<DealProps> = ({ deal }) => {
   return (
-    <div className="w-[400px]">
-      <div className="w-full h-[400px] border-2 border-black">{}</div>
+    <div className="border p-2 mb-2">
+      <h3>{deal.title}</h3>
+      <p>{deal.detail}</p>
+      <p>Seller: {deal.seller_nickname}</p>
+      <p>Winning Bid: {deal.winning_bid}</p>
+      <p>Status: {deal.status}</p>
+      기타 필요한 데이터들 추가
     </div>
   );
 };

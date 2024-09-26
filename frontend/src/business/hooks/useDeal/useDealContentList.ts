@@ -2,6 +2,5 @@ import { getDealContentListQuery } from "../../../stores/queries/getDealContentL
 
 export default function useDealContentList() {
     const dealContentListQuery = getDealContentListQuery();
-
     return dealContentListQuery;
 }

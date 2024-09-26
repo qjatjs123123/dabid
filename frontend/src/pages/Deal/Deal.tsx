@@ -1,7 +1,7 @@
-import DealContent from './components/DealContent';
+import DealContentContainer from './components/DealContentContainer';
 
 const Deal = () => {
-  return <DealContent />;
+  return <DealContentContainer />;
 };
 
 export default Deal;

@@ -12,6 +12,7 @@ import lombok.*;
 @Setter
 @Builder
 @Table(name = "deal")
+@ToString
 public class Deal extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
