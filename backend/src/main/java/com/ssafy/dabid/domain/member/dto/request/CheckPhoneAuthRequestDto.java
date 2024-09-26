@@ -1,6 +1,7 @@
 package com.ssafy.dabid.domain.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CheckPhoneAuthRequestDto {
+    @Pattern(regexp = "^010[-\\s]?\\d{4}[-\\s]?\\d{4}$")
     private String phoneNumber;
     private String code;
 }

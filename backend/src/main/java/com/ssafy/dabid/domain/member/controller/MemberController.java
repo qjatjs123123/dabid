@@ -3,6 +3,7 @@ package com.ssafy.dabid.domain.member.controller;
 import com.ssafy.dabid.domain.member.dto.request.*;
 import com.ssafy.dabid.domain.member.dto.PointDto;
 import com.ssafy.dabid.domain.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -88,13 +89,13 @@ public class MemberController {
         return ResponseEntity.ok(memberService.checkAccountAuth(dto));
     }
 
-    @PostMapping("/phone-auth")
-    public ResponseEntity<?> phoneAuth(@RequestBody PhoneAuthRequestDto dto){
+    @PostMapping("/auth/phone-auth")
+    public ResponseEntity<?> phoneAuth(@Valid @RequestBody PhoneAuthRequestDto dto){
         return ResponseEntity.ok(memberService.requestPhoneAuth(dto));
     }
 
-    @PostMapping("/phone-check")
-    public ResponseEntity<?> phoneCheck(@RequestBody CheckPhoneAuthRequestDto dto){
+    @PostMapping("/auth/phone-check")
+    public ResponseEntity<?> phoneCheck(@Valid @RequestBody CheckPhoneAuthRequestDto dto){
         return ResponseEntity.ok(memberService.checkPhoneAuth(dto));
     }
 }

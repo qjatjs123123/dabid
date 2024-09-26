@@ -338,7 +338,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public CommonResponseDto requestPhoneAuth(PhoneAuthRequestDto dto) {
         String phoneNumber = dto.getPhoneNumber();
-        // 전화번호 유효성 확인?
 
         // 전화번호 중복 확인?
         CheckRequestDto checkDto = new CheckRequestDto();
@@ -360,19 +359,17 @@ public class MemberServiceImpl implements MemberService {
         System.out.println("code = " + code);
 
         // 인증 코드 저장, 만료 시간 설정
-        // 해당 전화번호로 발급한 키가 만료되기 전에도 새로 요청하면 바로 다시 만들어서 저장해야 하나
-//        if (!redisUtil.getData(phoneNumber).equals(code))
-            redisUtil.setData(phoneNumber, code);
-            redisUtil.setDataExpire(phoneNumber, code, 60 * 5L);
+        redisUtil.setData(phoneNumber, code);
+        redisUtil.setDataExpire(phoneNumber, code, 60 * 5L);
 
 
         // 인증 코드 SMS 발송
-//        Message message = new Message();
-//        message.setFrom(CoolSMSConfig.SENDER);
-//        message.setTo(phoneNumber);
-//        message.setText("다비드 휴대전화 인증 코드: " + code);
-//
-//        SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
+        Message message = new Message();
+        message.setFrom(CoolSMSConfig.SENDER);
+        message.setTo(phoneNumber);
+        message.setText("다비드 휴대전화 인증 코드: " + code);
+
+        SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
 
         return new CommonResponseDto();
     }
