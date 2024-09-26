@@ -56,7 +56,7 @@ spring:
       uri: mongodb://root:dabid@13.124.170.198:27017/dabid?authSource=admin
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 13.124.170.198:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
