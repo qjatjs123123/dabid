@@ -2,16 +2,34 @@ spring:
   application:
     name: dabid
 
+  # Elasticsearch
+  elasticsearch:
+    rest:
+      uris: http://13.124.170.198:9200
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+  # Scheduler ThreadCount
+  quartz:
+    properties:
+      org.quartz.threadPool.threadCount: 20
+
   # MySQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/dabid
+    url: jdbc:mysql://localhost:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+
     password: dabid
   # SQL Encoding
   sql:
     init:
       encoding: UTF-8
+      mode: always
+
   #JPA
   jpa:
     properties:
@@ -21,8 +39,59 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: 'true'
+  #Security
+  security:
+    user:
+      name: admin
+      password: dabid
+
+  #MongoDB
+  data:
+    mongodb:
+      uri: mongodb://root:dabid@13.124.170.198:27017/dabid?authSource=admin
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+jwt:
+  key: /PrvvKm+CrnZUHBxKhqQNzhvN0QxnhGB1OzR1tV19yM=
+  access:
+    time: 10800
+  refresh:
+    time: 2592000
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA6GBMGEM7RJN3IVWT
+      secret-key: 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
+    s3:
+      bucket: dabid-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 server:
   servlet:
     encoding:
       enabled: 'true'
+
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: dabid
+
+point:
+  buy:
+    deposit: 5000
+
