@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .formLogin(FormLoginConfigurer::disable)
                 //시큐리티를 적용/미적용할 url 지정
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/member/auth/**", "/error", "/actuator/**").permitAll()
+                        .requestMatchers("/api/member/auth/**", "/error", "/actuator/**", "/api/chat").permitAll()
                         .requestMatchers("/api/member/auth/sign-out").authenticated()
                         .anyRequest().authenticated())
                 //세션 사용 방식 설정 -> Rest API 서버에서는 불필요하므로 미사용
@@ -56,6 +56,8 @@ public class SecurityConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOrigin("http://127.0.0.1:5500"); // 로컬 테스트용 오리진
+        corsConfiguration.addAllowedOrigin("http://localhost:5500"); // 로컬 테스트용 오리진
         corsConfiguration.addAllowedOrigin("http://j11a505.p.ssafy.io");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");

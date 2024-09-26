@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,7 +96,9 @@ public class DealController {
     public void sendChatMessage(@Valid ChatMessage chatMessage) {
         // 채팅 메시지 저장
         chatMessageRepository.save(chatMessage);
+        log.info("chatMessage: {}", chatMessage);
         kafkaTemplate.send("dabid-topic", chatMessage);
+
     }
 
 //    // 메시지 조회

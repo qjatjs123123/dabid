@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.deal.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -19,7 +20,9 @@ public class ChatMessage {
     @Id
     private ObjectId id;
     private int dealId; // 거래방id
-    private Long memberId;  // 사용자id
+    private int memberId;  // 사용자id
     private String content; // 내용
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createdAt; // 작성일
 }
