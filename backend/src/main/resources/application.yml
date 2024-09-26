@@ -5,7 +5,7 @@ spring:
   # Elasticsearch
   elasticsearch:
     rest:
-      uris: http://elasticsearch:9200
+      uris: 13.124.170.198:9200
 
   servlet:
     multipart:
@@ -21,9 +21,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-
+    url: jdbc:mysql://13.124.170.198:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     password: dabid
+
   # SQL Encoding
   sql:
     init:
@@ -39,21 +39,21 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: 'true'
+
   #Security
   security:
     user:
       name: admin
       password: dabid
-  #MongoDB
-  data:
-    mongodb:
-      uri: mongodb://root:dabid@172.19.63.93:27017/dabid?authSource=admin
-    redis:
-      host: localhost
-      port: 6379
-      password: qwer1122
-      # url: jdbc:redis://root:dabid@172.19.63.93:6379
 
+  data:
+    redis:
+      host: 13.124.170.198
+      port: 6379
+      password: dabid
+      # url: jdbc:redis://root:dabid@172.19.63.93:6379
+    mongodb:
+      uri: mongodb://root:dabid@13.124.170.198:27017/dabid?authSource=admin
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -77,7 +77,6 @@ spring:
       value-deserializer.delegate: org.springframework.kafka.support.serializer.JsonDeserializer  # JsonDeserializer 위임
     template:
       default-topic: dabid-topic
-
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

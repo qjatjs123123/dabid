@@ -185,8 +185,6 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-
-
     @Override
     public CommonResponseDto pointIn(PointDto dto) {
         String transactionBalance = dto.getAmount();
