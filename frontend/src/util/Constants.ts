@@ -6,4 +6,5 @@ export const PAGE_URL = {
 
   export const DEAL_API_URL = {
     GET_DEAL_CONTENT_LIST: "/api/deal/list",
+    GET_DEAL_CONTENT_DETAIL: "/api/deal/list"
   }

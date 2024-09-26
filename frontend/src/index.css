@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Jua";
+    src: url("/path/to/Jua.woff2") format("woff2"),
+         url("/path/to/Jua.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  html {
+    font-family: "Jua", sans-serif; /* 전체 HTML에 Jua 폰트 적용 */
+  }
+  
+:root {
+    /*   deal전역 변수   */
+    --deal_max-wt: 1200px;
+    
+    /*   dealContentContainer전역 변수    */
+    --dealContentContainer-width: 400px; 
+    --dealContentContainer-pt: 20px;
+    --dealContentContainer-pr: 40px;
+
+    /*  dealContent 전역변수  */
+    --contentImg-Height : 200px;
+
+}

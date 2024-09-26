@@ -1,10 +1,21 @@
 import React, { useRef, useEffect } from 'react';
 import useDealContentList from '../../../business/hooks/useDeal/useDealContentList';
 import DealContent from './DealContent';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
 
 const DealContentContainer = () => {
   const { data: dealContentList, fetchNextPage, hasNextPage } = useDealContentList();
+  const curDealId = useRecoilValue(curDealIdState);
+  const setCurDealId = useSetRecoilState(curDealIdState);
   const observerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (curDealId === -1) {
+      const firstId = dealContentList ? dealContentList.pages[0].content[0].id : -1;
+      setCurDealId(firstId);
+    }
+  }, [dealContentList]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,7 +39,7 @@ const DealContentContainer = () => {
   }, [fetchNextPage, hasNextPage]);
 
   return (
-    <div className="w-[500px]">
+    <div className="max-h-[80vh] overflow-y-auto grid gap-4 grid-cols-1 w-[var(--dealContentContainer-width)] border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)]">
       {dealContentList?.pages.map((page, pageIndex) =>
         page.content.map((deal) => <DealContent key={deal.id} deal={deal} />),
       )}
