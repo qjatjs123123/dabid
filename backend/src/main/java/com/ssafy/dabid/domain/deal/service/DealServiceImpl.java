@@ -26,6 +26,8 @@ import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -47,7 +49,6 @@ public class DealServiceImpl implements DealService {
     private final MemberAccountRepository memberAccountRepository;
     private final DeliveryTrackerAPIClient deliveryTrackerAPIClient;
     private final S3Util s3Util;
-
     // 스케줄러 임의 실행 테스트 start
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionService auctionService;
@@ -203,7 +204,53 @@ public class DealServiceImpl implements DealService {
                 .build();
         dealRepository.save(deal);
     }
+    @Override
+    public List<ListDealResponseDto> listDealPage(String email, int page, int size) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
+        log.info("닉네임 : {}", member.getNickname());
+        Page<Deal> dealPage = dealRepository.findAllBySellerOrBuyer(member, member, PageRequest.of(page, size));
 
+        List<ListDealResponseDto> result = new ArrayList<>();
+
+        for (Deal deal : dealPage) {
+            System.out.println(deal.toString());
+            String sta = "";
+            boolean isSeller = member.getId() == deal.getSeller().getId();
+            boolean isTimerVisible = false; // 입금 전 타이머 표시 여부
+
+            if(deal.getStatus() == Status.TRANSACTION_DONE){
+                sta = "거래완료";
+            } else{
+                if(!isSeller && deal.getStatus() == Status.BID_SUCCESS){
+                    sta = "입금전";
+                    isTimerVisible = true;
+                } else {
+                    sta = "거래중";
+                }
+            }
+
+            ListDealResponseDto dto = ListDealResponseDto.builder()
+                    .id(deal.getId())
+                    .seller_nickname(deal.getSeller().getNickname())
+                    .title(deal.getTitle())
+                    .detail(deal.getDetail())
+                    .image(s3Util.generateFileUrl(deal.getImage()))
+                    .winning_bid(deal.getWinning_bid())
+                    .status(sta)
+                    .isTimerVisible(isTimerVisible)  // 타이머 표시 여부 전달
+                    .build();
+
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    @Override
+    public long countBySellerOrBuyer(Member seller, Member buyer) {
+        return dealRepository.countBySellerOrBuyer(seller, buyer);
+    }
 
     @Override
     public List<ListDealResponseDto> listDeal(String email) {
@@ -336,6 +383,7 @@ public class DealServiceImpl implements DealService {
 
         return dto;
     }
+
 
     // 스케줄러 임의 실행 테스트 start
     public void testMakeDeal(int auctionId) {
