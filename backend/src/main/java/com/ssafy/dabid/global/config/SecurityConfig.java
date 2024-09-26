@@ -61,6 +61,7 @@ public class SecurityConfig {
         corsConfiguration.addAllowedOrigin("http://j11a505.p.ssafy.io");
 //        corsConfiguration.addAllowedOrigin("http://j11a505.p.ssafy.io");
         corsConfiguration.addAllowedOrigin("http://localhost:5173");// 잠시 추가
+        corsConfiguration.addAllowedOrigin("https://finopenapi.ssafy.io/ssafy/api/v1");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
 
