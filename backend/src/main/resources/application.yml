@@ -21,8 +21,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-#    url: jdbc:mysql://172.26.161.164:3306/dabid
-    url: jdbc:mysql://localhost:3306/dabid
+    url: jdbc:mysql://172.26.161.164:3306/dabid
 
     password: dabid
   # SQL Encoding
@@ -48,8 +47,8 @@ spring:
   #MongoDB
   data:
     mongodb:
-#      uri: mongodb://root:dabid@172.26.161.164:27017/dabid?authSource=admin
-      uri: mongodb://root:scon@127.0.0.1:27017/dabid?authSource=admin
+      uri: mongodb://root:dabid@172.26.161.164:27017/dabid?authSource=admin
+      
   kafka:
     bootstrap-servers: localhost:9092
     producer:
