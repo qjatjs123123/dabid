@@ -5,6 +5,8 @@ import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
+import com.ssafy.dabid.domain.deal.entity.ChatMessage;
+import com.ssafy.dabid.domain.deal.repository.ChatMessageRepository;
 import com.ssafy.dabid.global.api.ssafy.request.SsafyApiHeaderRequest;
 import com.ssafy.dabid.global.api.ssafy.request.SsafyApiRequest;
 import com.ssafy.dabid.domain.deal.dto.response.*;
@@ -47,6 +49,7 @@ public class DealServiceImpl implements DealService {
     private final MemberRepository memberRepository;
     private final AuctionRepository auctionRepository;
     private final MemberAccountRepository memberAccountRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final DeliveryTrackerAPIClient deliveryTrackerAPIClient;
     private final S3Util s3Util;
     // 스케줄러 임의 실행 테스트 start
@@ -413,4 +416,9 @@ public class DealServiceImpl implements DealService {
         log.info("스케쥴러 테스트 호출 - endAuctionAndMakeDeal 종료");
     }
     // 스케줄러 임의 실행 테스트 start
+
+    @Override
+    public List<ChatMessage> getChatMessage(int dealId) {
+        return chatMessageRepository.findByDealIdOrderByCreatedAtAsc(dealId);
+    }
 }
