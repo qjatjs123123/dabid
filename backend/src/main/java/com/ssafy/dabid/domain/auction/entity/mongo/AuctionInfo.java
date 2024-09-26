@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Builder
-@Document(collation = "auctioninfo")
+@Document(collection = "auctioninfo")
 public class AuctionInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

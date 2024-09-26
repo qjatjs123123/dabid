@@ -1,6 +1,8 @@
 package com.ssafy.dabid.domain.job.component;
 
 import com.ssafy.dabid.domain.auction.entity.Auction;
+import com.ssafy.dabid.domain.auction.entity.AuctionDocument;
+import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
 import com.ssafy.dabid.domain.deal.service.DealService;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class DabidJob implements Job {
 
     private final AuctionJpaRepository auctionJpaRepository;
+    private final AuctionElasticSearchRepository auctionElasticSearchRepository;
     private final AuctionService auctionService;
     private final DealService dealService;
 
@@ -55,6 +58,10 @@ public class DabidJob implements Job {
 
         auction.kill();
         auctionJpaRepository.save(auction);
+        AuctionDocument auctionDocument = auctionElasticSearchRepository.findById(String.valueOf(auctionId)).orElse(null);
+        if(auctionDocument != null) {
+            auctionElasticSearchRepository.delete(auctionDocument);
+        }
 
         log.info("스케쥴러 호출 - endAuctionAndMakeDeal 종료");
     }
