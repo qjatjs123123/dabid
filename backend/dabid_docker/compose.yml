@@ -72,12 +72,12 @@ services:
     #  - back-bridge
 
   elasticsearch:
-    build:
-      context: .
-      args:
-        VERSION: 8.6.2
+#    build:
+#      context: .
+#      args:
+#        VERSION: 8.6.2
     container_name: elasticsearch
-    # image: elasticsearch:8.6.2
+    image: elasticsearch:8.6.2
     environment:
       - xpack.security.enabled=false
       - node.name=single-node
@@ -93,8 +93,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    #command: >
-    #  sh -c "bin/elasticsearch-plugin install analysis-nori && bin/elasticsearch"
+    command: >
+      sh -c "bin/elasticsearch-plugin install analysis-nori && bin/elasticsearch"
 
   logstash:
     container_name: logstash

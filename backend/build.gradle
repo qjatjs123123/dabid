@@ -59,7 +59,7 @@ dependencies {
 
 	// coolsms
 	implementation 'net.nurigo:sdk:4.3.0'
-
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	//elasticsearch
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'

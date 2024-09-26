@@ -11,13 +11,19 @@ import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.domain.member.repository.RandomNicknameMapper;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 import com.ssafy.dabid.global.api.ssafy.response.*;
+import com.ssafy.dabid.global.config.CoolSMSConfig;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
 import com.ssafy.dabid.global.status.StatusMessage;
 import com.ssafy.dabid.global.utils.JwtUtils;
+import com.ssafy.dabid.global.utils.RedisUtil;
 import com.ssafy.dabid.global.utils.TokenType;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
@@ -27,9 +33,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.Function;
 
 import static com.ssafy.dabid.global.consts.StaticConst.ADMIN_ACCOUNT;
@@ -48,6 +56,8 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final RandomNicknameMapper randomNicknameMapper;
     private final MemberAccountRepository memberAccountRepository;
+    private final DefaultMessageService messageService;
+    private final RedisUtil redisUtil;
 
     private Map<ValueType, Function<String, Optional<?>>> checkFunctions;
     private Map<ValueType, Pair<String, String>> responseMappings;
@@ -278,7 +288,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public CommonResponseDto requestAuth() {
+    public CommonResponseDto requestAccountAuth() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -301,7 +311,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public CommonResponseDto checkAuth(AuthCheckRequestDto dto) {
+    public CommonResponseDto checkAccountAuth(AuthCheckRequestDto dto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -324,4 +334,56 @@ public class MemberServiceImpl implements MemberService {
             return CommonResponseDto.fail();
         }
     }
+
+    @Override
+    public CommonResponseDto requestPhoneAuth(PhoneAuthRequestDto dto) {
+        String phoneNumber = dto.getPhoneNumber();
+
+        // 전화번호 중복 확인?
+        CheckRequestDto checkDto = new CheckRequestDto();
+        checkDto.setValue(phoneNumber);
+        checkDto.setValueType(ValueType.PHONE);
+        if (checkDuplicate(checkDto).getCode().equals("VF")) {
+            return CommonResponseDto.fail();
+        }
+
+        // 인증 코드 생성 00000 ~ 99999
+        StringBuilder sb = new StringBuilder(5);
+        Random random = new SecureRandom();
+        for (int i = 0; i < 5; i++) {
+            int randomIndex = random.nextInt(10);
+            sb.append("0123456789".charAt(randomIndex));
+        }
+        String code = sb.toString();
+
+        System.out.println("code = " + code);
+
+        // 인증 코드 저장, 만료 시간 설정
+        redisUtil.setData(phoneNumber, code);
+        redisUtil.setDataExpire(phoneNumber, code, 60 * 5L);
+
+
+        // 인증 코드 SMS 발송
+        Message message = new Message();
+        message.setFrom(CoolSMSConfig.SENDER);
+        message.setTo(phoneNumber);
+        message.setText("다비드 휴대전화 인증 코드: " + code);
+
+        SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
+
+        return new CommonResponseDto();
+    }
+
+    @Override
+    public CommonResponseDto checkPhoneAuth(CheckPhoneAuthRequestDto dto) {
+        String phoneNumber = dto.getPhoneNumber();
+        String code = dto.getCode();
+
+        if (!redisUtil.getData(phoneNumber).equals(code)) {
+            return CommonResponseDto.fail();
+        }
+
+        return new CommonResponseDto();
+    }
+
 }

@@ -20,6 +20,7 @@ module.exports = {
   ],
   // [rules] 상세 규칙
   rules: {
+    'import/no-unresolved': 'off',
     // var 금지
     'no-var': 'warn',
     // 일치 연산자 사용 필수

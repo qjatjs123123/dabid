@@ -1,13 +1,20 @@
-import { useState } from 'react';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import PrivateRoute from './util/PrivateRoute';
+import About from './pages/About';
+import Deal from './pages/Deal/Deal';
+import Auction from './pages/Auction';
+import { PAGE_URL } from './util/Constants';
 
 function App() {
-  const [count, setCount] = useState(0);
   return (
-    <>
-      <div></div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <Routes>
+      <Route path={`${PAGE_URL.HOME}`} element={<About />} />
+      <Route element={<PrivateRoute />}>
+        <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
+        <Route path={`${PAGE_URL.AUCTION}`} element={<Auction />} />
+      </Route>
+    </Routes>
   );
 }
 
