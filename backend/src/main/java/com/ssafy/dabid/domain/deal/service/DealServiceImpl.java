@@ -21,22 +21,17 @@ import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
 import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
-import com.ssafy.dabid.global.api.ssafy.request.TransferRequest;
-import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
 import com.ssafy.dabid.global.utils.S3Util;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static com.ssafy.dabid.global.consts.StaticConst.*;
 import static com.ssafy.dabid.global.consts.StaticFunc.getSsafyApiHeaderRequest;
