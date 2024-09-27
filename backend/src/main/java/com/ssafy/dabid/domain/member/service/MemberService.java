@@ -25,7 +25,11 @@ public interface MemberService {
 
     CommonResponseDto balance();
 
-    CommonResponseDto requestAuth();
+    CommonResponseDto requestAccountAuth();
 
-    CommonResponseDto checkAuth(AuthCheckRequestDto dto);
+    CommonResponseDto checkAccountAuth(AuthCheckRequestDto dto);
+
+    CommonResponseDto requestPhoneAuth(PhoneAuthRequestDto dto);
+
+    CommonResponseDto checkPhoneAuth(CheckPhoneAuthRequestDto dto);
 }

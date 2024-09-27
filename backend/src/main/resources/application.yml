@@ -5,7 +5,7 @@ spring:
   # Elasticsearch
   elasticsearch:
     rest:
-      uris: http://13.124.170.198:9200
+      uris: 13.124.170.198:9200
 
   servlet:
     multipart:
@@ -21,9 +21,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-
+    url: jdbc:mysql://13.124.170.198:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     password: dabid
+
   # SQL Encoding
   sql:
     init:
@@ -39,16 +39,44 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: 'true'
+
   #Security
   security:
     user:
       name: admin
       password: dabid
 
-  #MongoDB
   data:
+    redis:
+      host: 13.124.170.198
+      port: 6379
+      password: dabid
+      # url: jdbc:redis://root:dabid@172.19.63.93:6379
     mongodb:
       uri: mongodb://root:dabid@13.124.170.198:27017/dabid?authSource=admin
+
+  kafka:
+    bootstrap-servers: 13.124.170.198:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      retries: 3
+      acks: all
+    consumer:
+      group-id: dabid-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      enable-auto-commit: false
+      max-poll-records: 500
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"  # 신뢰할 패키지 (추후수정) "com.ssafy.dabid.domain.deal.entity"
+      value-deserializer.delegate: org.springframework.kafka.support.serializer.JsonDeserializer  # JsonDeserializer 위임
+    template:
+      default-topic: dabid-topic
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -76,10 +104,11 @@ server:
   servlet:
     encoding:
       enabled: 'true'
+  port: 4040
 
 management:
   server:
-    port: 8080
+    port: 4040
   endpoints:
     web:
       exposure:
@@ -89,9 +118,15 @@ management:
       prometheus:
         enabled: true
     tags:
-      application: dabid
+      application: backend
 
 point:
   buy:
     deposit: 5000
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        web: DEBUG
 
