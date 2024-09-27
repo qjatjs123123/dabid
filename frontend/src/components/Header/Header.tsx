@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PAGE_URL } from '../../util/Constants';
 import { getImgUrl } from '../../util/Functions';
+import LoginModal from './LoginModal'; // 모달 컴포넌트 임포트
+
 import './Header.css';
 
 const NavBar: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isAuthenticated =
-    localStorage.getItem('accessToken') !== undefined && localStorage.getItem('accessToken') !== null;
+  const [isModalOpen, setModalOpen] = useState(false); // 모달 상태 추가
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setIsAuthenticated(token !== undefined && token !== null);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    setIsAuthenticated(false);
+    window.location.href = `${PAGE_URL.HOME}`;
+  };
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLoginSuccess = () => {
+    setModalOpen(false);
+    setIsAuthenticated(true); // 로그인 성공 시 상태 업데이트
   };
 
   return (
@@ -36,10 +55,13 @@ const NavBar: React.FC = () => {
 
             {!isAuthenticated && (
               <li className="navbar-item">
-                <Link to={`${PAGE_URL.LOG_IN}`}>
+                <button
+                  onClick={() => setModalOpen(true)} // 모달 열기
+                  className="flex items-center"
+                >
                   <img src={getImgUrl('navbar/nav-sign-up.png')} alt="로그인" className="navbar-logo-img" />
-                </Link>
-                <Link to={`${PAGE_URL.LOG_IN}`}>로그인</Link>
+                  <span>로그인</span>
+                </button>
               </li>
             )}
 
@@ -52,10 +74,10 @@ const NavBar: React.FC = () => {
                   <Link to={`${PAGE_URL.MY_PAGE}`}>마이페이지</Link>
                 </li>
                 <li className="navbar-item">
-                  <Link to={`${PAGE_URL.LOG_OUT}`}>
+                  <button onClick={handleLogout}>
                     <img src={getImgUrl('navbar/nav-sign-up.png')} alt="임시 이미지" className="navbar-logo-img" />
-                  </Link>
-                  <Link to={`${PAGE_URL.LOG_OUT}`}>로그아웃</Link>
+                  </button>
+                  <button onClick={handleLogout}>로그아웃</button>
                 </li>
               </>
             )}
@@ -91,6 +113,7 @@ const NavBar: React.FC = () => {
           </li>
         </ul>
       </div>
+      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
     </nav>
   );
 };
