@@ -10,5 +10,5 @@ export const DEAL_API_URL = {
   };
 
 export const SKELETON_TIME = {
-  TIME : 700
+  TIME : 500
 }

@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './util/PrivateRoute';
 import About from './pages/About';
 import Deal from './pages/Deal/Deal';
-import Auction from './pages/Auction';
+import Auction from './pages/Auction/Auction';
 import { PAGE_URL } from './util/Constants';
 
 function App() {

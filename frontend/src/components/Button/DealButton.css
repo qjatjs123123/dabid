@@ -1,0 +1,24 @@
+.btnPush {
+    padding-top: 1em;
+  margin-top: 1em;
+  border-top: 
+    solid
+    1px
+    #CCC;
+  
+  width: 100%;
+    font-size: 20px;
+  padding: 0;
+  margin: 10px 20px 10px 0;
+  font-weight: 600;
+  text-align: center;
+  line-height: 50px;
+  color: #FFF;
+  border-radius: 10px;
+  transition: all 0.2s ;
+  background: #FF9F04;
+  cursor: pointer;
+}
+.btnPush.btnOrange:hover {
+    background: #FF8E00;
+  }

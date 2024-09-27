@@ -29,10 +29,10 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
         src={`${deal.image}`}
         alt="Deal Image"
       />
-      <div className="text-[20px] mb-[8px] font-black overflow-hidden text-ellipsis line-clamp-1">{deal.title}</div>
+      <div className="text-[20px] mb-[8px] font-[600] overflow-hidden text-ellipsis line-clamp-1">{deal.title}</div>
       <div className="mb-[4px] h-[48px] overflow-hidden text-ellipsis line-clamp-2">{deal.detail}</div>
       <div className="mb-[5px]">
-        <span className="text-[20px]  font-black mr-[3px]">{formatNumberWithCommas(deal.winning_bid)}</span>
+        <span className="text-[20px]  font-[800] mr-[3px]">{formatNumberWithCommas(deal.winning_bid)}</span>
         <span>원</span>
       </div>
 

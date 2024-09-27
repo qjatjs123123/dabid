@@ -21,5 +21,6 @@ public class DealResponseDto {
     private String carrierId;
     private String trackingNumber;
     private LocalDateTime created_at;
+    private int winning_bid;
     private boolean isSeller;
 }

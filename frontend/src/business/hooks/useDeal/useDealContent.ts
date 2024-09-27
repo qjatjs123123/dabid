@@ -13,7 +13,7 @@ const useDealContent = (dealId: number) => {
   const isActive = curDealId === dealId;
 
   const boxShadowClasses = isActive 
-    ? 'shadow-[0px_0px_20px_rgba(242,170,103,1.0)]' 
+    ? 'shadow-[0px_4px_16px_0_rgba(242,170,103,1.0)]' 
     : 'shadow-[0px_4px_16px_rgba(0,0,0,.04)]';
 
   const borderColorClasses = isActive 
