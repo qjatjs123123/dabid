@@ -6,7 +6,7 @@ axios.defaults.baseURL = import.meta.env.VITE_SERVER_ENDPOINT;
 
 axios.interceptors.request.use(
     (config) => {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjIyQGdtYWlsLmNvbSIsImlhdCI6MTcyNzMwODU5OCwiZXhwIjoxNzI3MzE5Mzk4fQ.Frpsd8sMNDYwWJJHZFKRkUkSwiOD3D1b3SY3IxBELpQ';
+        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjIyQGdtYWlsLmNvbSIsImlhdCI6MTcyNzM5NDU1MSwiZXhwIjoxNzI3NDA1MzUxfQ.taDKMAsRt51lXcdHlFPjBrY8Aq1l6BCtrWaxPpNJoDo';
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }

@@ -10,6 +10,7 @@ function App() {
   return (
     <Routes>
       <Route path={`${PAGE_URL.HOME}`} element={<About />} />
+
       <Route element={<PrivateRoute />}>
         <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
         <Route path={`${PAGE_URL.AUCTION}`} element={<Auction />} />
