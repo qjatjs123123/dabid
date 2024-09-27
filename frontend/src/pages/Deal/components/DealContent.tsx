@@ -20,7 +20,7 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
 
   return (
     <div
-      className={`p-2 mb-2 w-full rounded-md ${borderColorClasses} ${boxShadowClasses} ${transitionClasses} cursor-pointer`}
+      className={`p-2 mb-4 w-full rounded-md ${borderColorClasses} ${boxShadowClasses} ${transitionClasses} cursor-pointer`}
       onClick={handleClick}
     >
       <img
@@ -29,9 +29,7 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
         src={`${deal.image}`}
         alt="Deal Image"
       />
-      <div className="text-[20px] mb-[8px] font-black whitespace-nowrap overflow-hidden text-ellipsis">
-        {deal.title}
-      </div>
+      <div className="text-[20px] mb-[8px] font-black overflow-hidden text-ellipsis line-clamp-1">{deal.title}</div>
       <div className="mb-[4px] h-[48px] overflow-hidden text-ellipsis line-clamp-2">{deal.detail}</div>
       <div className="mb-[5px]">
         <span className="text-[20px]  font-black mr-[3px]">{formatNumberWithCommas(deal.winning_bid)}</span>
@@ -39,7 +37,6 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
       </div>
 
       <DealContentContainer />
-      {/* 기타 필요한 데이터들 추가 */}
     </div>
   );
 };

@@ -39,7 +39,7 @@ const DealContentContainer = () => {
   }, [fetchNextPage, hasNextPage]);
 
   return (
-    <div className="max-h-[80vh] overflow-y-auto grid gap-4 grid-cols-1 w-[var(--dealContentContainer-width)] border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)]">
+    <div className="max-h-[calc(100vh-150px)] overflow-y-auto flex flex-col border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)] scroll-hide">
       {dealContentList?.pages.map((page, pageIndex) =>
         page.content.map((deal) => <DealContent key={deal.id} deal={deal} />),
       )}

@@ -3,9 +3,13 @@ import DealContentDetail from './components/DealContentDetail';
 
 const Deal = () => {
   return (
-    <div className="max-w-[1200px] mx-auto flex flex-row">
-      <DealContentContainer />
-      <DealContentDetail />
+    <div className="container flex flex-row">
+      <div className="flex-1">
+        <DealContentContainer />
+      </div>
+      <div className="flex-3">
+        <DealContentDetail />
+      </div>
     </div>
   );
 };

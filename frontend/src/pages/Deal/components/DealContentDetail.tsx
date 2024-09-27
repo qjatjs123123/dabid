@@ -1,38 +1,36 @@
-import { useRecoilValue } from 'recoil';
 import useDealContentDetail from '../../../business/hooks/useDeal/useDealContentDetail';
-import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
-import { getDealContentDetailQuery } from '../../../stores/queries/getDealContentDetailQuery';
 import { formatNumberWithCommas } from '../../../util/moneyComma';
-type SkeletonProps = {
-  className?: string;
-};
-
-const Skeleton = ({ className }: SkeletonProps) => <div className={`bg-gray-200 animate-pulse ${className}`}></div>;
+import { useEffect } from 'react';
+import DealContentUserProfile from './DealContentUserProfile';
+import DealContentDetailSkeleton from '../skeletons/DealContentDetailSkeleton';
+import { SKELETON_TIME } from '../../../util/Constants';
 
 const DealContentDetail = () => {
-  const { data: deal } = useDealContentDetail();
+  const { dealContentDetail: deal, showSkeleton, setShowSkeleton } = useDealContentDetail();
 
-  if (!deal) {
-    return (
-      <div className="border-2 h-full w-full">
-        <Skeleton className="h-[var(--contentImg-Height)] w-full" />
-        <Skeleton className="h-6 w-[60%] mb-2" />
-        <Skeleton className="h-10 mb-2" />
-        <Skeleton className="h-6 w-[30%]" />
-      </div>
-    ); // 데이터가 로딩 중일 때 스켈레톤 UI 표시
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, SKELETON_TIME.TIME); // 1초 후에 스켈레톤 UI를 숨김
+
+    return () => clearTimeout(timer);
+  }, [deal]);
+
+  if (showSkeleton || !deal) {
+    return <DealContentDetailSkeleton />;
   }
 
   return (
-    <div className="border-2 h-full w-full">
+    <div className="flex-3 h-full px-[200px]">
       <div>
         <img
-          className="h-[var(--contentImg-Height)] w-full object-cover"
+          className=" h-[400px] w-full object-cover rounded-lg mb-4"
           referrerPolicy="no-referrer"
           src={`${deal.image}`}
           alt="Deal Image"
         />
-        <div className="text-[20px] mb-[8px] font-black whitespace-nowrap overflow-hidden text-ellipsis">
+        <DealContentUserProfile />
+        <div className="text-[20px] mt-4 mb-[8px] font-blackoverflow-hidden text-ellipsis line-clamp-1">
           {deal.title}
         </div>
         <div className="mb-[4px] h-[48px] overflow-hidden text-ellipsis line-clamp-2">{deal.detail}</div>
