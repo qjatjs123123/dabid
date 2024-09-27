@@ -2,6 +2,7 @@ import axios from '../../api/axiosConfig';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { DEAL_API_URL } from '../../util/Constants';
 
+
 interface DealContent {
     id: number;
     seller_nickname: string;
