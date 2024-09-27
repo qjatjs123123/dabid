@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { MEMBER_API_URL } from '../util/Constants';
+import { Navigate, Outlet } from 'react-router-dom';
+import { PAGE_URL } from '../util/Constants';
 
 // const TOKEN_TYPE = localStorage.getItem("tokenType");
 let ACCESS_TOKEN = localStorage.getItem('accessToken');
@@ -48,4 +50,9 @@ export const signup = async ({ email, password }: SignupParams): Promise<any> =>
   const data = { email, password };
   const response = await AuthApi.post(`${MEMBER_API_URL.SIGN_UP}`, data);
   return response.data;
+};
+
+export const logout = async (): Promise<any> => {
+  localStorage.removeItem('accessToken');
+  return null;
 };
