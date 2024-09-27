@@ -18,8 +18,8 @@ export const DEAL_API_URL = {
 };
 
 export const SKELETON_TIME = {
-  TIME: 700,
-};
+  TIME : 500
+}
 
 export const MEMBER_API_URL = {
   SIGN_UP: '/api/member/auth/sign-up',
