@@ -1,0 +1,43 @@
+.navbar {
+  @apply block flex flex-col items-center justify-center w-full px-4 mx-auto bg-white bg-opacity-90 shadow md:px-8 items-center backdrop-blur-md backdrop-saturate-150 z-[9999] h-[100px];
+} /* sticky */
+
+.navbar-container {
+  @apply container flex flex-wrap items-center justify-between mx-auto text-slate-800;
+}
+
+.navbar-logo {
+  @apply mr-4 block cursor-pointer text-base text-slate-800 font-semibold;
+}
+
+.navbar-menu {
+  @apply hidden lg:block;
+}
+
+.navbar-list {
+  @apply flex flex-col gap-2 mb-4 md:mb-0 md:mt-0 md:flex-row md:items-center md:gap-6;
+}
+
+.navbar-item {
+  @apply flex flex-wrap flex-row items-center text-lg text-slate-600;
+}
+
+.navbar-button {
+  @apply relative ml-auto h-6 max-h-[40px] w-6 max-w-[40px] select-none rounded-md text-center align-middle text-xs font-medium uppercase text-inherit transition-all hover:bg-transparent focus:bg-transparent active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:hidden;
+}
+
+.navbar-icon {
+  @apply w-6 h-6;
+}
+
+.toggle-navbar-menu {
+  @apply hidden items-center justify-start ml-auto;
+}
+
+.toggle-navbar-menu.open {
+  @apply block flex flex-col  lg:hidden;
+}
+
+.navbar-logo-img {
+  @apply h-[50px];
+}

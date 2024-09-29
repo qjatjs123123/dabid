@@ -339,7 +339,8 @@ public class DealServiceImpl implements DealService {
                 .carrierId(deal.getCarrier_id() != null ? deal.getCarrier_id().name() : null)
                 .trackingNumber(deal.getTrackingNumber())
                 .created_at(deal.getCreatedAt())
-                .isSeller(member.getId() == deal.getSeller().getId())  // Seller 여부 설정
+                .isSeller(member.getId() == deal.getSeller().getId())
+                .winning_bid(deal.getWinning_bid())// Seller 여부 설정
                 .build();
 
         return dto;

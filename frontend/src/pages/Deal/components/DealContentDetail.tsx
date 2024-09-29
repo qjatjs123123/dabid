@@ -1,44 +1,49 @@
 import useDealContentDetail from '../../../business/hooks/useDeal/useDealContentDetail';
 import { formatNumberWithCommas } from '../../../util/moneyComma';
-import { useEffect } from 'react';
 import DealContentUserProfile from './DealContentUserProfile';
 import DealContentDetailSkeleton from '../skeletons/DealContentDetailSkeleton';
-import { SKELETON_TIME } from '../../../util/Constants';
+import DealButton from '../../../components/Button/DealButton';
+import DeliveryStatusSearch from './DeliveryStatusSearch';
 
 const DealContentDetail = () => {
-  const { dealContentDetail: deal, showSkeleton, setShowSkeleton } = useDealContentDetail();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSkeleton(false);
-    }, SKELETON_TIME.TIME); // 1초 후에 스켈레톤 UI를 숨김
-
-    return () => clearTimeout(timer);
-  }, [deal]);
+  const { dealContentDetail: deal, showSkeleton } = useDealContentDetail();
 
   if (showSkeleton || !deal) {
-    return <DealContentDetailSkeleton />;
+    return <DealContentDetailSkeleton />; // 스켈레톤 UI를 보여줌
   }
 
   return (
-    <div className="flex-3 h-full px-[200px]">
-      <div>
-        <img
-          className=" h-[400px] w-full object-cover rounded-lg mb-4"
-          referrerPolicy="no-referrer"
-          src={`${deal.image}`}
-          alt="Deal Image"
-        />
-        <DealContentUserProfile />
-        <div className="text-[20px] mt-4 mb-[8px] font-blackoverflow-hidden text-ellipsis line-clamp-1">
-          {deal.title}
+    <div className="flex-3 max-h-[calc(100vh-150px)] overflow-y-auto w-full scroll-hide scroll-hide">
+      <div className="w-full h-[80px]"></div>
+      <div className="h-[calc(100%-80px)] px-[200px]">
+        <div>
+          <img
+            className=" h-[400px] w-full object-cover rounded-lg mb-[25px]"
+            referrerPolicy="no-referrer"
+            src={`${deal.image}`}
+            alt="Deal Image"
+          />
+          <div className="flex justify-start">
+            <div className="flex-2 flex item-center">
+              <DealContentUserProfile />
+            </div>
+            <div className="flex-1 flex justify-end">
+              <div className="w-[180px]">
+                <DealButton />
+              </div>
+            </div>
+          </div>
+          <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
+          <div className="text-[30px] font-[600] mb-[4px] leading-tight ">{deal.title}</div>
+          <div className="mb-[4px] text-[16px] text-[#868e96] font-[400]">12시간 06분 전</div>
+          <div className="mb-[25px]">
+            <span className="font-[800] text-[19px]">{formatNumberWithCommas(deal.winning_bid)} 원</span>
+          </div>
+          <div className="mb-[8px] text-[17px] leading-tight">{deal.detail}</div>
+          <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
+
+          <DeliveryStatusSearch />
         </div>
-        <div className="mb-[4px] h-[48px] overflow-hidden text-ellipsis line-clamp-2">{deal.detail}</div>
-        <div className="mb-[5px]">
-          <span className="text-[20px]  font-black mr-[3px]">{formatNumberWithCommas(deal.winning_bid)}</span>
-          <span>원</span>
-        </div>
-        {/* 기타 필요한 데이터들 추가 */}
       </div>
     </div>
   );

@@ -1,14 +1,40 @@
 export const PAGE_URL = {
-    HOME: '/',
-    DEAL: '/deal',
-    AUCTION: '/auction',
-  };
+  HOME: '/',
+  DEAL: '/deal',
+  AUCTION: '/auction',
+
+  INFO: '/info',
+  HELP: '/help',
+  SIGN_UP: '/sign-up',
+  LOG_IN: '/log-in',
+  LOG_OUT: '/log-out',
+  CREATE: '/create',
+  MY_PAGE: '/my-page',
+};
 
 export const DEAL_API_URL = {
-    GET_DEAL_CONTENT_LIST: "/api/deal/list",
-    GET_DEAL_CONTENT_DETAIL: "/api/deal/list"
-  };
+  GET_DEAL_CONTENT_LIST: '/api/deal/list',
+  GET_DEAL_CONTENT_DETAIL: '/api/deal/list',
+};
 
 export const SKELETON_TIME = {
-  TIME : 700
-}
+  TIME: 500,
+};
+
+export const MEMBER_API_URL = {
+  SIGN_UP: '/api/member/auth/sign-up',
+  SIGN_IN: '/api/member/auth/sign-in',
+  SIGN_OUT: '/api/member/auth/sign-out',
+  RANDOM_NICKNAME: '/api/member/auth/random-nickname',
+  CHECK_DUPLICATION: '/api/member/auth/check',
+  PHONE_AUTH: '/api/member/auth/phone-auth',
+  PHONE_CHECK: '/api/member/auth/phone-check',
+
+  ACCOUNT_AUTH: '/api/member/account-auth',
+  ACCOUNT_CHECK: '/api/member/account-check',
+  POINT_IN: '/api/member/point-in',
+  POINT_OUT: '/api/member/point-out',
+
+  ACCOUNT_TRANSACTION: '/api/member/transaction',
+  ACCOUNT_BALANCE: '/api/member/balance',
+};

@@ -16,17 +16,28 @@ const NavBar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={`${PAGE_URL.HOME}`} className="navbar-logo">
-          <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15 w-[80%]" />
+          <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15" />
         </Link>
         <div className={`navbar-menu`}>
           <ul className="navbar-list">
             <li className="navbar-item">
+              <Link to={`${PAGE_URL.INFO}`}>
+                <img src={getImgUrl('navbar/nav-info.png')} alt="Bidding이란?" className="nav-info-img" />
+              </Link>
+              <Link to={`${PAGE_URL.INFO}`}>Bidding이란?</Link>
+            </li>
+            <li className="navbar-item">
               <Link to={`${PAGE_URL.AUCTION}`}>
-                <img src={getImgUrl('navbar/nav-info.png')} alt="경매 둘러보기" className="navbar-logo-img" />
+                <img src={getImgUrl('navbar/nav-products.png')} alt="경매 둘러보기" className="navbar-logo-img" />
               </Link>
               <Link to={`${PAGE_URL.AUCTION}`}>경매 둘러보기</Link>
             </li>
-
+            <li className="navbar-item">
+              <Link to={`${PAGE_URL.CREATE}`}>
+                <img src={getImgUrl('navbar/nav-create.png')} alt="경매 등록하기" className="navbar-logo-img" />
+              </Link>
+              <Link to={`${PAGE_URL.CREATE}`}>경매 등록하기</Link>
+            </li>
             <li className="navbar-item">
               <Link to={`${PAGE_URL.HELP}`}>
                 <img src={getImgUrl('navbar/nav-help.png')} alt="고객센터" className="navbar-logo-img" />
@@ -37,9 +48,9 @@ const NavBar: React.FC = () => {
             {!isAuthenticated && (
               <li className="navbar-item">
                 <Link to={`${PAGE_URL.LOG_IN}`}>
-                  <img src={getImgUrl('navbar/nav-sign-up.png')} alt="로그인" className="navbar-logo-img" />
+                  <img src={getImgUrl('navbar/nav-sign-up.png')} alt="로그인/회원가입" className="navbar-logo-img" />
                 </Link>
-                <Link to={`${PAGE_URL.LOG_IN}`}>로그인</Link>
+                <Link to={`${PAGE_URL.LOG_IN}`}>로그인/회원가입</Link>
               </li>
             )}
 

@@ -1,17 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* 
 @font-face {
     font-family: "Jua";
     src: url("/path/to/Jua.woff2") format("woff2"),
          url("/path/to/Jua.woff") format("woff");
     font-weight: normal;
     font-style: normal;
-  }
-  
+  } */
+  @font-face {
+    font-family: "Noto Sans KR";
+    src: url("/path/to/NotoSansKR.woff2") format("woff2"),
+         url("/path/to/NotoSansKR.woff") format("woff");
+    font-weight: normal; /* 기본 두께 */
+    font-style: normal;
+}
   html {
-    font-family: "Jua", sans-serif; /* 전체 HTML에 Jua 폰트 적용 */
+    /* font-family: "Jua", sans-serif;  */
+    font-family: "Noto Sans KR", sans-serif;
   }
   .scroll-hide::-webkit-scrollbar {
     display: none;
@@ -34,4 +41,15 @@
     /*  dealContent 전역변수  */
     --contentImg-Height : 200px;
 
+}
+@layer components {
+  .noto-sans-kr {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: normal;
+  }
+
+  .noto-sans-kr-bold {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: bold; 
+  }
 }
