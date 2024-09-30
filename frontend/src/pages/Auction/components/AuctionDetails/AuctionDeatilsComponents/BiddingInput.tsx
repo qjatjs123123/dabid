@@ -4,17 +4,9 @@ interface BiddingInputProps {
   isOwner: boolean;
   isParticipant: boolean;
   isFirstMember: boolean;
-  number1: number;
-  formatNumber: (num: number) => string;
 }
 
-const BiddingInput: React.FC<BiddingInputProps> = ({
-  isOwner,
-  isParticipant,
-  isFirstMember,
-  number1,
-  formatNumber,
-}) => {
+const BiddingInput: React.FC<BiddingInputProps> = ({ isOwner, isParticipant, isFirstMember }) => {
   if (isOwner || !isParticipant) {
     return null; // 조건에 맞지 않으면 아무것도 렌더링하지 않음
   }
@@ -24,7 +16,7 @@ const BiddingInput: React.FC<BiddingInputProps> = ({
       <label className="text-gray-600 mb-2">내 입찰가</label>
       {isFirstMember ? (
         <div className="flex items-center">
-          <p>{formatNumber(number1)}</p>
+          <p>내 입찰금 표시(낙찰 유력자)</p>
           <span className="ml-2 text-gray-600">WON</span>
         </div>
       ) : (

@@ -124,11 +124,11 @@ public class AuctionServiceImpl implements AuctionService{
                 .detail(auction.getDetail())
                 .deposit(auction.getDeposit())
                 .isFirstMember(auction.getFirstMemberId() == memberId)
-                .isOnwer(auction.getMember().getId() == memberId)
+                .isOwner(auction.getMember().getId() == memberId)
                 .isParticipant(auctionInfo != null)
                 .person(count)
                 .finishedAt(auction.getFinishedAt())
-                .bid(auctionInfo != null ? auctionInfo.getBid() : 0)
+                .bid(auction.getSecondBid())
                 .images(auctionImageUrls)
                 .build();
 
@@ -167,7 +167,6 @@ public class AuctionServiceImpl implements AuctionService{
         Auction auction = Auction.builder()
                 .title(dto.getTitle())
                 .member(member)
-                .category(Category.valueOf(dto.getCategory()))
                 .detail(dto.getDetail())
                 .deposit((int)(dto.getInitValue() * 0.3))
                 .firstMemberId(-1)

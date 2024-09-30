@@ -12,7 +12,7 @@ interface AuctionDetailsImageProps {
   images: string[];
 }
 
-const AuctionDetailImage: React.FC<AuctionDetailsImageProps> = ({ images }) => {
+const AuctionDetailsImage: React.FC<AuctionDetailsImageProps> = ({ images }) => {
   // if (showSkeleton || !auctionDetail) {
   if (false) {
     return <AuctionDeatilImageSkeleton />;
@@ -82,4 +82,4 @@ const AuctionDetailImage: React.FC<AuctionDetailsImageProps> = ({ images }) => {
   );
 };
 
-export default AuctionDetailImage;
+export default AuctionDetailsImage;
