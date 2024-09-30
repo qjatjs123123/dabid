@@ -8,6 +8,7 @@ import Auction from './pages/Auction/Auction';
 import LoginModal from './pages/Login/LoginModal'; // 모달 컴포넌트 임포트
 import Mypage from './pages/MyPage/Mypage';
 import Logout from './pages/Logout/Logout';
+import FloatingActionButtons from './components/Floating/FloatingButtons';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState'; // Recoil 상태 임포트
 
@@ -38,6 +39,8 @@ function App() {
           <Route path={`${PAGE_URL.LOG_OUT}`} element={<Logout />} />
         </Route>
       </Routes>
+
+      <FloatingActionButtons />
     </>
   );
 }
