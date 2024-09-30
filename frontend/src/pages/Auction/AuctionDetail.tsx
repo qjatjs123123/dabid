@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import AuctionDetailsImage from './components/AuctionDetails/AuctionDetailsImage';
 import AuctionDetailsBidding from './components/AuctionDetails/AuctionDetailsBidding';
 import AuctionDetailsDescription from './components/AuctionDetails/AuctionDetailsDescription';
 
 interface AuctionData {
+  auctionId: number;
   deposit: number;
   person: number;
   bid: number;
@@ -19,17 +21,18 @@ interface AuctionData {
   participant: boolean;
 }
 
-const AuctionDeatil: React.FC<{ token: string }> = ({ token }) => {
+const AuctionDeatil: React.FC = () => {
+  const { auctionId } = useParams<{ auctionId: string }>();
   const [auctionData, setAuctionData] = useState<AuctionData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchAuctionData = async () => {
+    const fetchAuctionData = async (auctionId: number) => {
       try {
-        const response = await fetch('https://j11a505.p.ssafy.io/api/auctions/2', {
+        const response = await fetch(`https://j11a505.p.ssafy.io/api/auctions/${auctionId}`, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZyb250X21hc3RlckBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NTg1MjQsImV4cCI6MTcyNzY2OTMyNH0.BXElJYaQwPIQHfnJH2bu3xRp0n_wpsQk0f5lPsmunYY`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZyb250X21hc3RlckBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NjY2NTEsImV4cCI6MTcyNzY3NzQ1MX0.v1h1R2x9d_hWLmYy9Ui9hoQ5avjVz6NzqPxOlaT4h-U`,
             'Content-Type': 'application/json',
           },
         });
@@ -45,8 +48,10 @@ const AuctionDeatil: React.FC<{ token: string }> = ({ token }) => {
       }
     };
 
-    fetchAuctionData();
-  }, [token]);
+    if (auctionId) {
+      fetchAuctionData(parseInt(auctionId)); // auctionId를 숫자로 변환하여 전달합니다.
+    }
+  }, []);
 
   if (error) {
     return <div>Error: {error}</div>;
