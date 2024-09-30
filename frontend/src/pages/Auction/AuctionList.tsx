@@ -1,5 +1,5 @@
-import AuctionContainer from './components/AuctionContainer';
-import AuctionFilter from './components/AuctionFilter';
+import AuctionContainer from './components/Auctions/AuctionContainer';
+import AuctionFilter from './components/Auctions/AuctionFilter';
 
 const Auction = () => {
   return (
