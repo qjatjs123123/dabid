@@ -2,33 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PAGE_URL } from '../../util/Constants';
 import { getImgUrl } from '../../util/Functions';
-import LoginModal from './LoginModal'; // 모달 컴포넌트 임포트
-
+import { useRecoilState } from 'recoil';
+import { modalState } from '../../stores/recoilStores/Member/modalState'; // Recoil 상태 임포트
+import { userState } from '../../stores/recoilStores/Member/userState'; // Recoil 상태 임포트
+import { loginState } from '../../stores/recoilStores/Member/loginState'; // Recoil 상태 임포트
 import './Header.css';
 
 const NavBar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isModalOpen, setModalOpen] = useState(false); // 모달 상태 추가
+  const [isModalOpen, setModalOpen] = useRecoilState(modalState); // Recoil 상태 사용
+  const [user, setUser] = useRecoilState(userState); // Recoil 상태 사용
+  const [token, setToken] = useRecoilState(loginState);
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    setIsAuthenticated(token !== undefined && token !== null);
-  }, []);
+    if (token !== '') {
+      setIsAuthenticated(true);
+    }
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
+    setToken('');
     window.location.href = `${PAGE_URL.HOME}`;
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleLoginSuccess = () => {
-    setModalOpen(false);
-    setIsAuthenticated(true); // 로그인 성공 시 상태 업데이트
   };
 
   return (
@@ -100,9 +102,6 @@ const NavBar: React.FC = () => {
       <div className={`toggle-navbar-menu${isMenuOpen ? ' open' : ''}`}>
         <ul className="navbar-list">
           <li className="navbar-item">
-            <Link to={`${PAGE_URL.INFO}`}>Bidding이란?</Link>
-          </li>
-          <li className="navbar-item">
             <Link to={`${PAGE_URL.AUCTION}`}>경매 둘러보기</Link>
           </li>
           <li className="navbar-item">
@@ -111,9 +110,25 @@ const NavBar: React.FC = () => {
           <li className="navbar-item">
             <Link to={`${PAGE_URL.HELP}`}>고객센터</Link>
           </li>
+          {!isAuthenticated && (
+            <li className="navbar-item">
+              <button onClick={() => setModalOpen(true)}>
+                <span>로그인</span>
+              </button>
+            </li>
+          )}
+          {isAuthenticated && (
+            <>
+              <li className="navbar-item">
+                <Link to={`${PAGE_URL.MY_PAGE}`}>마이페이지</Link>
+              </li>
+              <li className="navbar-item">
+                <button onClick={handleLogout}>로그아웃</button>
+              </li>
+            </>
+          )}
         </ul>
       </div>
-      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
     </nav>
   );
 };

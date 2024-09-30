@@ -8,10 +8,11 @@ import Auction from './pages/Auction/Auction';
 import LoginModal from './pages/Login/LoginModal'; // 모달 컴포넌트 임포트
 import Mypage from './pages/MyPage/Mypage';
 import Logout from './pages/Logout/Logout';
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { modalState } from './stores/recoilStores/Member/modalState'; // Recoil 상태 임포트
 
 function App() {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useRecoilState(modalState); // Recoil 상태 사용
   const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
@@ -21,13 +22,11 @@ function App() {
 
   return (
     <>
-      <button
-        onClick={() => setModalOpen(true)}
-        className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-      >
-        로그인
-      </button>
-      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
+      <LoginModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)} // Recoil 상태 변경
+        onLoginSuccess={handleLoginSuccess}
+      />
 
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />

@@ -34,6 +34,10 @@ interface LoginContent {
 export const login = async ({ email, password }: LoginParams): Promise<LoginContent> => {
   const data = { email, password };
   const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_IN}`, data);
+  // console.log(response);
+  // console.log(response.data);
+  // userState에 user 저장
+
   return response.data;
 };
 

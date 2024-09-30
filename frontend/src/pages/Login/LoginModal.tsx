@@ -3,6 +3,8 @@ import { login } from '../../api/MemberAPI';
 import { Link } from 'react-router-dom';
 import { PAGE_URL } from '../../util/Constants';
 import { getImgUrl } from '../../util/Functions';
+import { useRecoilState } from 'recoil';
+import { loginState } from '../../stores/recoilStores/Member/loginState';
 
 interface LoginParams {
   email: string;
@@ -19,6 +21,8 @@ const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onLoginSucces
     password: '',
   });
 
+  const [token1, setToken] = useRecoilState(loginState);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setValues({ ...values, [e.target.id]: e.target.value });
   };
@@ -27,8 +31,14 @@ const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onLoginSucces
     e.preventDefault();
     try {
       const response = await login(values);
+      if (response.code !== 'SU') {
+        return;
+      }
       localStorage.clear();
       localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      setToken(response.accessToken);
+
       onLoginSuccess(); // 로그인 성공 시 호출
     } catch (error) {
       console.log(error);
