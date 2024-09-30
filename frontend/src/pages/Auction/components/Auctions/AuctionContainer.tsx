@@ -42,7 +42,7 @@ const AuctionContainer = () => {
         const accessToken =
           'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzUyMjYsImV4cCI6MTcyNzY4NjAyNn0.O6MiW2E9XhUGgoDhiHS0tO0oLMt1GXDmudiUy9Ja1BE'; //localStorage.getItem('accessToken');
 
-        const response = await fetch('http://localhost:4040/api/auctions', {
+        const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
           method: 'GET', // 기본값은 GET이지만 명시적으로 추가
           headers: {
             'Content-Type': 'application/json',

@@ -27,7 +27,7 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
     const accessToken = `eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzUyMjYsImV4cCI6MTcyNzY4NjAyNn0.O6MiW2E9XhUGgoDhiHS0tO0oLMt1GXDmudiUy9Ja1BE`; //localStorage.getItem('accessToken');
 
     try {
-      const response = await fetch('http://localhost:4040/api/auctions', {
+      const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
         //j11a505.p.ssafy.io
         method: 'POST',
         headers: {
