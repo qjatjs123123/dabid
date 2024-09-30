@@ -1,12 +1,23 @@
+// import useAuctionDetail from '../../../business/hooks/useDeal/useDealContentDetail';
 import React, { useState, useRef, useEffect } from 'react';
+import AuctionDeatilImageSkeleton from '../../skeletons/AuctionDetailImageSkeleton';
 
-const images = [
-  'https://via.placeholder.com/300x200?text=Image+1',
-  'https://via.placeholder.com/300x200?text=Image+2',
-  'https://via.placeholder.com/300x200?text=Image+3',
-];
+// const images = [
+//   '/auctionTestImage/먹다 남은 사과.png',
+//   '/auctionTestImage/먹다 남은 사과2.png',
+//   '/auctionTestImage/먹다 남은 배.png',
+// ];
 
-const AuctionDetailImageSkeleton: React.FC = () => {
+interface AuctionDetailsImageProps {
+  images: string[];
+}
+
+const AuctionDetailImage: React.FC<AuctionDetailsImageProps> = ({ images }) => {
+  // if (showSkeleton || !auctionDetail) {
+  if (false) {
+    return <AuctionDeatilImageSkeleton />;
+  }
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 
@@ -29,7 +40,7 @@ const AuctionDetailImageSkeleton: React.FC = () => {
   }, [selectedIndex]);
 
   return (
-    <div className="flex flex-col items-center m-4">
+    <div className="bg-gray-100 flex flex-col items-center m-4 p-5 rounded-lg">
       {/* 큰 이미지 표시 영역 */}
       <div className="w-full mb-4 grid place-items-center">
         <img
@@ -42,7 +53,7 @@ const AuctionDetailImageSkeleton: React.FC = () => {
       {/* 가로로 정렬된 이미지와 화살표 */}
       <div className="flex items-center space-x-4 flex-wrap sm:flex-nowrap">
         {/* 왼쪽 화살표 */}
-        <button onClick={handlePrev} className="text-3xl font-bold p-2">
+        <button onClick={handlePrev} className="bg-gray-300 text-3xl font-bold p-2 rounded-lg">
           &lt;
         </button>
 
@@ -53,7 +64,7 @@ const AuctionDetailImageSkeleton: React.FC = () => {
               key={index}
               src={img}
               alt={`Image ${index + 1}`}
-              className={`w-32 h-20 object-cover cursor-pointer border-2 ${
+              className={`w-32 h-20 object-cover cursor-pointer border-2 rounded-lg ${
                 index === selectedIndex ? 'border-blue-500' : 'border-transparent'
               }`}
               onClick={() => setSelectedIndex(index)}
@@ -63,7 +74,7 @@ const AuctionDetailImageSkeleton: React.FC = () => {
         </div>
 
         {/* 오른쪽 화살표 */}
-        <button onClick={handleNext} className="text-3xl font-bold p-2">
+        <button onClick={handleNext} className="bg-gray-300 text-3xl font-bold p-2 rounded-lg">
           &gt;
         </button>
       </div>
@@ -71,11 +82,4 @@ const AuctionDetailImageSkeleton: React.FC = () => {
   );
 };
 
-export default AuctionDetailImageSkeleton;
-
-// 7번째 팀원 GPT의 코드 설명:
-// 1. 이미지 배열: images 배열에 3개의 이미지를 넣어 관리하고 있습니다. URL을 통해 placeholder 이미지를 사용하였지만, 실제 사용시 적절한 이미지를 넣으면 됩니다.
-// 2. 상태 관리: useState 훅을 이용해 선택된 이미지를 selectedIndex로 관리합니다. 기본값은 첫 번째 이미지로 설정됩니다.
-// 3. 핸들러 함수: handlePrev와 handleNext 함수는 좌우 화살표를 클릭할 때 이미지의 인덱스를 변경합니다.
-// 4. 이미지 표시: 선택된 이미지는 큰 사이즈로 상단에 표시되며, 하단에는 3개의 이미지를 가로로 정렬하여 표시합니다.
-// 5. 이미지 클릭: 하단의 이미지를 클릭하면 해당 이미지가 선택되어 상단에 크게 표시됩니다.
+export default AuctionDetailImage;
