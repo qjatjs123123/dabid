@@ -167,7 +167,6 @@ public class AuctionServiceImpl implements AuctionService{
         Auction auction = Auction.builder()
                 .title(dto.getTitle())
                 .member(member)
-                .category(Category.valueOf(dto.getCategory()))
                 .detail(dto.getDetail())
                 .deposit((int)(dto.getInitValue() * 0.3))
                 .firstMemberId(-1)

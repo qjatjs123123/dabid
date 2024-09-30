@@ -1,22 +1,52 @@
 import React, { useState } from 'react';
 
-const AuctionForm: React.FC = () => {
-  const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  const [title, setTitle] = useState('');
-  const [startingPrice, setStartingPrice] = useState('');
-  const [duration, setDuration] = useState('3');
-  const [description, setDescription] = useState('');
+interface AuctionFormProps {
+  images: File[]; // AuctionImage에서 가져온 이미지
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
+const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
+  const [title, setTitle] = useState('');
+  const [initValue, setStartingPrice] = useState('');
+  const [duration, setDuration] = useState('3');
+  const [detail, setDescription] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 여기에서 폼 데이터를 처리하는 로직 추가
-    console.log({
-      title,
-      startingPrice,
-      duration,
-      description,
-      selectedImages,
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('initValue', initValue);
+    formData.append('duration', duration);
+    formData.append('detail', detail);
+
+    // 이미지 추가
+    images.forEach((image) => {
+      formData.append('images', image);
     });
+
+    const accessToken = `eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzUyMjYsImV4cCI6MTcyNzY4NjAyNn0.O6MiW2E9XhUGgoDhiHS0tO0oLMt1GXDmudiUy9Ja1BE`; //localStorage.getItem('accessToken');
+
+    try {
+      const response = await fetch('http://localhost:4040/api/auctions', {
+        //j11a505.p.ssafy.io
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        // 성공 시 처리
+        console.log('경매가 성공적으로 등록되었습니다.');
+      } else {
+        // 오류 처리
+        const errorData = await response.json();
+        console.error('경매 등록 실패:', errorData);
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
   };
 
   return (
@@ -39,7 +69,7 @@ const AuctionForm: React.FC = () => {
           <label className="block text-sm font-semibold mb-1">시작가</label>
           <input
             type="number"
-            value={startingPrice}
+            value={initValue}
             onChange={(e) => setStartingPrice(e.target.value)}
             placeholder="시작가"
             className="w-full p-2 border border-gray-300 rounded"
@@ -64,7 +94,7 @@ const AuctionForm: React.FC = () => {
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">설명</label>
           <textarea
-            value={description}
+            value={detail}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="경매 물품에 대한 설명이 상세할수록 구매자의 이목을 끌 수 있습니다."
             className="w-full p-2 border border-gray-300 rounded"
