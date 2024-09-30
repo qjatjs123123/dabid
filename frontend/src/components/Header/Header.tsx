@@ -30,6 +30,7 @@ const NavBar: React.FC = () => {
   };
 
   const toggleMenu = () => {
+    console.log(isAuthenticated);
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -104,9 +105,7 @@ const NavBar: React.FC = () => {
           <li className="navbar-item">
             <Link to={`${PAGE_URL.AUCTION}`}>경매 둘러보기</Link>
           </li>
-          <li className="navbar-item">
-            <Link to={`${PAGE_URL.CREATE}`}>경매 등록하기</Link>
-          </li>
+
           <li className="navbar-item">
             <Link to={`${PAGE_URL.HELP}`}>고객센터</Link>
           </li>
@@ -121,6 +120,9 @@ const NavBar: React.FC = () => {
             <>
               <li className="navbar-item">
                 <Link to={`${PAGE_URL.MY_PAGE}`}>마이페이지</Link>
+              </li>
+              <li className="navbar-item">
+                <Link to={`${PAGE_URL.CREATE}`}>경매 등록하기</Link>
               </li>
               <li className="navbar-item">
                 <button onClick={handleLogout}>로그아웃</button>

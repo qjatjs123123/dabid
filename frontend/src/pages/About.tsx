@@ -8,6 +8,7 @@ const About = () => {
         구입하는 가장 좋은 방법.
       </p>
       <img src={getImgUrl('about/main-bg.png')} alt="다비드 메인" className="max-h-[600px]" />
+      {/* Bidding 설명 추가 */}
     </div>
   );
 };

@@ -6,8 +6,6 @@ export const PAGE_URL = {
   INFO: '/info',
   HELP: '/help',
   SIGN_UP: '/sign-up',
-  LOG_IN: '/log-in',
-  LOG_OUT: '/log-out',
   CREATE: '/create',
   MY_PAGE: '/my-page',
 };
