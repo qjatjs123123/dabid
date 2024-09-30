@@ -2,7 +2,7 @@ export const PAGE_URL = {
   HOME: '/',
   DEAL: '/deal',
   AUCTION_LIST: '/auction',
-  AUCTION_DETAIL: '/auction/1',
+  AUCTION_DETAIL: '/auctions/:auctionId',
 };
 
 export const DEAL_API_URL = {
