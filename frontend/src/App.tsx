@@ -10,6 +10,7 @@ import Login from './pages/Login/Login';
 import Mypage from './pages/MyPage/Mypage';
 import Logout from './pages/Logout/Logout';
 import AuctionList from './pages/Auction/AuctionList';
+import AuctionInput from './pages/Auction/components/Auctions/AuctionInput';
 import AuctionDetail from './pages/Auction/AuctionDetail';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path={`${PAGE_URL.LOG_OUT}`} element={<Logout />} />
         <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
         <Route path={`${PAGE_URL.AUCTION_DETAIL}`} element={<AuctionDetail />} />
+        <Route path={`${PAGE_URL.AUCTION_INPUT}`} element={<AuctionInput />} />
       </Route>
     </Routes>
   );
