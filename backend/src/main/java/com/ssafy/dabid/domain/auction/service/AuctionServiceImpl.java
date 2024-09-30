@@ -4,11 +4,13 @@ import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
 import com.ssafy.dabid.domain.auction.entity.*;
+import com.ssafy.dabid.domain.auction.entity.mongo.AuctionInfo;
 import com.ssafy.dabid.domain.auction.mapper.AuctionMapper;
 import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionImageRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
+import com.ssafy.dabid.domain.auction.repository.mongo.AuctionInfoMongoRepository;
 import com.ssafy.dabid.domain.job.service.QuartzSchedulerService;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
@@ -36,6 +38,7 @@ public class AuctionServiceImpl implements AuctionService{
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionElasticSearchRepository auctionElasticSearchRepository;
     private final AuctionInfoRepository auctionInfoRepository;
+    private final AuctionInfoMongoRepository auctionInfoMongoRepository;
     private final AuctionImageRepository auctionImageRepository;
     private final MemberRepository memberRepository;
     private final MemberAccountRepository memberAccountRepository;
@@ -71,6 +74,8 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("Active Auction 조회");
         List<AuctionDocument> auctions = auctionElasticSearchRepository.findAllByOrderByCreatedAtDesc();
 
+        log.info("Auction 참가자 수 조회");
+
         log.info("조회된 Auction을 AuctionListDto로 변환");
         List<AuctionListDto> results = new ArrayList<>();
         for (AuctionDocument auctionDocument : auctions){
@@ -80,6 +85,7 @@ public class AuctionServiceImpl implements AuctionService{
                             .title(auctionDocument.getTitle())
                             .thumbnail(s3Util.generateFileUrl(auctionDocument.getThumbnail()))
                             .secondBid(auctionDocument.getSecondBid())
+                            .person(auctionInfoMongoRepository.countByAuctionId(Integer.parseInt(auctionDocument.getId())))
                             .finishedAt(auctionDocument.getFinishedAt())
                             .createdAt(auctionDocument.getCreatedAt())
                             .build()
@@ -102,7 +108,7 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("auctionId: " + auctionId + " 조회");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않은 Auction"));
 
-        AuctionInfo auctionInfo = auctionInfoRepository.findByAuction_IdAndMember_Id(auctionId, memberId).orElse(null);
+        AuctionInfo auctionInfo = auctionInfoMongoRepository.findByAuctionIdAndMemberId(auctionId, memberId).orElse(null);
         List<AuctionImage> auctionImages = auctionImageRepository.findByAuction_Id(auctionId);
         List<String> auctionImageUrls = new ArrayList<>();
 
@@ -110,7 +116,7 @@ public class AuctionServiceImpl implements AuctionService{
             auctionImageUrls.add(s3Util.generateFileUrl(auctionImage.getImageUrl()));
         }
 
-        int count = auctionInfoRepository.countByAuctionId(auctionId);
+        int count = auctionInfoMongoRepository.countByAuctionId(auctionId);
         log.info("Dto 변환");
         AuctionDto result = AuctionDto.builder()
                 .title(auction.getTitle())
@@ -218,7 +224,7 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Override
     public boolean isExistParticipant(int auctionId){
-        return auctionInfoRepository.countByAuctionId(auctionId) > 0;
+        return auctionInfoMongoRepository.countByAuctionId(auctionId) > 0;
     }
 
     /**
