@@ -17,7 +17,7 @@ interface AuctionData {
   finishedAt: number[];
   images: string[];
   firstMember: boolean;
-  owner: boolean;
+  onwer: boolean;
   participant: boolean;
 }
 
@@ -32,7 +32,7 @@ const AuctionDeatil: React.FC = () => {
         const response = await fetch(`https://j11a505.p.ssafy.io/api/auctions/${auctionId}`, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZyb250X21hc3RlckBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NjY2NTEsImV4cCI6MTcyNzY3NzQ1MX0.v1h1R2x9d_hWLmYy9Ui9hoQ5avjVz6NzqPxOlaT4h-U`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZyb250X21hc3RlckBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzA0MTQsImV4cCI6MTcyNzY4MTIxNH0.4eigcgmjsekKsywFRKt5cblDXPrSvkH4PdzlTy1Gnu4`,
             'Content-Type': 'application/json',
           },
         });
@@ -43,6 +43,7 @@ const AuctionDeatil: React.FC = () => {
 
         const data: AuctionData = await response.json();
         setAuctionData(data);
+        console.log(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
       }
@@ -72,8 +73,8 @@ const AuctionDeatil: React.FC = () => {
           <AuctionDetailsImage images={auctionData.images} />
         </div>
         <div className="flex-6">
-          <AuctionDetailsBidding />
-          <AuctionDetailsDescription />
+          <AuctionDetailsBidding auctionData={auctionData} />
+          <AuctionDetailsDescription detail={auctionData.detail} />
         </div>
       </div>
     </div>

@@ -2,21 +2,49 @@ import React, { useEffect, useState } from 'react';
 import BiddingInput from './AuctionDeatilsComponents/BiddingInput';
 import BiddingStatus from './AuctionDeatilsComponents/BiddingStatus';
 
-const formatNumber = (num: number): string => {
-  return new Intl.NumberFormat('en-US').format(num);
+interface AuctionData {
+  auctionId: number;
+  deposit: number;
+  person: number;
+  bid: number;
+  title: string;
+  category: string;
+  detail: string;
+  profileImage: string | null;
+  nickname: string | null;
+  finishedAt: number[];
+  images: string[];
+  firstMember: boolean;
+  onwer: boolean;
+  participant: boolean;
+}
+
+interface AuctionDetailsBiddingProps {
+  auctionData: AuctionData;
+}
+
+const formatCurrency = (amount: number): string => {
+  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-const AuctionBiddingInfo: React.FC = () => {
-  const endDate = new Date('2024-12-28T16:00:00+09:00'); // 서울 시간
+const formatDateArrayToString = (dateArray: number[]): string => {
+  const [year, month, day, hours, minutes] = dateArray;
+
+  // 월은 0부터 시작하므로 +1 해줌
+  const formattedMonth = String(month).padStart(2, '0');
+  const formattedDay = String(day).padStart(2, '0');
+  const formattedHours = String(hours).padStart(2, '0');
+  const formattedMinutes = String(minutes).padStart(2, '0');
+
+  return `${year}년 ${formattedMonth}월 ${formattedDay}일 ${formattedHours}시 ${formattedMinutes}분`;
+};
+
+const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData }) => {
   const [timeRemaining, setTimeRemaining] = useState<string>('--시간 --분 --초');
 
-  const isOwner = false; // 소유자 여부
-  const isParticipant = true; // 참여자 여부
-  const isFirstMember = true; // 1등 입찰자(= 낙찰 유력자)인지 여부
-
-  const number1 = 120000;
-
-  const calculateTimeRemaining = () => {
+  const calculateTimeRemaining = (finishedAt: number[]) => {
+    const [year, month, day, hour, minute, second, millisecond] = finishedAt;
+    const endDate = new Date(year, month - 1, day, hour, minute, second, millisecond);
     const now = new Date();
     const timeDiff = endDate.getTime() - now.getTime();
 
@@ -39,7 +67,7 @@ const AuctionBiddingInfo: React.FC = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      calculateTimeRemaining();
+      calculateTimeRemaining(auctionData.finishedAt);
     }, 1000);
 
     return () => clearInterval(timer);
@@ -50,34 +78,38 @@ const AuctionBiddingInfo: React.FC = () => {
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center m-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-bold">현재가</h1>
-          <p className="text-2xl font-semibold text-gray-800">{formatNumber(number1)}</p>
+          <p className="text-2xl font-semibold text-gray-800">{formatCurrency(auctionData.bid)}</p>
         </div>
 
         <div className="flex justify-between items-center mt-4">
           <p className="text-gray-600">남은 시간</p>
           <div className="text-xl font-semibold">
             <p>{timeRemaining}</p>
-            <p className="text-sm text-gray-500">(2024년 11월 28일 16:00:00)</p>
+            <p className="text-sm text-gray-500">{formatDateArrayToString(auctionData.finishedAt)}</p>
           </div>
         </div>
 
         <div className="flex justify-between items-center mt-4">
           <p className="text-gray-600">경매 참여자</p>
-          <p className="text-xl font-semibold">25명</p>
+          <p className="text-xl font-semibold">{auctionData.person}명</p>
         </div>
 
         <div>
           <BiddingInput
-            isOwner={isOwner}
-            isParticipant={isParticipant}
-            isFirstMember={isFirstMember}
-            number1={number1}
-            formatNumber={formatNumber}
+            isOwner={auctionData.onwer}
+            isParticipant={auctionData.participant}
+            isFirstMember={auctionData.firstMember}
+            // finishedAt={auctionData.finishedAt}
+            // formatNumber={formatNumber}
           />
         </div>
 
         <div>
-          <BiddingStatus isOwner={isOwner} isParticipant={isParticipant} isFirstMember={isFirstMember} />
+          <BiddingStatus
+            isOwner={auctionData.onwer}
+            isParticipant={auctionData.participant}
+            isFirstMember={auctionData.firstMember}
+          />
         </div>
       </div>
 

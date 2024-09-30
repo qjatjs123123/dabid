@@ -40,7 +40,7 @@ const AuctionContainer = () => {
       try {
         // 로컬 스토리지에서 accessToken 가져오기
         const accessToken =
-          'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZyb250X21hc3RlckBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NjY2NTEsImV4cCI6MTcyNzY3NzQ1MX0.v1h1R2x9d_hWLmYy9Ui9hoQ5avjVz6NzqPxOlaT4h-U'; //localStorage.getItem('accessToken');
+          'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZyb250X21hc3RlckBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzA0MTQsImV4cCI6MTcyNzY4MTIxNH0.4eigcgmjsekKsywFRKt5cblDXPrSvkH4PdzlTy1Gnu4'; //localStorage.getItem('accessToken');
 
         const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
           method: 'GET', // 기본값은 GET이지만 명시적으로 추가
