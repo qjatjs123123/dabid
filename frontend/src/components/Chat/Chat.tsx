@@ -5,11 +5,14 @@ import { useRecoilValue } from 'recoil';
 import { curDealIdState } from '../../stores/recoilStores/Deal/stateDealId';
 import { fetchChatMessages } from '../../api/chatApi';
 import useWebSocket from '../../business/hooks/useDeal/useDealWebsocket';
+import moment from 'moment';
 
 interface Message {
   dealId: number;
-  memberId: number;
+  email: string;
+  nickname: string;
   content: string;
+  profile: string;
   createdAt: string;
 }
 
@@ -21,7 +24,8 @@ const Chat = () => {
 
   const dealId = useRecoilValue(curDealIdState); // 현재 거래 ID
   const token = localStorage.getItem('accessToken'); // 토큰 가져오기
-  const memberId = 1; // 로그인한 사용자 ID
+  const email = localStorage.getItem('email'); // 로그인한 사용자 이메일
+  // const email = 'ssafy7@gmail.com';
 
   // 웹소켓 훅을 사용해 메시지를 수신하고 전송
   const { sendMessage, disconnect } = useWebSocket(dealId, (newMessage: Message) => {
@@ -30,10 +34,10 @@ const Chat = () => {
 
   // 메시지 전송 핸들러
   const handleSendMessage = () => {
-    if (newMessage && memberId) {
+    if (newMessage) {
       const body = {
         dealId,
-        memberId,
+        email,
         content: newMessage,
         createdAt: new Date().toISOString().slice(0, -1),
       };
@@ -46,7 +50,7 @@ const Chat = () => {
   useEffect(() => {
     if (isOpen) {
       fetchChatMessages(dealId).then((data) => setMessages(data));
-      console.log(token);
+      console.log(email);
     }
   }, [isOpen, dealId]);
 
@@ -66,6 +70,64 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
+  //   return (
+  //     <div className="fixed bottom-10 right-10 z-50 noto-sans-kr-bold">
+  //       {isOpen ? (
+  //         <>
+  //           <div className="w-[350px] h-[500px] border border-gray-300 rounded-lg bg-white shadow-lg">
+  //             <div className="flex justify-between items-center bg-gray-800 text-white p-2 rounded-t-lg">
+  //               <div className="flex space-x-2">
+  //                 <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+  //                 <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+  //                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+  //               </div>
+  //               <button onClick={() => setIsOpen(false)} className="text-white text-xl">
+  //                 &times;
+  //               </button>
+  //             </div>
+
+  //             <div className="flex flex-col h-[400px] p-4 overflow-y-auto scroll-hide">
+  //               {messages.map((message, index) => (
+  //                 <div key={index} className={`mb-4 ${message.email === email ? 'text-right' : ''}`}>
+  //                   <div className="text-xs text-gray-500"></div>
+  //                   <div
+  //                     className={`mt-1 inline-block py-2 px-4 rounded-md ${message.email === email ? 'bg-yellow-500 text-white' : 'bg-gray-200'}`}
+  //                   >
+  //                     {message.content}
+  //                   </div>
+  //                 </div>
+  //               ))}
+  //               <div ref={messageEndRef} />
+  //             </div>
+
+  //             <form
+  //               className="flex border-t border-gray-300"
+  //               onSubmit={(e) => {
+  //                 e.preventDefault();
+  //                 handleSendMessage();
+  //               }}
+  //             >
+  //               <input
+  //                 type="text"
+  //                 className="flex-grow p-2 border-none focus:outline-none"
+  //                 value={newMessage}
+  //                 onChange={(e) => setNewMessage(e.target.value)}
+  //                 placeholder="Write a message"
+  //               />
+  //               <button type="submit" className="p-2 text-white rounded-br-lg">
+  //                 <img src={sendChat} alt="Chat Icon" className="w-full h-full" />
+  //               </button>
+  //             </form>
+  //           </div>
+  //         </>
+  //       ) : (
+  //         <button onClick={() => setIsOpen(true)} className="w-16 h-16 flex items-center justify-center rounded-full">
+  //           <img src={chatIcon} alt="Chat Icon" className="w-full h-full" />
+  //         </button>
+  //       )}
+  //     </div>
+  //   );
+  // };
   return (
     <div className="fixed bottom-10 right-10 z-50 noto-sans-kr-bold">
       {isOpen ? (
@@ -84,10 +146,21 @@ const Chat = () => {
 
             <div className="flex flex-col h-[400px] p-4 overflow-y-auto scroll-hide">
               {messages.map((message, index) => (
-                <div key={index} className={`mb-4 ${message.memberId === memberId ? 'text-right' : ''}`}>
-                  <div className="text-xs text-gray-500"></div>
+                <div key={index} className={`mb-4 ${message.email === email ? 'text-right' : 'text-left'}`}>
+                  {/* 프로필 사진 추가 */}
+                  {message.email !== email && (
+                    <div className="flex items-center space-x-2">
+                      <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" />
+                      <div className="text-[10px] text-gray-500 font-semibold">
+                        {message.nickname} {moment(message.createdAt).format('HH:mm')}
+                      </div>
+                    </div>
+                  )}
+                  {/* <div className="text-[10px] text-gray-500">{moment(message.createdAt).format('HH:mm')}</div>{' '} */}
+                  {/* 시간 추가 */}
+                  <div className="text-[8px] text-gray-500">{moment(message.createdAt).format('HH:mm')}</div>{' '}
                   <div
-                    className={`mt-1 inline-block py-2 px-4 rounded-md ${message.memberId === memberId ? 'bg-yellow-500 text-white' : 'bg-gray-200'}`}
+                    className={`mt-1 inline-block py-2 px-4 rounded-md ${message.email === email ? 'bg-yellow-500 text-white' : 'bg-gray-200'} break-words`}
                   >
                     {message.content}
                   </div>
