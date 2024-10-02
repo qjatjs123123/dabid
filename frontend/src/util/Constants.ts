@@ -10,6 +10,7 @@ export const PAGE_URL = {
   LOG_OUT: '/log-out',
   CREATE: '/create',
   MY_PAGE: '/my-page',
+
   AUCTION_LIST: '/auction',
   AUCTION_DETAIL: '/auctions/:auctionId',
   AUCTION_INPUT: `/auction/input`,
