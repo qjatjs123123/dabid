@@ -41,11 +41,11 @@ const DealContentDetail = () => {
             <span className="font-[800] text-[19px]">{formatNumberWithCommas(deal.winning_bid)} 원</span>
           </div>
           <div className="mb-[8px] text-[17px] leading-tight">{deal.detail}</div>
-          <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
+          <div className="h-[1px] w-full bg-[#e9ecef] mt-[35px] mb-[35px]"></div>
 
           <DeliveryStatusSearch />
 
-          <div className="h-[1px] w-full bg-[#e9ecef] mt-[35px] mb-[25px]"></div>
+          <div className="h-[1px] w-full bg-[#e9ecef] mt-[45px] mb-[45px]"></div>
           <DealStatus />
           <div className="mb-[100px]"></div>
         </div>
