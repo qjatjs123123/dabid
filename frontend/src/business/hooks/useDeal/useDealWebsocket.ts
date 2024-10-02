@@ -7,7 +7,8 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
 
   // 웹소켓 연결
   const connect = () => {
-    const socket = new WebSocket('ws://localhost:8080/api/chat');
+    // const socket = new WebSocket('ws://localhost:8080/api/chat');
+    const socket = new WebSocket('wss://j11a505.p.ssafy.io/api/chat');
     stompClient.current = Stomp.over(socket)!;
     stompClient.current.connect({}, () => {
       stompClient.current?.subscribe(`/sub/chat/room/${dealId}`, (message) => {
