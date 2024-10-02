@@ -58,10 +58,7 @@ const NavBar: React.FC = () => {
 
             {!isAuthenticated && (
               <li className="navbar-item">
-                <button
-                  onClick={() => setModalOpen(true)} // 모달 열기
-                  className="flex items-center"
-                >
+                <button onClick={() => setModalOpen(true)} className="flex items-center">
                   <img src={getImgUrl('navbar/nav-sign-up.png')} alt="로그인" className="navbar-logo-img" />
                   <span>로그인</span>
                 </button>

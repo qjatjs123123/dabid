@@ -279,168 +279,170 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold text-center mb-6">회원 가입</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1">이메일</label>
-          <div className="flex items-center">
+    <>
+      <div className="container mx-auto p-6 min-w-[500px] max-w-[1000px]">
+        <h2 className="text-2xl font-bold text-center mb-6">회원 가입</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="mb-10">
+            <label className="block mb-3 text-xl">이메일</label>
+            <div className="flex items-center">
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`border rounded w-full p-2 ${duplicateStatus.email ? 'border-green-500' : ''}`}
+                placeholder="test@test.com"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => handleDuplicateCheck('EMAIL', formData.email)}
+                className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[130px] h-[35px]"
+              >
+                중복 확인
+              </button>
+              {duplicateStatus.email && <span className="text-green-500 ml-2 ">✔️</span>}
+            </div>
+            {errors.emailExists && <p className="text-red-500">이미 존재하는 이메일입니다.</p>}
+            {errors.nullEmail && <p className="text-red-500">이메일을 입력하세요.</p>}
+            {errors.emailFormatterError && <p className="text-red-500">이메일 형식이 옳지 않습니다.</p>}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="block text-xl mr-[30px]">닉네임 </label> <hr />
+            <button
+              type="button"
+              onClick={handleNicknameGeneration}
+              className="bg-yellow-500 text-white rounded px-4 py-1"
+            >
+              랜덤 닉네임 생성
+            </button>
+          </div>
+          <div className="flex items-center mb-10">
             <input
-              type="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              name="nickname"
+              value={formData.nickname}
               onChange={handleChange}
-              className={`border rounded w-full p-2 ${duplicateStatus.email ? 'border-green-500' : ''}`}
-              placeholder="test@test.com"
+              className={`border rounded w-full p-2 ${duplicateStatus.nickname ? 'border-green-500' : ''}`}
               required
             />
             <button
               type="button"
-              onClick={() => handleDuplicateCheck('EMAIL', formData.email)}
-              className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[120px]"
+              onClick={() => handleDuplicateCheck('NICKNAME', formData.nickname)}
+              className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[130px] h-[35px]"
             >
               중복 확인
             </button>
-            {duplicateStatus.email && <span className="text-green-500 ml-2 ">✔️</span>}
+            {duplicateStatus.nickname && <span className="text-green-500 ml-2">✔️</span>}
           </div>
-          {errors.emailExists && <p className="text-red-500">이미 존재하는 이메일입니다.</p>}
-          {errors.nullEmail && <p className="text-red-500">이메일을 입력하세요.</p>}
-          {errors.emailFormatterError && <p className="text-red-500">이메일 형식이 옳지 않습니다.</p>}
-        </div>
+          {errors.nicknameExists && <p className="text-red-500">이미 존재하는 닉네임입니다.</p>}
+          {errors.nullNickname && <p className="text-red-500">닉네임을 입력하세요.</p>}
 
-        <div className="flex items-center mb-2">
-          <label className="block mb-1 mr-[30px]">닉네임 </label> <hr />
-          <button
-            type="button"
-            onClick={handleNicknameGeneration}
-            className="bg-yellow-500 text-white rounded px-4 py-1"
-          >
-            랜덤 닉네임 생성
-          </button>
-        </div>
-        <div className="flex items-center">
-          <input
-            type="text"
-            name="nickname"
-            value={formData.nickname}
-            onChange={handleChange}
-            className={`border rounded w-full p-2 ${duplicateStatus.nickname ? 'border-green-500' : ''}`}
-            required
-          />
-          <button
-            type="button"
-            onClick={() => handleDuplicateCheck('NICKNAME', formData.nickname)}
-            className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[120px]"
-          >
-            중복 확인
-          </button>
-          {duplicateStatus.nickname && <span className="text-green-500 ml-2">✔️</span>}
-        </div>
-        {errors.nicknameExists && <p className="text-red-500">이미 존재하는 닉네임입니다.</p>}
-        {errors.nullNickname && <p className="text-red-500">닉네임을 입력하세요.</p>}
-
-        <div>
-          <label className="block mb-1">비밀번호</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className={`border rounded w-full p-2 ${passwordStatus.password ? 'border-green-500' : ''}`}
-            required
-          />
-          {passwordStatus.password && <span className="text-green-500 ml-2">✔️</span>}
-          {errors.passwordFormatError && (
-            <p className="text-red-500">비밀번호는 최소 8자, 문자와 숫자가 포함되어야 함니다.</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block mb-1">비밀번호 확인</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className={`border rounded w-full p-2 ${passwordStatus.password_check ? 'border-green-500' : ''}`}
-            required
-          />
-          {passwordStatus.password_check && <span className="text-green-500 ml-2">✔️</span>}
-          {errors.passwordMismatch && (
-            <p className="text-red-500 mt-4">비밀번호와 비밀번호 확인이 일치하지 않습니다.</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block mb-1">전화번호</label>
-          <div className="flex items-center">
+          <div className="mt-10">
+            <label className="block mb-1 text-xl">비밀번호</label>
             <input
-              type="tel"
-              name="phoneNumber"
-              value={formData.phoneNumber}
+              type="password"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
-              className={`border rounded w-full p-2 ${duplicateStatus.phone ? 'border-green-500' : ''}`}
-              placeholder="010-1234-1234"
+              className={`border rounded w-full p-2 ${passwordStatus.password ? 'border-green-500' : ''}`}
               required
             />
-            {!duplicateStatus.phone && (
-              <button
-                type="button"
-                onClick={() => handleDuplicateCheck('PHONE', formData.phoneNumber)}
-                className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
-              >
-                중복 확인
-              </button>
+            {passwordStatus.password && <span className="text-green-500 ml-2">✔️</span>}
+            {errors.passwordFormatError && (
+              <p className="text-red-500">비밀번호는 최소 8자, 문자와 숫자가 포함되어야 함니다.</p>
             )}
-
-            {duplicateStatus.phone && (
-              <button
-                type="button"
-                onClick={handlePhoneAuth}
-                className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
-              >
-                인증 요청
-              </button>
-            )}
-
-            {/* {duplicateStatus.phone && <span className="text-green-500 ml-2">✔️</span>} */}
           </div>
-          {errors.phoneFormatError && <p className="text-red-500">전화번호 형식이 올바르지 않습니다.</p>}
-          {errors.phoneExists && <p className="text-red-500">이미 존재하는 전화번호입니다.</p>}
-          {errors.nullPhoneNumber && <p className="text-red-500">전화번호를 입력하세요.</p>}
-        </div>
 
-        {isPhoneVerified && duplicateStatus.phone && (
-          <>
-            <label className="block mb-1">인증 코드</label>
+          <div className="mt-10">
+            <label className="block mb-1 text-xl">비밀번호 확인</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className={`border rounded w-full p-2 ${passwordStatus.password_check ? 'border-green-500' : ''}`}
+              required
+            />
+            {passwordStatus.password_check && <span className="text-green-500 ml-2">✔️</span>}
+            {errors.passwordMismatch && (
+              <p className="text-red-500 mt-4">비밀번호와 비밀번호 확인이 일치하지 않습니다.</p>
+            )}
+          </div>
+
+          <div className="mt-10">
+            <label className="block mb-1 text-xl">전화번호</label>
             <div className="flex items-center">
               <input
-                type="text"
-                name="verificationCode"
-                value={formData.verificationCode}
+                type="tel"
+                name="phoneNumber"
+                value={formData.phoneNumber}
                 onChange={handleChange}
-                className={`border rounded w-full p-2 ${phoneStatus.success ? 'border-green-500' : ''}`}
+                className={`border rounded w-full p-2 ${duplicateStatus.phone ? 'border-green-500' : ''}`}
+                placeholder="010-1234-1234"
                 required
               />
+              {!duplicateStatus.phone && (
+                <button
+                  type="button"
+                  onClick={() => handleDuplicateCheck('PHONE', formData.phoneNumber)}
+                  className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[130px] h-[35px]"
+                >
+                  중복 확인
+                </button>
+              )}
 
-              <button
-                type="button"
-                onClick={handleVerifyCode}
-                className="bg-green-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
-              >
-                인증 확인
-              </button>
-              {phoneStatus.success && <span className="text-green-500 ml-2">✔️</span>}
-              {errors.phoneVerification && <p className="text-red-500">인증 코드가 올바르지 않습니다.</p>}
+              {duplicateStatus.phone && (
+                <button
+                  type="button"
+                  onClick={handlePhoneAuth}
+                  className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[130px] h-[35px]"
+                >
+                  인증 요청
+                </button>
+              )}
+
+              {/* {duplicateStatus.phone && <span className="text-green-500 ml-2">✔️</span>} */}
             </div>
-          </>
-        )}
+            {errors.phoneFormatError && <p className="text-red-500">전화번호 형식이 올바르지 않습니다.</p>}
+            {errors.phoneExists && <p className="text-red-500">이미 존재하는 전화번호입니다.</p>}
+            {errors.nullPhoneNumber && <p className="text-red-500">전화번호를 입력하세요.</p>}
+          </div>
 
-        <button type="submit" className="bg-orange-500 text-white rounded px-4 py-2" disabled={!canSubmit()}>
-          회원가입
-        </button>
-      </form>
-    </div>
+          {isPhoneVerified && duplicateStatus.phone && (
+            <>
+              <label className="block mb-10">인증 코드</label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  name="verificationCode"
+                  value={formData.verificationCode}
+                  onChange={handleChange}
+                  className={`border rounded w-full p-2 ${phoneStatus.success ? 'border-green-500' : ''}`}
+                  required
+                />
+
+                <button
+                  type="button"
+                  onClick={handleVerifyCode}
+                  className="bg-green-500 text-white rounded px-4 py-1 ml-2 w-[130px] h-[35px]"
+                >
+                  인증 확인
+                </button>
+                {phoneStatus.success && <span className="text-green-500 ml-2">✔️</span>}
+                {errors.phoneVerification && <p className="text-red-500">인증 코드가 올바르지 않습니다.</p>}
+              </div>
+            </>
+          )}
+
+          <button type="submit" className="bg-green-500 text-white rounded px-4 py-2" disabled={!canSubmit()}>
+            회원가입
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
