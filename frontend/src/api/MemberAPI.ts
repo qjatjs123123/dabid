@@ -1,18 +1,16 @@
 import axios from 'axios';
 import { MEMBER_API_URL } from '../util/Constants';
-import { Navigate, Outlet } from 'react-router-dom';
-import { PAGE_URL } from '../util/Constants';
 
 // const TOKEN_TYPE = localStorage.getItem("tokenType");
-let ACCESS_TOKEN = localStorage.getItem('accessToken');
+// let ACCESS_TOKEN = localStorage.getItem('accessToken');
 
-export const AuthApi = axios.create({
-  baseURL: 'https://localhost:8080',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${ACCESS_TOKEN}`,
-  },
-});
+// export const AuthApi = axios.create({
+//   baseURL: 'https://localhost:8080',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     Authorization: `Bearer ${ACCESS_TOKEN}`,
+//   },
+// });
 
 interface LoginParams {
   email: string;
@@ -26,33 +24,70 @@ interface LoginContent {
   refreshToken: string;
 }
 
-// export function login(email:string, password: string) {
-//     return useQuery<LoginContent, Error>({
-//     }
-// }
-
 export const login = async ({ email, password }: LoginParams): Promise<LoginContent> => {
   const data = { email, password };
   const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_IN}`, data);
-  return response.data;
-};
 
+  return response.data; // 로그인 성공 여부와 토큰을 반환
+};
 interface SignupParams {
   email: string;
   password: string;
-  passwordCheck: string;
+  password_check: string;
   nickname: string;
   phoneNumber: string;
   //   image_url: File;
 }
 
-export const signup = async ({ email, password }: SignupParams): Promise<any> => {
-  const data = { email, password };
-  const response = await AuthApi.post(`${MEMBER_API_URL.SIGN_UP}`, data);
+export const signup = async ({
+  email,
+  password,
+  password_check,
+  nickname,
+  phoneNumber,
+}: SignupParams): Promise<any> => {
+  const data = { email, password, password_check, nickname, phoneNumber };
+  const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_UP}`, data);
   return response.data;
 };
 
-export const logout = async (): Promise<any> => {
-  localStorage.removeItem('accessToken');
-  return null;
+// export const logout = async (): Promise<any> => {
+//   localStorage.removeItem('accessToken');
+//   return null;
+// };
+
+export const randomNickname = async (): Promise<string> => {
+  const response = await axios.get(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.RANDOM_NICKNAME}`);
+  // console.log(response.data);
+  return response.data.nickname;
+};
+
+export const phoneNumberAuth = async (phoneNumber: string): Promise<any> => {
+  const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.PHONE_AUTH}`, {
+    phoneNumber,
+  });
+  return response.data;
+};
+
+interface phoneCheckParams {
+  phoneNumber: string;
+  code: string;
+}
+
+export const phoneNumberCheck = async ({ phoneNumber, code }: phoneCheckParams): Promise<any> => {
+  const data = { phoneNumber, code };
+  console.log(data);
+  const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.PHONE_CHECK}`, data);
+  return response.data;
+};
+
+interface checkDuplicateParams {
+  valueType: string;
+  value: string;
+}
+
+export const checkDuplication = async ({ valueType, value }: checkDuplicateParams): Promise<any> => {
+  const data = { valueType, value };
+  const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.CHECK_DUPLICATION}`, data);
+  return response.data;
 };
