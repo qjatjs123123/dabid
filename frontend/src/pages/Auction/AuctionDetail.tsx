@@ -17,7 +17,7 @@ interface AuctionData {
   finishedAt: number[];
   images: string[];
   firstMember: boolean;
-  onwer: boolean;
+  owner: boolean;
   participant: boolean;
 }
 
@@ -28,11 +28,12 @@ const AuctionDeatil: React.FC = () => {
 
   useEffect(() => {
     const fetchAuctionData = async (auctionId: number) => {
+      const accessToken = localStorage.getItem('accessToken');
       try {
         const response = await fetch(`https://j11a505.p.ssafy.io/api/auctions/${auctionId}`, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZyb250X21hc3RlckBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzA0MTQsImV4cCI6MTcyNzY4MTIxNH0.4eigcgmjsekKsywFRKt5cblDXPrSvkH4PdzlTy1Gnu4`,
+            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
         });

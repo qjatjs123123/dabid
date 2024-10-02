@@ -38,10 +38,9 @@ const AuctionContainer = () => {
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
-        const accessToken =
-          'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2Nzc4MTMsImV4cCI6MTcyNzY4ODYxM30.OJQa9vtghSX7Bg9ji0Y_EFT2RMrb5gNDEP_Rg-zgZHw'; //localStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem('accessToken');
 
-        const response = await fetch('http://localhost:4040/api/auctions', {
+        const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -72,7 +71,7 @@ const AuctionContainer = () => {
   };
 
   return (
-    <div className="card-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 p-4 w-5/6 ml-auto">
+    <div className="card-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 p-4 ml-auto">
       {auctionList.map((auction, index) => (
         <div
           key={index}

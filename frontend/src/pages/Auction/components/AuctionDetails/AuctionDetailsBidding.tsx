@@ -15,7 +15,7 @@ interface AuctionData {
   finishedAt: number[];
   images: string[];
   firstMember: boolean;
-  onwer: boolean;
+  owner: boolean;
   participant: boolean;
 }
 
@@ -96,7 +96,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
         <div>
           <BiddingInput
-            isOwner={auctionData.onwer}
+            isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
             // finishedAt={auctionData.finishedAt}
@@ -106,7 +106,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
         <div>
           <BiddingStatus
-            isOwner={auctionData.onwer}
+            isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
           />
