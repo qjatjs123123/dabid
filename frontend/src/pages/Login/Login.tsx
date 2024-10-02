@@ -26,6 +26,7 @@ const Login = () => {
         localStorage.clear();
         localStorage.setItem('accessToken', response.accessToken);
         // localStorage.setItem('refreshToken', response.refreshToken);
+        localStorage.setItem('email', values.email);
         window.location.href = `/home`;
       })
       .catch((error) => {

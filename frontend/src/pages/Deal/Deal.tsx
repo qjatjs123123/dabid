@@ -1,3 +1,4 @@
+import Chat from '../../components/Chat/Chat';
 import DealContentContainer from './components/DealContentContainer';
 import DealContentDetail from './components/DealContentDetail';
 
@@ -9,6 +10,9 @@ const Deal = () => {
       </div>
       <div className="flex-2">
         <DealContentDetail />
+      </div>
+      <div>
+        <Chat />
       </div>
     </div>
   );
