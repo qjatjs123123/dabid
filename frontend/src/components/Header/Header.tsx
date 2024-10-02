@@ -16,10 +16,12 @@ const NavBar: React.FC = () => {
   const [token, setToken] = useRecoilState(loginState);
 
   useEffect(() => {
-    if (token !== '') {
+    const storedAccessToken = localStorage.getItem('accessToken');
+    if (storedAccessToken) {
       setIsAuthenticated(true);
+      setToken(storedAccessToken); // Recoil 상태에 토큰 저장
     }
-  }, [token]);
+  }, [token, setToken]);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');

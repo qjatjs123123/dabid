@@ -39,14 +39,8 @@ interface SignupParams {
   //   image_url: File;
 }
 
-export const signup = async ({
-  email,
-  password,
-  password_check,
-  nickname,
-  phoneNumber,
-}: SignupParams): Promise<any> => {
-  const data = { email, password, password_check, nickname, phoneNumber };
+export const signup = async ({ email, password, nickname, phoneNumber }: SignupParams): Promise<any> => {
+  const data = { email, password, nickname, phoneNumber };
   const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_UP}`, data);
   return response.data;
 };

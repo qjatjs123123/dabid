@@ -18,8 +18,8 @@ const Mypage: React.FC = () => {
   };
 
   return (
-    <div className="container w-full border-gray-300 flex items-end mt-4">
-      <nav className="mb-4 h-[50px]">
+    <div className="container w-full border-gray-300 flex flex-col mt-4">
+      <nav className="h-[30px]">
         <ul className="flex space-x-4">
           <li>
             <button onClick={() => setActivePage('내정보')} className="text-blue-600 hover:underline">
@@ -38,7 +38,7 @@ const Mypage: React.FC = () => {
           </li>
         </ul>
       </nav>
-      <div className="mt-4">{renderContent()}</div>
+      <div className="m-1">{renderContent()}</div>
     </div>
   );
 };

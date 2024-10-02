@@ -16,7 +16,6 @@ import AuctionList from './pages/Auction/AuctionList';
 import AuctionInput from './pages/Auction/components/Auctions/AuctionInput';
 import AuctionDetail from './pages/Auction/AuctionDetail';
 
-
 function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
   const navigate = useNavigate();
@@ -46,7 +45,6 @@ function App() {
 
       <FloatingActionButtons />
     </>
-
   );
 }
 

@@ -6,7 +6,7 @@ export const PAGE_URL = {
   INFO: '/info',
   HELP: '/help',
   SIGN_UP: '/sign-up',
-  CREATE: '/create',
+  CREATE: '/auction/input',
   MY_PAGE: '/my-page',
 
   AUCTION_LIST: '/auction',
@@ -32,6 +32,7 @@ export const MEMBER_API_URL = {
   PHONE_AUTH: '/api/member/auth/phone-auth',
   PHONE_CHECK: '/api/member/auth/phone-check',
 
+  MY_INFO: '/api/member/info',
   ACCOUNT_AUTH: '/api/member/account-auth',
   ACCOUNT_CHECK: '/api/member/account-check',
   POINT_IN: '/api/member/point-in',
