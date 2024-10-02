@@ -7,8 +7,8 @@ import Deal from './pages/Deal/Deal';
 import Auction from './pages/Auction/Auction';
 import LoginModal from './pages/Login/LoginModal'; // 모달 컴포넌트 임포트
 import Mypage from './pages/MyPage/Mypage';
-import Logout from './pages/Logout/Logout';
 import FloatingActionButtons from './components/Floating/FloatingButtons';
+import Signup from './pages/Signup/Signup';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState'; // Recoil 상태 임포트
 
@@ -31,12 +31,12 @@ function App() {
 
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
+        <Route path={`${PAGE_URL.SIGN_UP}`} element={<Signup />} />
 
         <Route element={<PrivateRoute />}>
           <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
           <Route path={`${PAGE_URL.AUCTION}`} element={<Auction />} />
           <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
-          <Route path={`${PAGE_URL.LOG_OUT}`} element={<Logout />} />
         </Route>
       </Routes>
 
