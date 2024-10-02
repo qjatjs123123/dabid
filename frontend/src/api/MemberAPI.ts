@@ -4,13 +4,13 @@ import { MEMBER_API_URL } from '../util/Constants';
 // const TOKEN_TYPE = localStorage.getItem("tokenType");
 // let ACCESS_TOKEN = localStorage.getItem('accessToken');
 
-export const AuthApi = axios.create({
-  baseURL: 'https://j11a505.p.ssafy.io',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${ACCESS_TOKEN}`,
-  },
-});
+// export const AuthApi = axios.create({
+//   baseURL: 'https://j11a505.p.ssafy.io',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     Authorization: `Bearer ${ACCESS_TOKEN}`,
+//   },
+// });
 
 interface LoginParams {
   email: string;
@@ -33,7 +33,7 @@ export const login = async ({ email, password }: LoginParams): Promise<LoginCont
 interface SignupParams {
   email: string;
   password: string;
-  password_check: string;
+  // password_check: string;
   nickname: string;
   phoneNumber: string;
   //   image_url: File;
@@ -42,11 +42,11 @@ interface SignupParams {
 export const signup = async ({
   email,
   password,
-  password_check,
+  // password_check,
   nickname,
   phoneNumber,
 }: SignupParams): Promise<any> => {
-  const data = { email, password, password_check, nickname, phoneNumber };
+  const data = { email, password, nickname, phoneNumber };
   const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_UP}`, data);
   return response.data;
 };

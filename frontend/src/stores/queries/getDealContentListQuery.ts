@@ -15,9 +15,10 @@ interface DealContent {
 }
 
 interface DealContentListResponse {
-    content: DealContent[]; // 현재 페이지의 데이터 배열
+    content: DealContent[] ; // 현재 페이지의 데이터 배열
     totalPages: number; // 전체 페이지 수
     number: number; // 현재 페이지 번호
+    pages: any[]
 }
 
 export function getDealContentListQuery() {
@@ -27,6 +28,7 @@ export function getDealContentListQuery() {
             const response = await axios.get<DealContentListResponse>(
                 `${import.meta.env.VITE_SERVER_ENDPOINT}${DEAL_API_URL.GET_DEAL_CONTENT_LIST}?page=${pageParam}&size=5`
             );
+            
             return response.data; // API에서 반환된 데이터
         },
         getNextPageParam: (lastPage) => {

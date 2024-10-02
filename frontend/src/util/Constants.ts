@@ -91,4 +91,5 @@ export const DEAL_STAGE = [
 export const MESSAGE = {
   DELIVERY_NO_CONTENTS: '운송장 미등록 상태이거나 업체에서 상품을 준비중입니다.',
   FIND_NO_CONTENTS: '검색결과가 없습니다.',
+  DEAL_LIST_NO_CONTENTS : '텅',
 };
