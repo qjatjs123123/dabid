@@ -10,13 +10,13 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @EnableElasticsearchRepositories(basePackages = "org.springframework.data.elasticsearch.repository")
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
-   @Value("${spring.elasticsearch.rest.uris}")
-   private String host;
+    @Value("${spring.elasticsearch.rest.uris}")
+    private String host;
 
-   @Override
-   public ClientConfiguration clientConfiguration() {
-       return ClientConfiguration.builder()
-               .connectedTo(host)
-               .build();
-   }
+    @Override
+    public ClientConfiguration clientConfiguration() {
+        return ClientConfiguration.builder()
+                .connectedTo(host)
+                .build();
+    }
 }
