@@ -1,6 +1,7 @@
 package com.ssafy.dabid.domain.auction.service;
 
 import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
+import com.ssafy.dabid.domain.auction.dto.request.SearchAuctionTitle;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionDto;
 import com.ssafy.dabid.domain.auction.dto.response.AuctionListDto;
 import com.ssafy.dabid.domain.auction.entity.*;
@@ -72,6 +73,7 @@ public class AuctionServiceImpl implements AuctionService{
     public List<AuctionListDto> getAuctions(){
         log.info("getAuctions 시작");
         log.info("Active Auction 조회");
+
         List<AuctionDocument> auctions = auctionElasticSearchRepository.findAllByOrderByCreatedAtDesc();
 
         log.info("Auction 참가자 수 조회");
@@ -93,6 +95,80 @@ public class AuctionServiceImpl implements AuctionService{
         }
 
         log.info("getAuctions 종료");
+        return results;
+    }
+
+    @Override
+    public List<AuctionListDto> getAuctionsTitle(SearchAuctionTitle searchAuctionTitle){
+        log.info("getAuctions 시작");
+        log.info("Active Auction 조회");
+
+        String keyword = searchAuctionTitle.getTitle();
+        List<AuctionDocument> auctions;
+        if(keyword == null) {
+            auctions = auctionElasticSearchRepository.findAllByOrderByCreatedAtDesc();
+        }
+        else {
+            keyword = keyword.trim();
+            auctions = auctionElasticSearchRepository.findByTitleContainingOrderByCreatedAtDesc(keyword);
+        }
+
+        log.info("Auction 참가자 수 조회");
+
+        log.info("조회된 Auction을 AuctionListDto로 변환");
+        List<AuctionListDto> results = new ArrayList<>();
+        for (AuctionDocument auctionDocument : auctions){
+            results.add(
+                    AuctionListDto.builder()
+                            .auctionId(auctionDocument.getId())
+                            .title(auctionDocument.getTitle())
+                            .thumbnail(s3Util.generateFileUrl(auctionDocument.getThumbnail()))
+                            .secondBid(auctionDocument.getSecondBid())
+                            .person(auctionInfoMongoRepository.countByAuctionId(Integer.parseInt(auctionDocument.getId())))
+                            .finishedAt(auctionDocument.getFinishedAt())
+                            .createdAt(auctionDocument.getCreatedAt())
+                            .build()
+            );
+        }
+
+        log.info("getAuctions 종료");
+        return results;
+    }
+
+    @Override
+    public List<AuctionListDto> getAuctionsTitleTest(SearchAuctionTitle searchAuctionTitle){
+        log.info("getAuctionsTest 시작");
+        log.info("Active Auction 조회");
+
+        String keyword = searchAuctionTitle.getTitle();
+        List<Auction> auctions;
+        if(keyword == null) {
+            auctions = auctionJpaRepository.findAllByOrderByCreatedAtDesc();
+        }
+        else {
+            keyword = keyword.trim();
+            auctions = auctionJpaRepository.findByTitleContainingOrderByCreatedAtDesc(keyword);
+        }
+
+        log.info("Auction 참가자 수 조회");
+
+        log.info("조회된 Auction을 AuctionListDto로 변환");
+        List<AuctionListDto> results = new ArrayList<>();
+        for (Auction auction : auctions){
+            results.add(
+                    AuctionListDto.builder()
+                            .auctionId(String.valueOf(auction.getId()))
+                            .title(auction.getTitle())
+                            .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
+                            .secondBid(String.valueOf(auction.getSecondBid()))
+                            .person(auctionInfoMongoRepository.countByAuctionId(auction.getId()))
+                            .finishedAt(auction.getFinishedAt())
+                            .createdAt(auction.getCreatedAt())
+                            .build()
+            );
+        }
+
+        log.info("getAuctionsTest 종료");
         return results;
     }
 
