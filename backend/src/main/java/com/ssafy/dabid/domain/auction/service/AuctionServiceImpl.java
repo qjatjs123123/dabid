@@ -119,8 +119,11 @@ public class AuctionServiceImpl implements AuctionService{
         int count = auctionInfoMongoRepository.countByAuctionId(auctionId);
         log.info("Dto 변환");
         AuctionDto result = AuctionDto.builder()
+                .auctionId(auctionId)
+                .firstBid(auction.getFirstBid())
                 .title(auction.getTitle())
-                .category(auction.getCategory().toString())
+                .nickname(auction.getMember().getNickname())
+                .profileImage(auction.getMember().getImageUrl())
                 .detail(auction.getDetail())
                 .deposit(auction.getDeposit())
                 .isFirstMember(auction.getFirstMemberId() == memberId)

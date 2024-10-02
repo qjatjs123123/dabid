@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 훅 임포트
 
 interface AuctionFormProps {
   images: File[]; // AuctionImage에서 가져온 이미지
@@ -9,6 +10,7 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
   const [initValue, setStartingPrice] = useState('');
   const [duration, setDuration] = useState('3');
   const [detail, setDescription] = useState('');
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,11 +26,10 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
       formData.append('images', image);
     });
 
-    const accessToken = `eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzUyMjYsImV4cCI6MTcyNzY4NjAyNn0.O6MiW2E9XhUGgoDhiHS0tO0oLMt1GXDmudiUy9Ja1BE`; //localStorage.getItem('accessToken');
+    const accessToken = `eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2Nzc4MTMsImV4cCI6MTcyNzY4ODYxM30.OJQa9vtghSX7Bg9ji0Y_EFT2RMrb5gNDEP_Rg-zgZHw`; //localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
 
     try {
-      const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
-        //j11a505.p.ssafy.io
+      const response = await fetch('http://localhost:4040/api/auctions', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -38,7 +39,8 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
 
       if (response.ok) {
         // 성공 시 처리
-        console.log('경매가 성공적으로 등록되었습니다.');
+        alert('경매가 성공적으로 등록되었습니다.'); // 알림 표시
+        navigate('/auction'); // 페이지 이동
       } else {
         // 오류 처리
         const errorData = await response.json();

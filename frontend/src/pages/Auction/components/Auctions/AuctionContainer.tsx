@@ -38,15 +38,14 @@ const AuctionContainer = () => {
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
-        // 로컬 스토리지에서 accessToken 가져오기
         const accessToken =
-          'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2NzUyMjYsImV4cCI6MTcyNzY4NjAyNn0.O6MiW2E9XhUGgoDhiHS0tO0oLMt1GXDmudiUy9Ja1BE'; //localStorage.getItem('accessToken');
+          'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2Nzc4MTMsImV4cCI6MTcyNzY4ODYxM30.OJQa9vtghSX7Bg9ji0Y_EFT2RMrb5gNDEP_Rg-zgZHw'; //localStorage.getItem('accessToken');
 
-        const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
-          method: 'GET', // 기본값은 GET이지만 명시적으로 추가
+        const response = await fetch('http://localhost:4040/api/auctions', {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`, // accessToken을 Authorization 헤더에 추가
+            Authorization: `Bearer ${accessToken}`,
           },
         });
 
@@ -58,7 +57,7 @@ const AuctionContainer = () => {
         setAuctionList(data);
       } catch (error) {
         if (error instanceof Error) {
-          setError(error.message); // 에러 메시지를 설정
+          setError(error.message);
         }
       } finally {
         setLoading(false);
@@ -81,7 +80,11 @@ const AuctionContainer = () => {
           onClick={() => handleAuctionClick(auction.auctionId)}
         >
           <input type="hidden" value={auction.auctionId} />
-          <img src={auction.thumbnail} alt={auction.title} className="w-full h-auto mb-2" />
+          <img
+            src={auction.thumbnail}
+            alt={auction.title}
+            className="w-full h-48 object-cover mb-2" // 높이를 48로 고정
+          />
           <h4 className="font-semibold">{auction.title}</h4>
           <p className="text-lg">경매가: {auction.secondBid}원</p>
           <p className="text-sm text-gray-600">참가자: {auction.person}명</p>
