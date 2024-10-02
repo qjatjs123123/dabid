@@ -116,11 +116,11 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
       <div className="mt-1 flex items-center">
         <p className="text-gray-600">판매자</p>
         <img
-          src="https://via.placeholder.com/300x200?text=Image+1"
+          src={auctionData.profileImage ? auctionData.profileImage : 'https://via.placeholder.com/300x200?text=Image+1'}
           alt="판매자 프로필"
           className="w-10 h-10 rounded-full ml-2"
         />
-        <p className="ml-2 font-semibold">qjatjs123123</p>
+        <p className="ml-2 font-semibold">{auctionData.nickname}</p>
       </div>
     </div>
   );

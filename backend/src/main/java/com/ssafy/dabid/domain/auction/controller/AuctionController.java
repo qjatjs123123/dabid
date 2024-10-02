@@ -1,6 +1,7 @@
 package com.ssafy.dabid.domain.auction.controller;
 
 import com.ssafy.dabid.domain.auction.dto.request.RegistrationAuctionDto;
+import com.ssafy.dabid.domain.auction.dto.request.SearchAuctionTitle;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
 import com.ssafy.dabid.global.utils.S3Util;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auctions")
 @RequiredArgsConstructor
@@ -18,8 +21,18 @@ public class AuctionController {
     private final S3Util s3Util;
 
     @GetMapping("")
-    public ResponseEntity<?> getAuctions(){
+    public ResponseEntity<?> getAuctions() {
         return new ResponseEntity<>(service.getAuctions(), HttpStatus.OK);
+    }
+
+    @PostMapping("/title")
+    public ResponseEntity<?> getAuctions(@RequestBody SearchAuctionTitle searchAuctionTitle) {
+        return new ResponseEntity<>(service.getAuctionsTitle(searchAuctionTitle), HttpStatus.OK);
+    }
+
+    @PostMapping("/test/title")
+    public ResponseEntity<?> getAuctionsTest(@RequestBody SearchAuctionTitle searchAuctionTitle) {
+        return new ResponseEntity<>(service.getAuctionsTitleTest(searchAuctionTitle), HttpStatus.OK);
     }
 
     @GetMapping("/{auctionId}")
