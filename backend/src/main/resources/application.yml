@@ -5,7 +5,7 @@ spring:
   # Elasticsearch
   elasticsearch:
     rest:
-      uris: http://elasticsearch:9200
+      uris: 13.124.170.198:9200
 
   servlet:
     multipart:
