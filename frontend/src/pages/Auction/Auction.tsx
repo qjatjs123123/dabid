@@ -1,5 +1,5 @@
 const Auction = () => {
-  return <></>;
+  return <div>ㅎㅇ</div>;
 };
 
 export default Auction;

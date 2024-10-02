@@ -17,11 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 public class AuctionDto {
     private boolean isFirstMember;
-    private boolean isOnwer;
+    private boolean isOwner;
     private boolean isParticipant;
+
+    private int auctionId;
     private int deposit;
     private int person;
     private int bid;
+    private int firstBid;
     private String title;
     private String category;
     private String detail;

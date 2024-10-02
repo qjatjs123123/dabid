@@ -10,6 +10,10 @@ export const PAGE_URL = {
   LOG_OUT: '/log-out',
   CREATE: '/create',
   MY_PAGE: '/my-page',
+
+  AUCTION_LIST: '/auction',
+  AUCTION_DETAIL: '/auctions/:auctionId',
+  AUCTION_INPUT: `/auction/input`,
 };
 
 export const DEAL_API_URL = {
@@ -37,4 +41,9 @@ export const MEMBER_API_URL = {
 
   ACCOUNT_TRANSACTION: '/api/member/transaction',
   ACCOUNT_BALANCE: '/api/member/balance',
+};
+
+export const AUCTION_API_URL = {
+  GET_AUCTION_CONTENT: '/api/auctions',
+  GET_AUCTION_INTERACTION: 'api/biddings',
 };
