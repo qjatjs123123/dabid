@@ -16,7 +16,7 @@ const NavBar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={`${PAGE_URL.HOME}`} className="navbar-logo">
-          <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15 w-[80%]" />
+          <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15 h-[50px]" />
         </Link>
         <div className={`navbar-menu`}>
           <ul className="navbar-list">
