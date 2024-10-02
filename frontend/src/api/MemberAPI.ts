@@ -7,7 +7,7 @@ import { PAGE_URL } from '../util/Constants';
 let ACCESS_TOKEN = localStorage.getItem('accessToken');
 
 export const AuthApi = axios.create({
-  baseURL: 'https://localhost:8080',
+  baseURL: 'https://j11a505.p.ssafy.io',
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${ACCESS_TOKEN}`,
