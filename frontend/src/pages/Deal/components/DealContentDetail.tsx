@@ -4,6 +4,7 @@ import DealContentUserProfile from './DealContentUserProfile';
 import DealContentDetailSkeleton from '../skeletons/DealContentDetailSkeleton';
 import DealButton from '../../../components/Button/DealButton';
 import DeliveryStatusSearch from './DeliveryStatusSearch';
+import DealStatus from './DealStatus';
 
 const DealContentDetail = () => {
   const { dealContentDetail: deal, showSkeleton } = useDealContentDetail();
@@ -15,7 +16,7 @@ const DealContentDetail = () => {
   return (
     <div className="flex-3 max-h-[calc(100vh-150px)] overflow-y-auto w-full scroll-hide scroll-hide">
       <div className="w-full h-[80px]"></div>
-      <div className="h-[calc(100%-80px)] px-[200px]">
+      <div className="h-[calc(100%-80px)] px-[90px]">
         <div>
           <img
             className=" h-[400px] w-full object-cover rounded-lg mb-[25px]"
@@ -43,6 +44,10 @@ const DealContentDetail = () => {
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
 
           <DeliveryStatusSearch />
+
+          <div className="h-[1px] w-full bg-[#e9ecef] mt-[35px] mb-[25px]"></div>
+          <DealStatus />
+          <div className="mb-[100px]"></div>
         </div>
       </div>
     </div>
