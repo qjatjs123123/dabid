@@ -12,6 +12,11 @@ import Signup from './pages/Signup/Signup';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState';
 
+import AuctionList from './pages/Auction/AuctionList';
+import AuctionInput from './pages/Auction/components/Auctions/AuctionInput';
+import AuctionDetail from './pages/Auction/AuctionDetail';
+
+
 function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
   const navigate = useNavigate();
@@ -33,11 +38,15 @@ function App() {
           <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
           <Route path={`${PAGE_URL.AUCTION}`} element={<Auction />} />
           <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
+          <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
+          <Route path={`${PAGE_URL.AUCTION_DETAIL}`} element={<AuctionDetail />} />
+          <Route path={`${PAGE_URL.AUCTION_INPUT}`} element={<AuctionInput />} />
         </Route>
       </Routes>
 
       <FloatingActionButtons />
     </>
+
   );
 }
 

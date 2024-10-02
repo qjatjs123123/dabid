@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AuctionElasticSearchRepository extends ElasticsearchRepository<AuctionDocument, String> {
     List<AuctionDocument> findAllByOrderByCreatedAtDesc();
-    List<AuctionDocument> findByTitle(String title);
+    List<AuctionDocument> findByTitleContainingOrderByCreatedAtDesc(String title);
 }

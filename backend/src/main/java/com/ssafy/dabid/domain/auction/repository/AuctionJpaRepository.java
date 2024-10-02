@@ -15,4 +15,7 @@ public interface AuctionJpaRepository extends JpaRepository<Auction, Integer> {
 
     @Query("select a from Auction a where a.id = :id and a.isActive = true")
     Optional<Auction> findById(int id);
+
+    List<Auction> findAllByOrderByCreatedAtDesc();
+    List<Auction> findByTitleContainingOrderByCreatedAtDesc(String title);
 }

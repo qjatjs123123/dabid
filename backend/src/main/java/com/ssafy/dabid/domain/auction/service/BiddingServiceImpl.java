@@ -49,6 +49,13 @@ public class BiddingServiceImpl implements BiddingService {
         if(!memberAccountRepository.findByMemberId(member.getId()).getIsActive())
             throw new IllegalStateException("계좌가 인증되지 않았습니다.");
 
+        /* 참가 이력 확인 */
+        log.info("이미 참가한 경매인지 확인");
+        AuctionInfo info = auctionInfoMongoRepository.findByAuctionIdAndMemberId(auctionId, member.getId()).orElse(null);
+        if(info != null){
+            throw new IllegalStateException("이미 참가한 경매입니다.");
+        }
+
         /* 포인트 확인 */
         log.info("포인트 확인");
         if(member.getPoint() < auction.getDeposit())

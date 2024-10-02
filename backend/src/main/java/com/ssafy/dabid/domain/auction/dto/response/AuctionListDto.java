@@ -24,6 +24,7 @@ public class AuctionListDto {
     private String title;
     private String thumbnail;
     private String secondBid;
+    private int person;
     private LocalDateTime finishedAt;
     private LocalDateTime createdAt;
 }
