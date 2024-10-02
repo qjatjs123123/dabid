@@ -1,5 +1,6 @@
 package com.ssafy.dabid.global.config.kafka;
 
+import com.ssafy.dabid.domain.deal.dto.response.ChatMessageResponseDto;
 import com.ssafy.dabid.domain.deal.entity.ChatMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -22,7 +23,7 @@ public class Producer {
     private String bootstrapServer;
 
     @Bean
-    public ProducerFactory<String, ChatMessage> producerFactory() {
+    public ProducerFactory<String, ChatMessageResponseDto> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -30,7 +31,7 @@ public class Producer {
         return new DefaultKafkaProducerFactory<>(configProps);
     }
     @Bean
-    public KafkaTemplate<String, ChatMessage> kafkaTemplate() {
+    public KafkaTemplate<String, ChatMessageResponseDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

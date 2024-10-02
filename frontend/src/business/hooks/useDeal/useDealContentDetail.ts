@@ -3,11 +3,14 @@ import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
 import { getDealContentDetailQuery } from '../../../stores/queries/getDealContentDetailQuery';
 import { useEffect, useState } from 'react';
 import { SKELETON_TIME } from '../../../util/Constants';
+import { dealStatusState } from '../../../stores/recoilStores/Deal/stateDealStatus';
 
 const useDealContentDetail = () => {
     const curDealId = useRecoilValue(curDealIdState);
+    const dealStatus = useRecoilValue(dealStatusState);
     const dealQuery = getDealContentDetailQuery(curDealId);
     const [showSkeleton, setShowSkeleton] = useState(true);
+
 
     useEffect(() => {
          setShowSkeleton(true); 

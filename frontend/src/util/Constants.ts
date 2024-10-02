@@ -45,3 +45,50 @@ export const AUCTION_API_URL = {
   GET_AUCTION_CONTENT: '/api/auctions',
   GET_AUCTION_INTERACTION: 'api/biddings',
 };
+
+export const DELIVERY = {
+  NAMES: Object.freeze([
+    {
+      id: 'kr.cjlogistics',
+      name: 'CJ대한통운',
+    },
+    {
+      id: 'kr.coupangls',
+      name: '쿠팡 로지스틱스 서비스',
+    },
+    {
+      id: 'kr.cupost',
+      name: 'CU 편의점택배',
+    },
+    {
+      id: 'kr.chunilps',
+      name: '천일택배',
+    },
+    {
+      id: 'kr.cvsnet',
+      name: 'GS Postbox',
+    },
+  ]),
+};
+
+export const DELIVERY_STAGE = [
+  { icon: '📦', label: '인수', name: '잡하' },
+  { icon: '🚚', label: '이동', name: '잡하' },
+  { icon: '🏠', label: '배송지', name: '캠프도착' },
+  { icon: '🚀', label: '배송중', name: '배송출발' },
+  { icon: '✅', label: '배송완료', name: '배송완료' },
+];
+
+// export const DEAL_STAGE = ['낙찰', '입금', '배송', '배송 확인', '거래 완료']
+export const DEAL_STAGE = [
+  { name: '낙찰', id: 'BID_SUCCESS' },
+  { name: '입금', id: 'PAYMENT_COMPLETE' },
+  { name: '배송', id: 'IN_TRANSIT' },
+  { name: '배송완료', id: 'DELIVERED' },
+  { name: '거래 완료', id: 'TRANSACTION_DONE' },
+];
+
+export const MESSAGE = {
+  DELIVERY_NO_CONTENTS: '운송장 미등록 상태이거나 업체에서 상품을 준비중입니다.',
+  FIND_NO_CONTENTS: '검색결과가 없습니다.',
+};

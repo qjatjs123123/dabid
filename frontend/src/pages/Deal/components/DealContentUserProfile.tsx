@@ -1,4 +1,4 @@
-const DealContentContainer = () => {
+const DealContentUserProfile = () => {
   return (
     <div className="flex flex-row items-center">
       <img className="w-[30px] h-[30px] rounded-full" alt="Profile" src="profile.jpg"></img>
@@ -7,4 +7,4 @@ const DealContentContainer = () => {
   );
 };
 
-export default DealContentContainer;
+export default DealContentUserProfile;
