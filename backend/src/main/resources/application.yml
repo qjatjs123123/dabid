@@ -53,7 +53,7 @@ spring:
       password: dabid
       # url: jdbc:redis://root:dabid@172.19.63.93:6379
     mongodb:
-      uri: mongodb://root:dabid@172.23.40.252:27017/dabid?authSource=admin
+      uri: mongodb://root:dabid@mongodb:27017/dabid?authSource=admin
 
   kafka:
     bootstrap-servers: 13.124.170.198:9092
