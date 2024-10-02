@@ -21,7 +21,7 @@ const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onLoginSucces
     email: '',
     password: '',
   });
-  const [_, setToken] = useRecoilState(loginState); // 컴포넌트 최상위에서 호출
+  const [_, setToken] = useRecoilState(loginState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setValues({ ...values, [e.target.id]: e.target.value });

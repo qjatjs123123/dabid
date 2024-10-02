@@ -36,6 +36,7 @@ const Signup: React.FC = () => {
   });
 
   const [phoneStatus, setPhoneStatus] = useState({
+    duplicated: false,
     success: false,
   });
 
@@ -146,15 +147,17 @@ const Signup: React.FC = () => {
   };
 
   const handlePhoneAuth = async () => {
-    const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/; // 전화번호 형식 정규 표현식
+    const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
     if (!phoneRegex.test(formData.phoneNumber)) {
       setErrors({ ...errors, phoneFormatError: true });
       return;
     }
+    await handleDuplicateCheck('PHONE', formData.phoneNumber);
+    if (errors.phoneExists) return;
 
     try {
       await phoneNumberAuth(formData.phoneNumber);
-      setIsPhoneVerified(true); // 인증 요청 성공 시 상태 업데이트
+      setIsPhoneVerified(true);
       setErrors({ ...errors, phoneFormatError: false });
     } catch (error) {
       console.error('전화번호 인증 요청 실패:', error);
@@ -170,7 +173,7 @@ const Signup: React.FC = () => {
 
       if (response.code === 'SU') {
         setErrors({ ...errors, phoneVerification: false });
-        setPhoneStatus({ ...phoneStatus, success: true }); // 인증 성공 시 상태 업데이트
+        setPhoneStatus({ ...phoneStatus, success: true });
       } else {
         setErrors({ ...errors, phoneVerification: true });
       }
@@ -265,9 +268,9 @@ const Signup: React.FC = () => {
 
       // 로그인 성공 후 홈으로 이동
       if (loginResponse.code === 'SU') {
+        setToken(loginResponse.accessToken);
         localStorage.setItem('accessToken', loginResponse.accessToken); // 로그인 성공 시 token 저장
         localStorage.setItem('refreshToken', loginResponse.refreshToken);
-        setToken(loginResponse.accessToken);
         navigate(`${PAGE_URL.HOME}`); // 홈으로 이동
       }
     } catch (error) {
@@ -307,7 +310,11 @@ const Signup: React.FC = () => {
 
         <div className="flex items-center mb-2">
           <label className="block mb-1 mr-[30px]">닉네임 </label> <hr />
-          <button type="button" onClick={handleNicknameGeneration} className="bg-blue-500 text-white rounded px-4 py-1">
+          <button
+            type="button"
+            onClick={handleNicknameGeneration}
+            className="bg-yellow-500 text-white rounded px-4 py-1"
+          >
             랜덤 닉네임 생성
           </button>
         </div>
@@ -376,48 +383,57 @@ const Signup: React.FC = () => {
               placeholder="010-1234-1234"
               required
             />
-            <button
-              type="button"
-              onClick={() => handleDuplicateCheck('PHONE', formData.phoneNumber.replace(/-/g, ''))}
-              className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
-            >
-              중복 확인
-            </button>
-            {duplicateStatus.phone && <span className="text-green-500 ml-2">✔️</span>}
-            <button
-              type="button"
-              onClick={handlePhoneAuth}
-              className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
-            >
-              인증 요청
-            </button>
+            {!duplicateStatus.phone && (
+              <button
+                type="button"
+                onClick={() => handleDuplicateCheck('PHONE', formData.phoneNumber)}
+                className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
+              >
+                중복 확인
+              </button>
+            )}
+
+            {duplicateStatus.phone && (
+              <button
+                type="button"
+                onClick={handlePhoneAuth}
+                className="bg-blue-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
+              >
+                인증 요청
+              </button>
+            )}
+
+            {/* {duplicateStatus.phone && <span className="text-green-500 ml-2">✔️</span>} */}
           </div>
           {errors.phoneFormatError && <p className="text-red-500">전화번호 형식이 올바르지 않습니다.</p>}
           {errors.phoneExists && <p className="text-red-500">이미 존재하는 전화번호입니다.</p>}
           {errors.nullPhoneNumber && <p className="text-red-500">전화번호를 입력하세요.</p>}
         </div>
 
-        {isPhoneVerified && (
-          <div>
+        {isPhoneVerified && duplicateStatus.phone && (
+          <>
             <label className="block mb-1">인증 코드</label>
-            <input
-              type="text"
-              name="verificationCode"
-              value={formData.verificationCode}
-              onChange={handleChange}
-              className={`border rounded w-full p-2 ${phoneStatus.success ? 'border-green-500' : ''}`}
-              required
-            />
-            {phoneStatus.success && <span className="text-green-500 ml-2">✔️</span>}
-            <button
-              type="button"
-              onClick={handleVerifyCode}
-              className="bg-green-500 text-white rounded px-4 py-1 mt-2 w-[120px]"
-            >
-              인증 확인
-            </button>
-            {errors.phoneVerification && <p className="text-red-500">인증 코드가 올바르지 않습니다.</p>}
-          </div>
+            <div className="flex items-center">
+              <input
+                type="text"
+                name="verificationCode"
+                value={formData.verificationCode}
+                onChange={handleChange}
+                className={`border rounded w-full p-2 ${phoneStatus.success ? 'border-green-500' : ''}`}
+                required
+              />
+
+              <button
+                type="button"
+                onClick={handleVerifyCode}
+                className="bg-green-500 text-white rounded px-4 py-1 ml-2 w-[140px]"
+              >
+                인증 확인
+              </button>
+              {phoneStatus.success && <span className="text-green-500 ml-2">✔️</span>}
+              {errors.phoneVerification && <p className="text-red-500">인증 코드가 올바르지 않습니다.</p>}
+            </div>
+          </>
         )}
 
         <button type="submit" className="bg-orange-500 text-white rounded px-4 py-2" disabled={!canSubmit()}>

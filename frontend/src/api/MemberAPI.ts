@@ -1,9 +1,5 @@
 import axios from 'axios';
 import { MEMBER_API_URL } from '../util/Constants';
-import { Navigate, Outlet } from 'react-router-dom';
-import { PAGE_URL } from '../util/Constants';
-import { useRecoilState } from 'recoil';
-import { loginState } from '../stores/recoilStores/Member/loginState';
 
 // const TOKEN_TYPE = localStorage.getItem("tokenType");
 let ACCESS_TOKEN = localStorage.getItem('accessToken');

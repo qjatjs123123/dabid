@@ -3,16 +3,16 @@ import { Link } from 'react-router-dom';
 import { PAGE_URL } from '../../util/Constants';
 import { getImgUrl } from '../../util/Functions';
 import { useRecoilState } from 'recoil';
-import { modalState } from '../../stores/recoilStores/Member/modalState'; // Recoil 상태 임포트
-import { userState } from '../../stores/recoilStores/Member/userState'; // Recoil 상태 임포트
-import { loginState } from '../../stores/recoilStores/Member/loginState'; // Recoil 상태 임포트
+import { modalState } from '../../stores/recoilStores/Member/modalState';
+// import { userState } from '../../stores/recoilStores/Member/userState'; // 유저 정보 State
+import { loginState } from '../../stores/recoilStores/Member/loginState';
 import './Header.css';
 
 const NavBar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isModalOpen, setModalOpen] = useRecoilState(modalState); // Recoil 상태 사용
-  const [user, setUser] = useRecoilState(userState); // Recoil 상태 사용
+  const [_, setModalOpen] = useRecoilState(modalState);
+  // const [user, setUser] = useRecoilState(userState); 유저 정보 저장 State
   const [token, setToken] = useRecoilState(loginState);
 
   useEffect(() => {
@@ -119,10 +119,10 @@ const NavBar: React.FC = () => {
           {isAuthenticated && (
             <>
               <li className="navbar-item">
-                <Link to={`${PAGE_URL.MY_PAGE}`}>마이페이지</Link>
+                <Link to={`${PAGE_URL.CREATE}`}>경매 등록하기</Link>
               </li>
               <li className="navbar-item">
-                <Link to={`${PAGE_URL.CREATE}`}>경매 등록하기</Link>
+                <Link to={`${PAGE_URL.MY_PAGE}`}>마이페이지</Link>
               </li>
               <li className="navbar-item">
                 <button onClick={handleLogout}>로그아웃</button>
