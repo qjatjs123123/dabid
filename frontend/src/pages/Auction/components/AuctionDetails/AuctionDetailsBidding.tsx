@@ -96,6 +96,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
         <div>
           <BiddingInput
+            auctionId={auctionData.auctionId}
             isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
@@ -106,6 +107,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
         <div>
           <BiddingStatus
+            auctionId={auctionData.auctionId}
             isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}

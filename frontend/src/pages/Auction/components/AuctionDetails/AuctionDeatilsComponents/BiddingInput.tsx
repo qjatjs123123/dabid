@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface BiddingInputProps {
+  auctionId: number;
   isOwner: boolean;
   isParticipant: boolean;
   isFirstMember: boolean;
