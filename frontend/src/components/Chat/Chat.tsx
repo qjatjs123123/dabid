@@ -35,11 +35,14 @@ const Chat = () => {
   // 메시지 전송 핸들러
   const handleSendMessage = () => {
     if (newMessage) {
+      const localTime = new Date();
+      const offset = localTime.getTimezoneOffset() * 60000; // 현지 시간대 오프셋을 밀리초로 변환
+      const localISOTime = new Date(localTime.getTime() - offset).toISOString().slice(0, -1); // 현지 시간으로 ISO 8601 형식 변환
       const body = {
         dealId,
         email,
         content: newMessage,
-        createdAt: new Date().toISOString().slice(0, -1),
+        createdAt: localISOTime,
       };
       sendMessage(body); // 웹소켓을 통해 메시지 전송
       setNewMessage(''); // 메시지 입력 필드 초기화
@@ -87,21 +90,22 @@ const Chat = () => {
     //           </button>
     //         </div>
 
-    //         <div className="flex flex-col h-[400px] p-4 overflow-y-auto scroll-hide">
-    //           {messages.map((message, index) => (
-    //             <div key={index} className={`mb-1 ${message.email === email ? 'text-right' : 'text-left'}`}>
-    //               {/* 프로필 사진과 시간 추가 */}
-    //               {message.email !== email ? (
-    //                 <div className="flex items-center space-x-2">
-    //                   <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" />
-    //                   <div className="text-[8px] text-gray-500 font-semibold">
-    //                     {message.nickname} {moment(message.createdAt).format('HH:mm')}
-    //                   </div>
-    //                 </div>
-    //               ) : (
-    //                 /* 메시지 전송 시간이 있는 경우 */
-    //                 <div className="text-[8px] text-gray-500">{moment(message.createdAt).format('HH:mm')}</div>
-    //               )}
+            <div className="flex flex-col h-[400px] p-4 overflow-y-auto scroll-hide">
+              {messages.map((message, index) => (
+                <div key={index} className={`mb-1 ${message.email === email ? 'text-right' : 'text-left'}`}>
+                  {/* 프로필 사진과 시간 추가 */}
+                  {message.email !== email ? (
+                    <div className="flex items-center space-x-2">
+                      <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" />
+                      <div className="text-[8px] text-gray-500 font-semibold">
+                        {message.nickname}
+                        {moment(message.createdAt).format('HH:mm')}
+                      </div>
+                    </div>
+                  ) : (
+                    /* 메시지 전송 시간이 있는 경우 */
+                    <div className="text-[8px] text-gray-500">{moment(message.createdAt).format('HH:mm')}</div>
+                  )}
 
     //               {/* 메시지 내용 */}
     //               <div
