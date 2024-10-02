@@ -4,13 +4,13 @@ import { MEMBER_API_URL } from '../util/Constants';
 // const TOKEN_TYPE = localStorage.getItem("tokenType");
 // let ACCESS_TOKEN = localStorage.getItem('accessToken');
 
-export const AuthApi = axios.create({
-  baseURL: 'https://j11a505.p.ssafy.io',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${ACCESS_TOKEN}`,
-  },
-});
+// export const AuthApi = axios.create({
+//   baseURL: 'https://j11a505.p.ssafy.io',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     Authorization: `Bearer ${ACCESS_TOKEN}`,
+//   },
+// });
 
 interface LoginParams {
   email: string;

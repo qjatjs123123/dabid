@@ -35,11 +35,14 @@ const Chat = () => {
   // 메시지 전송 핸들러
   const handleSendMessage = () => {
     if (newMessage) {
+      const localTime = new Date();
+      const offset = localTime.getTimezoneOffset() * 60000; // 현지 시간대 오프셋을 밀리초로 변환
+      const localISOTime = new Date(localTime.getTime() - offset).toISOString().slice(0, -1); // 현지 시간으로 ISO 8601 형식 변환
       const body = {
         dealId,
         email,
         content: newMessage,
-        createdAt: new Date().toISOString().slice(0, -1),
+        createdAt: localISOTime,
       };
       sendMessage(body); // 웹소켓을 통해 메시지 전송
       setNewMessage(''); // 메시지 입력 필드 초기화
@@ -94,7 +97,8 @@ const Chat = () => {
                     <div className="flex items-center space-x-2">
                       <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" />
                       <div className="text-[8px] text-gray-500 font-semibold">
-                        {message.nickname} {moment(message.createdAt).format('HH:mm')}
+                        {message.nickname}
+                        {moment(message.createdAt).format('HH:mm')}
                       </div>
                     </div>
                   ) : (
