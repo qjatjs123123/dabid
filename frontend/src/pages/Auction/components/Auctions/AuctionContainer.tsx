@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export class AuctionListDto {
@@ -29,42 +29,12 @@ export class AuctionListDto {
   }
 }
 
-const AuctionContainer = () => {
-  const [auctionList, setAuctionList] = useState<AuctionListDto[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+interface AuctionContainerProps {
+  auctionList: AuctionListDto[]; // props로 auctionList를 받음
+}
+
+const AuctionContainer: React.FC<AuctionContainerProps> = ({ auctionList }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchAuctions = async () => {
-      try {
-        const accessToken = localStorage.getItem('accessToken');
-
-        const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('네트워크 응답이 좋지 않습니다.');
-        }
-
-        const data: AuctionListDto[] = await response.json();
-        setAuctionList(data);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAuctions();
-  }, []);
 
   const handleAuctionClick = (auctionId: string) => {
     navigate(`/auctions/${auctionId}`);
