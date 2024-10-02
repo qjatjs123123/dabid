@@ -38,9 +38,7 @@ const Auction: React.FC = () => {
       <div>
         <AuctionFilter setAuctionList={setAuctionList} />
         <div className="container mx-auto">
-          {/* <div className="relative flex"> */}
-          <AuctionContainer auctionList={auctionList} />
-          {/* </div> */}
+          <AuctionContainer auctionList={auctionList} setAuctionList={setAuctionList} /> {/* setAuctionList 추가 */}
         </div>
       </div>
     </div>
