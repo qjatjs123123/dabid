@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AuctionInfoMongoRepository extends MongoRepository<AuctionInfo, Integer> {
+public interface AuctionInfoMongoRepository extends MongoRepository<AuctionInfo, String> {
     @Query(value = "{auctionId:?0, memberId:?1}")
     Optional<AuctionInfo> findByAuctionIdAndMemberId(int auctionId, int memberId);
 

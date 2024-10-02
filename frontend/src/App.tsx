@@ -1,28 +1,52 @@
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { PAGE_URL } from './util/Constants';
-
 import PrivateRoute from './util/PrivateRoute';
 import About from './pages/About';
 import Deal from './pages/Deal/Deal';
 import Auction from './pages/Auction/Auction';
-import Login from './pages/Login/Login';
+import LoginModal from './pages/Login/LoginModal';
 import Mypage from './pages/MyPage/Mypage';
-import Logout from './pages/Logout/Logout';
+import FloatingActionButtons from './components/Floating/FloatingButtons';
+import Signup from './pages/Signup/Signup';
+import { useRecoilState } from 'recoil';
+import { modalState } from './stores/recoilStores/Member/modalState';
+
+import AuctionList from './pages/Auction/AuctionList';
+import AuctionInput from './pages/Auction/components/Auctions/AuctionInput';
+import AuctionDetail from './pages/Auction/AuctionDetail';
+
 
 function App() {
-  return (
-    <Routes>
-      <Route path={`${PAGE_URL.HOME}`} element={<About />} />
-      <Route path={`${PAGE_URL.LOG_IN}`} element={<Login />} />
+  const [isModalOpen, setModalOpen] = useRecoilState(modalState);
+  const navigate = useNavigate();
 
-      <Route element={<PrivateRoute />}>
-        <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
-        <Route path={`${PAGE_URL.AUCTION}`} element={<Auction />} />
-        <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
-        <Route path={`${PAGE_URL.LOG_OUT}`} element={<Logout />} />
-      </Route>
-    </Routes>
+  const handleLoginSuccess = () => {
+    setModalOpen(false);
+    navigate(PAGE_URL.HOME); // 로그인 성공 후 홈으로 리다이렉트
+  };
+
+  return (
+    <>
+      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
+
+      <Routes>
+        <Route path={`${PAGE_URL.HOME}`} element={<About />} />
+        <Route path={`${PAGE_URL.SIGN_UP}`} element={<Signup />} />
+
+        <Route element={<PrivateRoute />}>
+          <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
+          <Route path={`${PAGE_URL.AUCTION}`} element={<Auction />} />
+          <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
+          <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
+          <Route path={`${PAGE_URL.AUCTION_DETAIL}`} element={<AuctionDetail />} />
+          <Route path={`${PAGE_URL.AUCTION_INPUT}`} element={<AuctionInput />} />
+        </Route>
+      </Routes>
+
+      <FloatingActionButtons />
+    </>
+
   );
 }
 
