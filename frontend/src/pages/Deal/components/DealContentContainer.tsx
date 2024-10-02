@@ -3,16 +3,29 @@ import useDealContentList from '../../../business/hooks/useDeal/useDealContentLi
 import DealContent from './DealContent';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
+import { dealIsContent } from '../../../stores/recoilStores/Deal/stateIsContent';
+import { MESSAGE } from '../../../util/Constants';
 
 const DealContentContainer = () => {
   const { data: dealContentList, fetchNextPage, hasNextPage } = useDealContentList();
   const curDealId = useRecoilValue(curDealIdState);
+
   const setCurDealId = useSetRecoilState(curDealIdState);
+  const setIsContent = useSetRecoilState(dealIsContent);
+
   const observerRef = useRef<HTMLDivElement | null>(null);
 
+  const IsExistContent = () => {
+    if (curDealId === -1 && dealContentList && dealContentList.pages.length === 1) return false;
+    return true;
+  };
+
   useEffect(() => {
-    if (curDealId === -1) {
-      const firstId = dealContentList ? dealContentList.pages[0].content[0].id : -1;
+    if (curDealId === -1 && dealContentList) {
+      if (!IsExistContent()) return;
+
+      const firstId = dealContentList.pages[0]?.content[0]?.id ?? -1;
+      setIsContent(true);
       setCurDealId(firstId);
     }
   }, [dealContentList]);
@@ -40,8 +53,14 @@ const DealContentContainer = () => {
 
   return (
     <div className="max-h-[calc(100vh-150px)] overflow-y-auto flex flex-col border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)] scroll-hide">
-      {dealContentList?.pages.map((page, pageIndex) =>
-        page.content.map((deal) => <DealContent key={deal.id} deal={deal} />),
+      {curDealId !== -1 && dealContentList ? (
+        dealContentList.pages.map((page, pageIndex) =>
+          page.content.map((deal) => <DealContent key={deal.id} deal={deal} />),
+        )
+      ) : (
+        <div className="text-center text-[50px]">
+          <p>{MESSAGE.DEAL_LIST_NO_CONTENTS}</p>{' '}
+        </div>
       )}
 
       {/* 무한 스크롤을 위한 감시 지점 */}
