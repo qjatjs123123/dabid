@@ -8,7 +8,7 @@ interface AuctionFormProps {
 const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
   const [title, setTitle] = useState('');
   const [initValue, setStartingPrice] = useState('');
-  const [duration, setDuration] = useState('3600');
+  const [duration, setDuration] = useState('3');
   const [detail, setDescription] = useState('');
   const navigate = useNavigate(); // useNavigate 훅 사용
 
@@ -86,7 +86,7 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
             onChange={(e) => setDuration(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded"
           >
-            <option value="3600">3일</option>
+            <option value="3">3일</option>
             <option value="5">5일</option>
             <option value="7">7일</option>
             {/* 다른 기간 추가 가능 */}
