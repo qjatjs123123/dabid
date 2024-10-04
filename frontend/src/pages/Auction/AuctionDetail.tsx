@@ -8,6 +8,7 @@ interface AuctionData {
   auctionId: number;
   deposit: number;
   person: number;
+  firstBid: number;
   bid: number;
   title: string;
   category: string;
