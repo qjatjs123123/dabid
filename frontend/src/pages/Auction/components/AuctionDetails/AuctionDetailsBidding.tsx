@@ -123,7 +123,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
             isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
-            bid={auctionData.bid}
+            bid={auctionData.bid + ''}
           />
         </div>
       </div>

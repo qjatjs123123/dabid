@@ -11,7 +11,7 @@ interface BiddingStatusProps {
   isOwner: boolean;
   isParticipant: boolean;
   isFirstMember: boolean;
-  bid: number;
+  bid: String;
 }
 
 const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isParticipant, isFirstMember, bid }) => {
@@ -19,6 +19,11 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
   const [isModalOpen, setModalOpen] = useState(false);
   const [isGiveupModalOpen, setGiveupModalOpen] = useState(false);
   const [isBiddingModalOpen, setBiddingModalOpen] = useState(false);
+  const [inputBiddingValue, setInputBiddingValue] = useState('0');
+
+  const handleInputBiddingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputBiddingValue(e.target.value);
+  };
 
   const openModal = () => {
     setModalOpen(true);
@@ -35,6 +40,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
   const closeModal = () => {
     setModalOpen(false);
     setGiveupModalOpen(false);
+    setBiddingModalOpen(false);
   };
 
   const cancelHandleConfirm = async () => {
@@ -115,7 +121,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
   const AttemptHandleConfirm = async () => {
     const accessToken = localStorage.getItem('accessToken');
     try {
-      const response = await fetch(`https://j11a505.p.ssafy.io/api/biddings/${auctionId}/${bid}`, {
+      const response = await fetch(`https://j11a505.p.ssafy.io/api/biddings/${auctionId}/${inputBiddingValue}`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -123,8 +129,11 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
         },
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('경매 입찰에 성공하였습니다.');
+        navigate(0);
+      } else if (response.status === 202) {
+        alert('입찰 금액이 올바르지 않음');
         navigate(0);
       } else {
         alert('경매 입찰에 실패했습니다.');
@@ -150,7 +159,13 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
             </div>
           ) : (
             <div className="flex items-center">
-              <input type="number" className="border rounded py-2 px-3 w-40 text-right" placeholder="0" />
+              <input
+                type="text"
+                className="border rounded py-2 px-3 w-40 text-right"
+                placeholder="0"
+                value={inputBiddingValue}
+                onChange={handleInputBiddingChange}
+              />
               <span className="ml-2 text-gray-600">WON</span>
             </div>
           )}
@@ -195,7 +210,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
             />
             <AttemptBiddingModal
               auctionId={auctionId}
-              bid={bid}
+              bid={inputBiddingValue}
               isOpen={isBiddingModalOpen}
               onClose={closeModal}
               onConfirm={AttemptHandleConfirm}

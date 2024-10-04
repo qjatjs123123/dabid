@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ModalProps {
   auctionId: number;
-  bid: number;
+  bid: String;
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
