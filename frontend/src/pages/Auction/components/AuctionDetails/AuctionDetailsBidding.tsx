@@ -43,7 +43,9 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
   const calculateTimeRemaining = (finishedAt: number[]) => {
     const [year, month, day, hour, minute, second, millisecond] = finishedAt;
-    const endDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond));
+    console.log('불러온 경매 마감일: ' + finishedAt);
+    const endDate = new Date(year, month - 1, day, hour, minute, second, 0);
+    console.log('불러온 경매 마감일 변환 결과: ' + endDate);
     const now = new Date(
       Date.UTC(
         new Date().getUTCFullYear(),
@@ -52,12 +54,11 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
         new Date().getUTCHours(),
         new Date().getUTCMinutes(),
         new Date().getUTCSeconds(),
-        new Date().getUTCMilliseconds(),
+        0,
       ),
     );
     // const timeDiff = endDate.getTime() - now.getTime();
-    const timeDiff = endDate.getTime();
-    console.log(endDate);
+    const timeDiff = endDate.getTime() - now.getTime();
 
     if (timeDiff <= 0) {
       setTimeRemaining('--시간 --분 --초');
@@ -71,10 +72,8 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
     if (days > 0) {
       setTimeRemaining(`${days}일 ${hours}시간 ${minutes}분 ${seconds}초`);
-      // setTimeRemaining(timeDiff.toString());
     } else {
       setTimeRemaining(`${hours}시간 ${minutes}분 ${seconds}초`);
-      // setTimeRemaining(timeDiff.toString());
     }
   };
 
