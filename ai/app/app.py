@@ -8,7 +8,8 @@ from characters import system_role, instruction
 from memory_manager import MemoryManager
 
 app = Flask(__name__)
-CORS(app, resources={'/': {'origins': 'http://j11a505.p.ssafy.io:5173'}})
+app.config["APPLICATION_ROOT"] = "/chatbot"
+CORS(app, resources={'/chatbot': {'origins': ['http://j11a505.p.ssafy.io:5173', 'http://localhost:5173']}})
 
 bidme = Chatbot(model.basic, instruction)
 
