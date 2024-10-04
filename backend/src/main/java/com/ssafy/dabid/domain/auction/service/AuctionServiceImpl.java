@@ -199,7 +199,7 @@ public class AuctionServiceImpl implements AuctionService{
                 .firstBid(auction.getFirstBid())
                 .title(auction.getTitle())
                 .nickname(auction.getMember().getNickname())
-                .profileImage(auction.getMember().getImageUrl())
+                .profileImage(s3Util.generateFileUrl(auction.getMember().getImageUrl()))
                 .detail(auction.getDetail())
                 .deposit(auction.getDeposit())
                 .isFirstMember(auction.getFirstMemberId() == memberId)
