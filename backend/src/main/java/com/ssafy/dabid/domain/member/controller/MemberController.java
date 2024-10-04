@@ -20,7 +20,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/auth/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto dto) {
+    public ResponseEntity<?> signUp(@ModelAttribute SignUpRequestDto dto) {
         log.info("Sign Up for user with email : " + dto.getEmail());
         return ResponseEntity.ok(memberService.signUp(dto));
     }

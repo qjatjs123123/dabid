@@ -17,6 +17,7 @@ import com.ssafy.dabid.global.status.StatusCode;
 import com.ssafy.dabid.global.status.StatusMessage;
 import com.ssafy.dabid.global.utils.JwtUtils;
 import com.ssafy.dabid.global.utils.RedisUtil;
+import com.ssafy.dabid.global.utils.S3Util;
 import com.ssafy.dabid.global.utils.TokenType;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberAccountRepository memberAccountRepository;
     private final DefaultMessageService messageService;
     private final RedisUtil redisUtil;
+    private final S3Util s3Util;
 
     private Map<ValueType, Function<String, Optional<?>>> checkFunctions;
     private Map<ValueType, Pair<String, String>> responseMappings;
@@ -81,6 +83,8 @@ public class MemberServiceImpl implements MemberService {
     public CommonResponseDto signUp(SignUpRequestDto dto) {
         log.info("Sign-up user with email {}", dto.getEmail());
         //이메일, 휴대폰번호 중복 체크를 다시 해야할까?
+        String profileUrl = s3Util.uploadFile(dto.getImage());
+
         Member member = Member
                 .builder()
                 .email(dto.getEmail())
@@ -88,6 +92,7 @@ public class MemberServiceImpl implements MemberService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .nickname(dto.getNickname())
                 .phoneNumber(dto.getPhoneNumber())
+                .imageUrl(profileUrl)
                 .build();
         
         //랜덤 생성 닉네임에 포함되는 닉네임일 경우 사용 여부 갱신
@@ -105,6 +110,7 @@ public class MemberServiceImpl implements MemberService {
                 .member(member)
                 .build();
 
+        //계좌는 인증 전까지 사용 불가
         account.kill();
 
         memberAccountRepository.save(account);
@@ -395,7 +401,7 @@ public class MemberServiceImpl implements MemberService {
         dto.setRole(String.valueOf(member.getRole()));
         dto.setPoint(member.getPoint());
         dto.setNickname(member.getNickname());
-        dto.setImageUrl(member.getImageUrl());
+        dto.setImageUrl(s3Util.generateFileUrl(member.getImageUrl()));
         dto.setPhoneNumber(member.getPhoneNumber());
         dto.setAccountNo(account.getAccount_number());
         dto.setAccountActive(account.getIsActive());
