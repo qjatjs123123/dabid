@@ -5,11 +5,6 @@ import { Link } from 'react-router-dom';
 import { PAGE_URL } from '../../util/Constants';
 import { getImgUrl } from '../../util/Functions';
 
-interface LoginParams {
-  email: string;
-  password: string;
-}
-
 const Login = () => {
   const [values, setValues] = useState({
     email: '',
@@ -26,6 +21,7 @@ const Login = () => {
       .then((response) => {
         localStorage.clear();
         localStorage.setItem('accessToken', response.accessToken);
+
         window.location.href = `/home`;
       })
       .catch((error) => {

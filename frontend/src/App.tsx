@@ -9,6 +9,7 @@ import LoginModal from './pages/Login/LoginModal';
 import Mypage from './pages/MyPage/Mypage';
 import FloatingActionButtons from './components/Floating/FloatingButtons';
 import Signup from './pages/Signup/Signup';
+import { init } from './api/ChatbotAPI';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState';
 
@@ -22,6 +23,8 @@ function App() {
 
   const handleLoginSuccess = () => {
     setModalOpen(false);
+    const email = 'xorjsghkd1011@gmail.com';
+    init(email);
     navigate(PAGE_URL.HOME); // 로그인 성공 후 홈으로 리다이렉트
   };
 

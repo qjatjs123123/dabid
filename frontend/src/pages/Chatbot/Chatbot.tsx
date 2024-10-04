@@ -1,6 +1,7 @@
 // src/components/Modal.js
-import React, { useEffect, useState } from 'react';
-import { init, list, send } from '../../api/ChatbotAPI';
+import React, { useEffect, useState, useRef } from 'react';
+import { list, send } from '../../api/ChatbotAPI';
+import { getImgUrl } from '../../util/Functions';
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,8 +11,16 @@ interface ModalProps {
 const ButtonGroup: React.FC<{ onButtonClick: (value: string) => void }> = ({ onButtonClick }) => {
   const buttons = [
     {
-      title: 'BidMe?',
+      title: 'BidMe',
       content: '이름이 왜 비드미야?',
+    },
+    {
+      title: '다비드',
+      content: '다비드는 어떤 서비스야?',
+    },
+    {
+      title: '경매 방식',
+      content: '경매는 어떤 방식으로 진행해?',
     },
     {
       title: '입찰 취소',
@@ -26,16 +35,16 @@ const ButtonGroup: React.FC<{ onButtonClick: (value: string) => void }> = ({ onB
       content: '보증금은 언제 환급받을 수 있어?',
     },
     {
-      title: '다비드?',
-      content: '다비드는 어떤 서비스야?',
-    },
-    {
-      title: '경매 방식',
-      content: '경매는 어떤 방식으로 진행해?',
+      title: '거래 절차',
+      content: '거래는 어떤 방식으로 진행해?',
     },
     {
       title: '고객센터',
       content: '고객센터로 연결해줘.',
+    },
+    {
+      title: '테스트 계좌',
+      content: '테스트 계좌는 뭐야?',
     },
   ];
 
@@ -44,7 +53,7 @@ const ButtonGroup: React.FC<{ onButtonClick: (value: string) => void }> = ({ onB
       {buttons.map((buttonProperty) => (
         <button
           key={buttonProperty.title}
-          className="bg-gray-100 p-2 rounded-lg"
+          className="bg-gray-300 p-2 rounded-lg"
           onClick={() => onButtonClick(buttonProperty.content)}
         >
           {buttonProperty.title}
@@ -58,6 +67,8 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState<boolean>(isOpen);
   const [inputValue, setInputValue] = useState<string>('');
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null); // 대화창을 위한 ref
 
   useEffect(() => {
     if (isOpen) {
@@ -73,11 +84,12 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     try {
       const email = 'xorjsghkd1011@gmail.com';
       const history = await list(email);
+
       if (!history.length) {
-        setChatHistory((prev) => [
-          ...prev,
-          { role: 'assistant', content: '안녕, 나는 비드미! 다비드에 대해 궁금한 게 있으면 언제든 물어봐!' },
-        ]);
+        history.push({
+          role: 'assistant',
+          content: '안녕, 나는 비드미! 다비드에 대해 궁금한 게 있으면 언제든 물어봐!',
+        });
       }
       setChatHistory(history);
     } catch (error) {
@@ -87,23 +99,43 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   const handleButtonClick = (value: string) => {
     setInputValue(value);
+    handleSend(value);
   };
 
-  const handleSend = async () => {
-    if (!inputValue.trim()) return;
+  const handleSend = async (messageToSend: string | null = null) => {
+    const message = messageToSend || inputValue; // 버튼 클릭 시 메시지 사용
+    if (!message.trim()) return;
+
+    setChatHistory((prev) => [...prev, { role: 'user', content: message }]);
+
     try {
       const email = 'xorjsghkd1011@gmail.com';
-      const response = await send(email, inputValue);
-      setChatHistory((prev) => [
-        ...prev,
-        { role: 'user', content: inputValue },
-        { role: 'assistant', content: response.reply },
-      ]);
+      const response = await send(email, message);
+      setChatHistory((prev) => [...prev, { role: 'assistant', content: response.reply }]);
       setInputValue('');
     } catch (error) {
       console.error('메시지 전송에 실패했습니다:', error);
     }
   };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatHistory]);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      onClose(); // 대화창 닫기
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside); // 바깥 영역 클릭 감지
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); // 정리
+    };
+  }, []);
 
   if (!isVisible) return null;
 
@@ -112,39 +144,58 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       className={`fixed inset-0 flex items-end justify-end transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
     >
       <div
-        className={`bg-white p-6 rounded-lg shadow-lg max-w-md w-full mb-10 transition-transform duration-300 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}
+        ref={modalRef} // 대화창을 위한 ref 추가
+        className={`bg-white p-6 rounded-lg shadow-lg max-w-md w-full mb-10 transition-transform duration-300 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'} h-[700px] flex flex-col`} // Flexbox 설정
       >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
-          aria-label="닫기"
-        >
-          &times;
-        </button>
-        <h2 className="text-xl font-bold mb-4">BidMe: 다비드 AI 챗봇</h2>
-        <div className="mb-4">
-          {chatHistory.map((message, index) => (
-            <p key={index} className={`p-2 rounded-lg mb-2 ${message.role === 'user' ? 'bg-blue-100' : 'bg-gray-200'}`}>
-              {message.content}
-            </p>
-          ))}
+        <div className="flex items-center mb-4">
+          <div
+            style={{
+              backgroundImage: `url(${getImgUrl('floating/bidme.png')})`,
+              backgroundSize: '75% 75%',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+            }}
+            className="h-14 w-16 mr-4 rounded-full shadow-lg"
+          ></div>
+          <h2 className="text-xl font-bold">BidMe: 다비드 AI 챗봇</h2>
+          <button
+            onClick={onClose}
+            className="absolute text-3xl top-4 right-4 text-gray-600 hover:text-gray-900"
+            aria-label="닫기"
+          >
+            &times;
+          </button>
         </div>
-        {/* <div className="mb-4">
-          <p className="bg-gray-200 p-2 rounded-lg">
-            해당 문제는 고객센터 상담이 필요합니다.
-            <br />더 자세한 도움이 필요하다면 문의를 남겨 주세요.
-          </p>
-          <button className="text-blue-500 underline">고객센터 문의하기 &gt;&gt;</button>
-        </div> */}
+
+        <div className="flex-grow mb-4 overflow-y-auto">
+          {' '}
+          {chatHistory.map((message, index) => (
+            <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-2`}>
+              <p className={`p-2 rounded-lg ${message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>
+                {message.content}
+              </p>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
         <ButtonGroup onButtonClick={handleButtonClick} />
-        <div className="flex">
+
+        <div className="flex mt-4">
+          {' '}
           <input
-            className="text-gray-600 mt-4"
+            className="text-gray-600 flex-grow border border-gray-300 rounded-lg p-2"
             placeholder="다비드에 대해 궁금한 점은 무엇이든 물어보세요!"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
           />
-          <button className="bg-blue-500 text-white p-2 ml-2 rounded-lg" onClick={handleSend}>
+          <button className="bg-blue-500 text-white p-2 ml-2 rounded-lg" onClick={() => handleSend()}>
             전송
           </button>
         </div>
