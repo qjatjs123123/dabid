@@ -52,15 +52,15 @@ const NavBar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={`${PAGE_URL.HOME}`} className="navbar-logo">
-          <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15 w-[80%]" />
+          <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15 h-[50px]" />
         </Link>
         <div className={`navbar-menu`}>
           <ul className="navbar-list">
             <li className="navbar-item">
-              <Link to={`${PAGE_URL.AUCTION}`}>
+              <Link to={`${PAGE_URL.AUCTION_LIST}`}>
                 <img src={getImgUrl('navbar/nav-info.png')} alt="경매 둘러보기" className="navbar-logo-img" />
               </Link>
-              <Link to={`${PAGE_URL.AUCTION}`}>경매 둘러보기</Link>
+              <Link to={`${PAGE_URL.AUCTION_LIST}`}>경매 둘러보기</Link>
             </li>
 
             <li className="navbar-item">
@@ -98,7 +98,7 @@ const NavBar: React.FC = () => {
       <div className={`toggle-navbar-menu${isMenuOpen ? ' open' : ''}`}>
         <ul className="navbar-list">
           <li className="navbar-item">
-            <Link to={`${PAGE_URL.AUCTION}`}>경매 둘러보기</Link>
+            <Link to={`${PAGE_URL.AUCTION_LIST}`}>경매 둘러보기</Link>
           </li>
 
           <li className="navbar-item">

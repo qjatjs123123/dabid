@@ -1,26 +1,246 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import CancelAuctionModal from '../../Modal/CancelAuctionModal';
+import JoinAuctionModal from '../../Modal/JoinAuctionModal';
+import GiveupBiddingModal from '../../Modal/GiveupBiddingModal';
+import AttemptBiddingModal from '../../Modal/AttemptBiddingModal';
+import { PAGE_URL } from '../../../../../util/Constants';
 
 interface BiddingStatusProps {
+  auctionId: number;
   isOwner: boolean;
   isParticipant: boolean;
   isFirstMember: boolean;
+  firstBid: String;
+  bid: String;
 }
 
-const BiddingStatus: React.FC<BiddingStatusProps> = ({ isOwner, isParticipant, isFirstMember }) => {
+const BiddingStatus: React.FC<BiddingStatusProps> = ({
+  auctionId,
+  isOwner,
+  isParticipant,
+  isFirstMember,
+  firstBid,
+}) => {
+  const navigate = useNavigate();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isGiveupModalOpen, setGiveupModalOpen] = useState(false);
+  const [isBiddingModalOpen, setBiddingModalOpen] = useState(false);
+  const [inputBiddingValue, setInputBiddingValue] = useState('0');
+
+  const handleInputBiddingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputBiddingValue(e.target.value);
+  };
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const openGiveupModal = () => {
+    setGiveupModalOpen(true);
+  };
+
+  const openBiddingModal = () => {
+    setBiddingModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setGiveupModalOpen(false);
+    setBiddingModalOpen(false);
+  };
+
+  const cancelHandleConfirm = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      const response = await fetch(`https://j11a505.p.ssafy.io/api/auctions/${auctionId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        alert('경매가 성공적으로 취소되었습니다.');
+        navigate(PAGE_URL.AUCTION_LIST);
+      } else {
+        alert('경매 취소에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      closeModal();
+    }
+  };
+
+  const joinHandleConfirm = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      const response = await fetch(`https://j11a505.p.ssafy.io/api/biddings/${auctionId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        alert('경매에 참여하셨습니다.');
+        navigate(0);
+      } else {
+        alert('경매 참여에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      closeModal();
+    }
+  };
+
+  const giveupHandleConfirm = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      const response = await fetch(`https://j11a505.p.ssafy.io/api/biddings/${auctionId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        alert('경매 참여를 포기하였습니다.');
+        navigate(0);
+      } else {
+        alert('경매 참여 포기에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      closeModal();
+    }
+  };
+
+  const AttemptHandleConfirm = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      const response = await fetch(`https://j11a505.p.ssafy.io/api/biddings/${auctionId}/${inputBiddingValue}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        alert('경매 입찰에 성공하였습니다.');
+        navigate(0);
+      } else if (response.status === 202) {
+        alert('경매 입찰에 실패했습니다.');
+        navigate(0);
+      } else {
+        alert('경매 입찰에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      closeModal();
+    }
+  };
+
   return (
-    <div className="mt-6 flex justify-center">
-      {isOwner ? (
-        <button className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition">경매 취소</button>
-      ) : isParticipant && !isFirstMember ? (
-        <div className="flex justify-around w-full">
-          <button className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 transition">입찰하기</button>
-          <button className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition ml-2">입찰포기</button>
+    <div>
+      {!isOwner && isParticipant ? (
+        <div className="mt-4 flex justify-between items-center">
+          <label className="text-gray-600 mb-2">내 입찰가</label>
+          {isFirstMember ? (
+            <div className="flex items-center">
+              <p>{firstBid}</p>
+              <span className="ml-2 text-gray-600">WON</span>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <input
+                type="text"
+                className="border rounded py-2 px-3 w-40 text-right"
+                placeholder="0"
+                value={inputBiddingValue}
+                onChange={handleInputBiddingChange}
+              />
+              <span className="ml-2 text-gray-600">WON</span>
+            </div>
+          )}
         </div>
-      ) : isParticipant && isFirstMember ? (
-        <label className="text-red-600 mb-2">귀하는 현재 유력 낙찰자입니다!</label>
       ) : (
-        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">경매 참여</button>
+        <div className="flex items-center"></div>
       )}
+
+      <div className="mt-6 flex justify-center">
+        <input type="hidden" value={auctionId} />
+        {isOwner ? (
+          <div>
+            <button onClick={openModal} className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition">
+              경매 취소
+            </button>
+            <CancelAuctionModal
+              auctionId={auctionId}
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              onConfirm={cancelHandleConfirm}
+            />
+          </div>
+        ) : isParticipant && !isFirstMember ? (
+          <div className="flex justify-around w-full">
+            <button
+              onClick={openBiddingModal}
+              className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 transition"
+            >
+              입찰하기
+            </button>
+            <button
+              onClick={openGiveupModal}
+              className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition ml-2"
+            >
+              참여포기
+            </button>
+            <GiveupBiddingModal
+              auctionId={auctionId}
+              isOpen={isGiveupModalOpen}
+              onClose={closeModal}
+              onConfirm={giveupHandleConfirm}
+            />
+            <AttemptBiddingModal
+              auctionId={auctionId}
+              bid={inputBiddingValue}
+              isOpen={isBiddingModalOpen}
+              onClose={closeModal}
+              onConfirm={AttemptHandleConfirm}
+            />
+          </div>
+        ) : isParticipant && isFirstMember ? (
+          <label className="text-red-600 mb-2">귀하는 현재 유력 낙찰자입니다!</label>
+        ) : (
+          <div>
+            <button
+              onClick={openModal}
+              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+            >
+              경매 참여
+            </button>
+            <JoinAuctionModal
+              auctionId={auctionId}
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              onConfirm={joinHandleConfirm}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

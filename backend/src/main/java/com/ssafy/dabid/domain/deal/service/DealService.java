@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.deal.service;
 
+import com.ssafy.dabid.domain.deal.dto.request.ChatMessageRequestDto;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
 import com.ssafy.dabid.domain.deal.dto.response.*;
 import com.ssafy.dabid.domain.deal.dto.response.BuyerBalanceAndAccount;
@@ -30,6 +31,11 @@ public interface DealService {
     public void testMakeDeal(int auctionId);
     // 스케줄러 임의 실행 테스트 end
 
-    List<ChatMessage> getChatMessage(int dealId);
+    List<ChatMessageResponseDto> getChatMessage(int dealId);
+
+    ChatMessage saveChatMessage(String email, ChatMessageRequestDto chatMessage);
+
+    ChatMessageResponseDto convertToResponseDto(ChatMessage message);
+
 }
 

@@ -1,4 +1,0 @@
-OPENAI_API_KEY = "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"
-REDIS_HOST = localhost
-REDIS_PORT = 6379
-REDIS_PASSWORD = "rhksansfh166!"

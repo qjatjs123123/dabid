@@ -1,5 +1,6 @@
 package com.ssafy.dabid.global.config.kafka;
 
+import com.ssafy.dabid.domain.deal.dto.response.ChatMessageResponseDto;
 import com.ssafy.dabid.domain.deal.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,8 @@ public class Consumer {
     private final SimpMessagingTemplate messagingTemplate;
 
     @KafkaListener(topics = "${spring.kafka.template.default-topic}", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(ChatMessage message){
-        log.info("CONSUME PAYLOAD : " + message.getMemberId()+":"+message.getContent());
+    public void consume(ChatMessageResponseDto message){
+        log.info("CONSUME PAYLOAD : " + message.getNickname()+":"+message.getContent());
         try{
             messagingTemplate.convertAndSend("/sub/chat/room/" + message.getDealId(), message);
         }catch(Exception ex){

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import BiddingInput from './AuctionDeatilsComponents/BiddingInput';
+// import BiddingInput from './AuctionDeatilsComponents/BiddingInput';
 import BiddingStatus from './AuctionDeatilsComponents/BiddingStatus';
 
 interface AuctionData {
   auctionId: number;
   deposit: number;
   person: number;
+  firstBid: number;
   bid: number;
   title: string;
   category: string;
@@ -15,7 +16,7 @@ interface AuctionData {
   finishedAt: number[];
   images: string[];
   firstMember: boolean;
-  onwer: boolean;
+  owner: boolean;
   participant: boolean;
 }
 
@@ -30,7 +31,6 @@ const formatCurrency = (amount: number): string => {
 const formatDateArrayToString = (dateArray: number[]): string => {
   const [year, month, day, hours, minutes] = dateArray;
 
-  // 월은 0부터 시작하므로 +1 해줌
   const formattedMonth = String(month).padStart(2, '0');
   const formattedDay = String(day).padStart(2, '0');
   const formattedHours = String(hours).padStart(2, '0');
@@ -44,8 +44,20 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
   const calculateTimeRemaining = (finishedAt: number[]) => {
     const [year, month, day, hour, minute, second, millisecond] = finishedAt;
-    const endDate = new Date(year, month - 1, day, hour, minute, second, millisecond);
-    const now = new Date();
+    // console.log('불러온 경매 마감일: ' + finishedAt);
+    const endDate = new Date(year, month - 1, day, hour, minute, second, 0);
+    // console.log('불러온 경매 마감일 변환 결과: ' + endDate);
+    const now = new Date(
+      Date.UTC(
+        new Date().getUTCFullYear(),
+        new Date().getUTCMonth(),
+        new Date().getUTCDate(),
+        new Date().getUTCHours(),
+        new Date().getUTCMinutes(),
+        new Date().getUTCSeconds(),
+        0,
+      ),
+    );
     const timeDiff = endDate.getTime() - now.getTime();
 
     if (timeDiff <= 0) {
@@ -66,12 +78,14 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
   };
 
   useEffect(() => {
+    calculateTimeRemaining(auctionData.finishedAt);
+
     const timer = setInterval(() => {
       calculateTimeRemaining(auctionData.finishedAt);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [auctionData.finishedAt]);
 
   return (
     <div className="bg-gray-100 flex flex-col items-center m-4 p-5 rounded-lg">
@@ -94,21 +108,24 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
           <p className="text-xl font-semibold">{auctionData.person}명</p>
         </div>
 
-        <div>
+        {/* <div>
           <BiddingInput
-            isOwner={auctionData.onwer}
+            auctionId={auctionData.auctionId}
+            isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
-            // finishedAt={auctionData.finishedAt}
-            // formatNumber={formatNumber}
+            bid={auctionData.bid}
           />
-        </div>
+        </div> */}
 
         <div>
           <BiddingStatus
-            isOwner={auctionData.onwer}
+            auctionId={auctionData.auctionId}
+            isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
+            firstBid={auctionData.firstBid + ''}
+            bid={auctionData.bid + ''}
           />
         </div>
       </div>

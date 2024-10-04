@@ -45,7 +45,6 @@ function App() {
 
         <Route element={<PrivateRoute />}>
           <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
-          <Route path={`${PAGE_URL.AUCTION}`} element={<Auction />} />
           <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
           <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
           <Route path={`${PAGE_URL.AUCTION_DETAIL}`} element={<AuctionDetail />} />

@@ -20,7 +20,7 @@ public class ChatMessage {
     @Id
     private ObjectId id;
     private int dealId; // 거래방id
-    private int memberId;  // 사용자id
+    private String email;  // 사용자이메일
     private String content; // 내용
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")

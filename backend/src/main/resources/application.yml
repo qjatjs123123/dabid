@@ -9,13 +9,13 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 10MB
+      max-file-size: 25MB
+      max-request-size: 25MB
 
   # Scheduler ThreadCount
   quartz:
     properties:
-      org.quartz.threadPool.threadCount: 20
+      org.quartz.threadPool.threadCount: 50
 
   # MySQL
   datasource:
@@ -66,15 +66,12 @@ spring:
       group-id: dabid-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      enable-auto-commit: false
-      max-poll-records: 500
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer # JsonDeserializer 사용
       properties:
         spring:
           json:
             trusted:
-              packages: "*"  # 신뢰할 패키지 (추후수정) "com.ssafy.dabid.domain.deal.entity"
-      value-deserializer.delegate: org.springframework.kafka.support.serializer.JsonDeserializer  # JsonDeserializer 위임
+              packages: "*" # 명시적 패키지 지정
     template:
       default-topic: dabid-topic
 

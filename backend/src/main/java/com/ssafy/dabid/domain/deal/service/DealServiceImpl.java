@@ -4,6 +4,7 @@ import com.ssafy.dabid.domain.auction.entity.Auction;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
+import com.ssafy.dabid.domain.deal.dto.request.ChatMessageRequestDto;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
 import com.ssafy.dabid.domain.deal.entity.ChatMessage;
 import com.ssafy.dabid.domain.deal.repository.ChatMessageRepository;
@@ -421,7 +422,49 @@ public class DealServiceImpl implements DealService {
     // 스케줄러 임의 실행 테스트 start
 
     @Override
-    public List<ChatMessage> getChatMessage(int dealId) {
-        return chatMessageRepository.findByDealIdOrderByCreatedAtAsc(dealId);
+    public List<ChatMessageResponseDto> getChatMessage(int dealId) {
+        List<ChatMessage> list = chatMessageRepository.findByDealIdOrderByCreatedAtAsc(dealId);
+        List<ChatMessageResponseDto> result = new ArrayList<>();
+        for(ChatMessage chatMessage : list){
+            Member member = memberRepository.findByEmail(chatMessage.getEmail())
+                    .orElseThrow(() -> new RuntimeException("회원정보 없음: " + chatMessage.getEmail()));
+
+            ChatMessageResponseDto dto = new ChatMessageResponseDto();
+            dto.setDealId(chatMessage.getDealId());
+            dto.setEmail(chatMessage.getEmail());
+            dto.setNickname(member.getNickname());
+            dto.setContent(chatMessage.getContent());
+            dto.setProfile(s3Util.generateFileUrl(member.getImageUrl()));
+            dto.setCreatedAt(chatMessage.getCreatedAt());
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @Override
+    public ChatMessage saveChatMessage(String email, ChatMessageRequestDto chatMessage) {
+        ChatMessage result = ChatMessage.builder()
+                .dealId(chatMessage.getDealId())
+                .content(chatMessage.getContent())
+                .email(email)
+                .createdAt(chatMessage.getCreatedAt())
+                .build();
+        chatMessageRepository.save(result);
+        return result;
+    }
+
+    @Override
+    public ChatMessageResponseDto convertToResponseDto(ChatMessage message) {
+        Member member = memberRepository.findByEmail(message.getEmail())
+                .orElseThrow(() -> new RuntimeException("회원정보 없음: " + message.getEmail()));
+
+        return ChatMessageResponseDto.builder()
+                .dealId(message.getDealId())
+                .email(message.getEmail())
+                .nickname(member.getNickname())
+                .content(message.getContent())
+                .profile(s3Util.generateFileUrl(member.getImageUrl())) // 필요시 주석 해제
+                .createdAt(message.getCreatedAt())
+                .build();
     }
 }

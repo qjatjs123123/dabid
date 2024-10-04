@@ -1,5 +1,6 @@
 package com.ssafy.dabid.domain.deal.controller;
 
+import com.ssafy.dabid.domain.deal.dto.request.ChatMessageRequestDto;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
 import com.ssafy.dabid.domain.deal.dto.response.*;
 import com.ssafy.dabid.domain.deal.entity.ChatMessage;
@@ -27,8 +28,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173") // 특정 출처 허용
 public class DealController {
     private final DealService dealService;
-    private final KafkaTemplate<String, ChatMessage> kafkaTemplate;
-    private final ChatMessageRepository chatMessageRepository;
+    private final KafkaTemplate<String, ChatMessageResponseDto> kafkaTemplate;
 
     private final MemberRepository memberRepository;
     // Spring Security로 ID받아오는 함수
@@ -121,17 +121,23 @@ public class DealController {
 
     // 메시지 보내기
     @MessageMapping("/chat/message")
-    public void sendChatMessage(@Valid ChatMessage chatMessage) {
+    public void sendChatMessage(@Valid ChatMessageRequestDto chatMessageDto) {
+
+        log.info("현재 사용자 이메일: {}", chatMessageDto.getEmail());
+        log.info("chatMessage: {}", chatMessageDto);
+
         // 채팅 메시지 저장
-        chatMessageRepository.save(chatMessage);
-        log.info("chatMessage: {}", chatMessage);
-        kafkaTemplate.send("dabid-topic", chatMessage);
+        ChatMessage message = dealService.saveChatMessage(chatMessageDto.getEmail(), chatMessageDto);
+
+        // responseDto로 변환
+        ChatMessageResponseDto response = dealService.convertToResponseDto(message);
+        kafkaTemplate.send("dabid-topic", response);
 
     }
 
-//    // 메시지 조회
+    // 메시지 조회
     @GetMapping("/chat/{dealId}/messages")
-    public List<ChatMessage> getChatMessage(@PathVariable int dealId) {
+    public List<ChatMessageResponseDto> getChatMessage(@PathVariable int dealId) {
         return dealService.getChatMessage(dealId);
     }
 
