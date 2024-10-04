@@ -11,10 +11,17 @@ interface BiddingStatusProps {
   isOwner: boolean;
   isParticipant: boolean;
   isFirstMember: boolean;
+  firstBid: String;
   bid: String;
 }
 
-const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isParticipant, isFirstMember, bid }) => {
+const BiddingStatus: React.FC<BiddingStatusProps> = ({
+  auctionId,
+  isOwner,
+  isParticipant,
+  isFirstMember,
+  firstBid,
+}) => {
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isGiveupModalOpen, setGiveupModalOpen] = useState(false);
@@ -133,7 +140,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
         alert('경매 입찰에 성공하였습니다.');
         navigate(0);
       } else if (response.status === 202) {
-        alert('입찰 금액이 올바르지 않음');
+        alert('경매 입찰에 실패했습니다.');
         navigate(0);
       } else {
         alert('경매 입찰에 실패했습니다.');
@@ -147,14 +154,13 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
   };
 
   return (
-    // if (!isOwner || isParticipant)
     <div>
-      {!isOwner || isParticipant ? (
+      {!isOwner && isParticipant ? (
         <div className="mt-4 flex justify-between items-center">
           <label className="text-gray-600 mb-2">내 입찰가</label>
           {isFirstMember ? (
             <div className="flex items-center">
-              <p>{bid}</p>
+              <p>{firstBid}</p>
               <span className="ml-2 text-gray-600">WON</span>
             </div>
           ) : (

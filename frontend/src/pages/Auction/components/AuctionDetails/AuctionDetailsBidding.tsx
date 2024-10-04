@@ -6,6 +6,7 @@ interface AuctionData {
   auctionId: number;
   deposit: number;
   person: number;
+  firstBid: number;
   bid: number;
   title: string;
   category: string;
@@ -123,6 +124,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
             isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
+            firstBid={auctionData.firstBid + ''}
             bid={auctionData.bid + ''}
           />
         </div>
