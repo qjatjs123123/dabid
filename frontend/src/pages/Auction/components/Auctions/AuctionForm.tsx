@@ -8,7 +8,7 @@ interface AuctionFormProps {
 const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
   const [title, setTitle] = useState('');
   const [initValue, setStartingPrice] = useState('');
-  const [duration, setDuration] = useState('3');
+  const [duration, setDuration] = useState('3600');
   const [detail, setDescription] = useState('');
   const navigate = useNavigate(); // useNavigate 훅 사용
 
@@ -26,10 +26,10 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
       formData.append('images', image);
     });
 
-    const accessToken = `eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2Nzc4MTMsImV4cCI6MTcyNzY4ODYxM30.OJQa9vtghSX7Bg9ji0Y_EFT2RMrb5gNDEP_Rg-zgZHw`; //localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+    const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
 
     try {
-      const response = await fetch('http://localhost:4040/api/auctions', {
+      const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -86,7 +86,7 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
             onChange={(e) => setDuration(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded"
           >
-            <option value="3">3일</option>
+            <option value="3600">3일</option>
             <option value="5">5일</option>
             <option value="7">7일</option>
             {/* 다른 기간 추가 가능 */}
