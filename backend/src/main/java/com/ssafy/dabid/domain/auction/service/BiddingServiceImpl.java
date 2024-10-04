@@ -92,9 +92,6 @@ public class BiddingServiceImpl implements BiddingService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         log.info(email);
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
-        if(!Objects.equals(auction.getMember().getId(), member.getId())) {
-            throw new IllegalArgumentException("경매 등록자가 아니기에 포기가 불가능합니다.");
-        }
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         log.info("경매 참여 포기 가능 여부 확인");
