@@ -30,7 +30,6 @@ const formatCurrency = (amount: number): string => {
 const formatDateArrayToString = (dateArray: number[]): string => {
   const [year, month, day, hours, minutes] = dateArray;
 
-  // 월은 0부터 시작하므로 +1 해줌
   const formattedMonth = String(month).padStart(2, '0');
   const formattedDay = String(day).padStart(2, '0');
   const formattedHours = String(hours).padStart(2, '0');
@@ -44,9 +43,21 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
   const calculateTimeRemaining = (finishedAt: number[]) => {
     const [year, month, day, hour, minute, second, millisecond] = finishedAt;
-    const endDate = new Date(year, month - 1, day, hour, minute, second, millisecond);
-    const now = new Date();
-    const timeDiff = endDate.getTime() - now.getTime();
+    const endDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second, millisecond));
+    const now = new Date(
+      Date.UTC(
+        new Date().getUTCFullYear(),
+        new Date().getUTCMonth(),
+        new Date().getUTCDate(),
+        new Date().getUTCHours(),
+        new Date().getUTCMinutes(),
+        new Date().getUTCSeconds(),
+        new Date().getUTCMilliseconds(),
+      ),
+    );
+    // const timeDiff = endDate.getTime() - now.getTime();
+    const timeDiff = endDate.getTime();
+    console.log(endDate);
 
     if (timeDiff <= 0) {
       setTimeRemaining('--시간 --분 --초');
@@ -60,18 +71,22 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
     if (days > 0) {
       setTimeRemaining(`${days}일 ${hours}시간 ${minutes}분 ${seconds}초`);
+      // setTimeRemaining(timeDiff.toString());
     } else {
       setTimeRemaining(`${hours}시간 ${minutes}분 ${seconds}초`);
+      // setTimeRemaining(timeDiff.toString());
     }
   };
 
   useEffect(() => {
+    calculateTimeRemaining(auctionData.finishedAt);
+
     const timer = setInterval(() => {
       calculateTimeRemaining(auctionData.finishedAt);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [auctionData.finishedAt]);
 
   return (
     <div className="bg-gray-100 flex flex-col items-center m-4 p-5 rounded-lg">

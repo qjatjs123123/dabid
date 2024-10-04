@@ -91,7 +91,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({ auctionId, isOwner, isPar
       ) : isParticipant && !isFirstMember ? (
         <div className="flex justify-around w-full">
           <button className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 transition">입찰하기</button>
-          <button className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition ml-2">입찰포기</button>
+          <button className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition ml-2">참여포기</button>
         </div>
       ) : isParticipant && isFirstMember ? (
         <label className="text-red-600 mb-2">귀하는 현재 유력 낙찰자입니다!</label>
