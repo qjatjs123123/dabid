@@ -311,7 +311,12 @@ public class AuctionServiceImpl implements AuctionService{
      */
     @Override
     public void returnBuyerPointWhenGiveUp(int auctionId, int buyerDeposit){
-        List<Member> members = memberRepository.findParticipantByAuctionId(auctionId);
+        List<AuctionInfo> auctionInfos = auctionInfoMongoRepository.findMemberByAuctionId(auctionId);
+
+        List<Member> members = new ArrayList<>();
+        for(AuctionInfo auctionInfo : auctionInfos){
+            members.add(memberRepository.findById(auctionInfo.getMemberId()).get());
+        }
 
         for(Member member : members){
             member.increasePoint(buyerDeposit);
@@ -325,7 +330,12 @@ public class AuctionServiceImpl implements AuctionService{
      */
     @Override
     public void returnBuyerPointWhenExpired(int auctionId, int firstMemberId, int buyerDeposit){
-        List<Member> members = memberRepository.findParticipantByAuctionId(auctionId);
+        List<AuctionInfo> auctionInfos = auctionInfoMongoRepository.findMemberByAuctionId(auctionId);
+
+        List<Member> members = new ArrayList<>();
+        for(AuctionInfo auctionInfo : auctionInfos){
+            members.add(memberRepository.findById(auctionInfo.getMemberId()).get());
+        }
 
         for(Member member : members){
             if(member.getId() == firstMemberId) { continue; }
