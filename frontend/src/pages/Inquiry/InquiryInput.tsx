@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { INQUIRY_API_URL } from '../../util/Constants';
-import axios from '../../api/axiosConfig';
-
 import InquiryImage from './InquiryImage';
 import InquiryForm from './InquiryForm';
 
@@ -9,13 +6,14 @@ const InquiryInput: React.FC = () => {
   const [images, setImages] = useState<File[]>([]); // 선택한 이미지 상태
 
   return (
-    <div className="container mx-auto flex justify-center items-center min-h-screen">
+    <div className="container mx-auto flex flex-col justify-center items-center">
+      <h1 className="text-3xl font-bold mb-6">고객센터 문의</h1>
       <div className="flex flex-col md:flex-row w-full max-w-5xl space-x-4">
         <div className="flex-1">
-          <InquiryImage onImagesChange={setImages} /> {/* 이미지 변경 시 상태 업데이트 */}
+          <InquiryImage onImagesChange={setImages} />
         </div>
         <div className="flex-1">
-          <InquiryForm images={images} /> {/* 선택한 이미지를 InquiryForm에 전달 */}
+          <InquiryForm images={images} />
         </div>
       </div>
     </div>

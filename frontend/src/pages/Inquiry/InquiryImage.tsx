@@ -33,7 +33,7 @@ const InquiryImage: React.FC<InquiryImageProps> = ({ onImagesChange }) => {
   const handleRemoveImage = (index: number) => {
     const updatedImages = selectedImages.filter((_, i) => i !== index);
     setSelectedImages(updatedImages);
-    onImagesChange(updatedImages); // 이미지 변경 시 호출
+    onImagesChange(updatedImages);
   };
 
   const getLatestImageUrl = () => {
@@ -52,7 +52,7 @@ const InquiryImage: React.FC<InquiryImageProps> = ({ onImagesChange }) => {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <h2 className="text-2xl font-bold mb-4">이미지 등록하기</h2>
+      <h2 className="text-xl font-bold mb-4">이미지 등록하기</h2>
 
       <div className="border-2 border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center mb-4 w-96 h-72">
         <img src={getLatestImageUrl()} alt="Recent Upload" className="w-full h-full object-cover mb-4 opacity-50" />

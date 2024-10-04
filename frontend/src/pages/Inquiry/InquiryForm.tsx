@@ -37,7 +37,7 @@ const InquiryForm: React.FC<InquiryFormProps> = ({ images }) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`, // Access token 추가
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );
@@ -53,26 +53,24 @@ const InquiryForm: React.FC<InquiryFormProps> = ({ images }) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6">
-      <h1 className="text-2xl font-bold mb-6">고객센터 문의</h1>
-
-      <div className="mb-4">
+    <div className="flex flex-col items-center p-3">
+      <div className="mb-4 w-full">
         <label className="block text-sm font-medium mb-1">문의 제목</label>
         <input
           type="text"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="ex. 보증금이 제대로 환급되지 않았어요."
-          className="border border-gray-300 rounded p-2 w-full"
+          className="w-full border border-gray-300 rounded p-2"
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 w-full ">
         <label className="block text-sm font-medium mb-1">문의 카테고리</label>
         <select
           value={formData.category}
           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-          className="border border-gray-300 rounded p-2 w-full"
+          className="w-full border border-gray-300 rounded p-2"
         >
           <option value="">카테고리 선택</option>
           <option value="DEAL">거래</option>
@@ -81,18 +79,18 @@ const InquiryForm: React.FC<InquiryFormProps> = ({ images }) => {
         </select>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 w-full ">
         <label className="block text-sm font-medium mb-1">문의 내용</label>
         <textarea
           value={formData.content}
           onChange={(e) => setFormData({ ...formData, content: e.target.value })}
           placeholder="문제 상황을 자세히 작성해 주시면 더욱 빠르게 도움을 드릴 수 있습니다."
-          className="border border-gray-300 rounded p-2 w-full h-32"
+          className="w-full border border-gray-300 rounded p-2 min-m-[300px] h-[300px]"
         />
       </div>
 
-      <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
-        경매 시작하기
+      <button onClick={handleSubmit} className="w-full p-2 bg-blue-500 text-white rounded-md">
+        문의 등록하기
       </button>
     </div>
   );

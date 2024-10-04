@@ -24,7 +24,7 @@ const InquiryList = () => {
     const getInquiries = async () => {
       try {
         const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_LIST}`);
-        console.log(response.data);
+
         if (response.data.code === 'SU') {
           if (response.data.list.length === 0) {
             setError('작성한 문의가 없습니다.');
@@ -54,11 +54,11 @@ const InquiryList = () => {
   }
 
   return (
-    <div className="container w-full border-gray-300 flex flex-col mt-4 p-6">
-      <h1 className="text-2xl font-bold mb-6">문의 목록</h1>
+    <div className="container mx-auto flex flex-col justify-center items-center">
+      <h1 className="text-3xl font-bold mb-6">내가 작성한 문의</h1>
       <div className="space-y-4">
         {inquiries.map((inquiry) => (
-          <div key={inquiry.inquiryId} className="border p-4 rounded shadow">
+          <div key={inquiry.inquiryId} className="border p-4 min-w-[500px] rounded shadow">
             <h2 className="text-lg font-semibold">{inquiry.title}</h2>
             <p className="text-sm text-gray-600">{inquiry.content}</p>
             <p className="text-sm italic">카테고리: {inquiry.category}</p>

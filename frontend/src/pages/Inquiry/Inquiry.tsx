@@ -19,8 +19,16 @@ const Inquiry = () => {
 
   return (
     <div className="container w-full border-gray-300 flex flex-col mt-4 p-6">
-      {activePage === '문의 목록' && <button onClick={() => setActivePage('문의 작성')}>문의 작성하기</button>}
-      {activePage === '문의 작성' && <button onClick={() => setActivePage('문의 목록')}>문의 목록</button>}
+      {activePage === '문의 목록' && (
+        <button onClick={() => setActivePage('문의 작성')} className="text-left w-[110px]">
+          ▶ 문의 작성
+        </button>
+      )}
+      {activePage === '문의 작성' && (
+        <button onClick={() => setActivePage('문의 목록')} className="text-left w-[110px]">
+          ▶ 문의 목록
+        </button>
+      )}
       <div className="m-1">{renderContent()}</div>
     </div>
   );

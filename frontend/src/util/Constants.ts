@@ -44,7 +44,7 @@ export const MEMBER_API_URL = {
 
 export const INQUIRY_API_URL = {
   INQUIRY_LIST: '/api/inquiry/my-list',
-  INQUIRY_CREATE: '/api/inquiry',
+  INQUIRY_CREATE: '/api/inquiry/',
   INQUIRY_PRINT: '/api/inquiry/file',
   INQUIRY_EXCEL: '/api/inquiry/excel',
 };
