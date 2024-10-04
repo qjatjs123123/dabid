@@ -43,6 +43,7 @@ const MyInfo: React.FC = () => {
     };
 
     fetchUserInfo();
+    console.log('userInfo:', userInfo);
   }, [setUserInfo]);
 
   const accountAuth = async () => {
