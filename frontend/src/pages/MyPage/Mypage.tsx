@@ -1,44 +1,49 @@
 import React, { useState } from 'react';
 import MyInfo from './components/MyInfo';
+import Deal from '../Deal/Deal';
 
 const Mypage: React.FC = () => {
-  const [activePage, setActivePage] = useState<string>('내정보');
+  const [activePage, setActivePage] = useState<string>('내 정보');
 
   const renderContent = () => {
     switch (activePage) {
-      case '내정보':
+      case '내 정보':
         return <MyInfo />;
-      case '내구매':
-        return <div>내 구매 내용입니다.</div>;
-      case '내결제':
-        return <div>내 결제 내용입니다.</div>;
+      case '내 구매':
+        return (
+          <div>
+            <Deal />
+          </div>
+        );
+      case '내 경매':
+        return <div>내 경매</div>;
       default:
         return null;
     }
   };
 
   return (
-    <div className="container w-full border-gray-300 flex items-end mt-4">
-      <nav className="mb-4 h-[50px]">
+    <div className="container w-full border-gray-300 flex flex-col mt-4">
+      <nav className="h-[30px]">
         <ul className="flex space-x-4">
           <li>
-            <button onClick={() => setActivePage('내정보')} className="text-blue-600 hover:underline">
+            <button onClick={() => setActivePage('내 정보')} className="text-blue-600 hover:underline">
               내 정보
             </button>
           </li>
           <li>
-            <button onClick={() => setActivePage('내구매')} className="text-blue-600 hover:underline">
+            <button onClick={() => setActivePage('내 구매')} className="text-blue-600 hover:underline">
               내 구매
             </button>
           </li>
           <li>
-            <button onClick={() => setActivePage('내결제')} className="text-blue-600 hover:underline">
-              내 결제
+            <button onClick={() => setActivePage('내 경매')} className="text-blue-600 hover:underline">
+              내 경매
             </button>
           </li>
         </ul>
       </nav>
-      <div className="mt-4">{renderContent()}</div>
+      <div className="m-1">{renderContent()}</div>
     </div>
   );
 };

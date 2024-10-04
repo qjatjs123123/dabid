@@ -26,10 +26,10 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
       formData.append('images', image);
     });
 
-    const accessToken = `eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImE1MDVhZHNhc2Q1c3NhZnkwMkBzc2FmeS5jb20iLCJpYXQiOjE3Mjc2Nzc4MTMsImV4cCI6MTcyNzY4ODYxM30.OJQa9vtghSX7Bg9ji0Y_EFT2RMrb5gNDEP_Rg-zgZHw`; //localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+    const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await fetch('http://localhost:4040/api/auctions', {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_ENDPOINT}/api/auctions`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
