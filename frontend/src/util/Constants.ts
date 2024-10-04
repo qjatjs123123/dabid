@@ -53,11 +53,11 @@ export const AUCTION_API_URL = {
   GET_AUCTION_INTERACTION: 'api/biddings',
 };
 
-
 export const CHATBOT_API_URL = {
   INITIATE_CHATBOT: '/chatbot/init',
   GET_CHAT_HISTORY: '/chatbot/list',
   POST_QUESTION: '/chatbot/ask',
+};
 
 export const DELIVERY = {
   NAMES: Object.freeze([
