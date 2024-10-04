@@ -3,7 +3,6 @@ import { DELIVERY_STAGE, MESSAGE } from '../../../util/Constants';
 import { Track } from './DeliveryStatusSearch';
 import { isModalState } from '../../../stores/recoilStores/Deal/stateModal';
 import { useSetRecoilState } from 'recoil';
-import DealContentUserProfile from './DealContentUserProfile';
 
 interface DeliveryStatusModalProps {
   edges: Track | null;
