@@ -22,6 +22,7 @@ import com.ssafy.dabid.domain.deal.repository.DealRepository;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
+import com.ssafy.dabid.global.api.ssafy.response.AccountBalanceResponse;
 import com.ssafy.dabid.global.api.ssafy.response.CreateAccountResponse;
 import com.ssafy.dabid.global.api.ssafy.response.TransferResponse;
 import com.ssafy.dabid.global.utils.S3Util;
@@ -115,62 +116,75 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public InquireDemandDepositAccountBalance findSellerAccount(int dealId, int userKey) {
-        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                ACCOUNT_BALANCE_CODE,
-                ACCOUNT_BALANCE_CODE,
-                "937d7d39-eccc-4741-bf54-af154e279537" //임시 나중에 Security에서 멤버에서 가져올것
-        );
+    public InquireDemandDepositAccountBalance findSellerAccount(int dealId) {
+//        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
+//                ACCOUNT_BALANCE_CODE,
+//                ACCOUNT_BALANCE_CODE,
+//                "937d7d39-eccc-4741-bf54-af154e279537" //임시 나중에 Security에서 멤버에서 가져올것
+//        );
 
         Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
 
         String dealAccount = deal.getAccount();
+//
+//        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
+//                .header(ssafyApiHeaderRequest)
+//                .accountNo(dealAccount)
+//                .build();
+//
+//        InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
+//                ACCOUNT_BALANCE_CODE,
+//                ssafyApiRequest,
+//                InquireDemandDepositAccountBalance.class
+//        );
 
-        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
-                .header(ssafyApiHeaderRequest)
-                .accountNo(dealAccount)
-                .build();
+        // 가상계좌 잔액 조회
+        AccountBalanceResponse response = ssafyApiClient.accountBalance(ADMIN_USER_KEY, dealAccount);
 
-        InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
-                ACCOUNT_BALANCE_CODE,
-                ssafyApiRequest,
-                InquireDemandDepositAccountBalance.class
-        );
+        InquireDemandDepositAccountBalance accountInfo = new InquireDemandDepositAccountBalance();
+        InquireDemandDepositAccountBalance.Rec recInfo = new InquireDemandDepositAccountBalance.Rec();
+        recInfo.setAccountNo(response.getRec().getAccountNo());
+        recInfo.setAccountBalance(response.getRec().getAccountBalance());
+        accountInfo.setRec(recInfo);
 
-        return response;
+        return accountInfo;
     }
 
     @Override
-    public BuyerBalanceAndAccount findBuyerAccount(int dealId, int userKey) {
-        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-                ACCOUNT_BALANCE_CODE,
-                ACCOUNT_BALANCE_CODE,
-                "71b2ece2-981e-452a-8412-7c6aecbaa2e1" //임시 나중에 Security에서 멤버에서 가져올것
-        );
+    public BuyerBalanceAndAccount findBuyerAccount(int dealId) {
+//        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
+//                ACCOUNT_BALANCE_CODE,
+//                ACCOUNT_BALANCE_CODE,
+//                "71b2ece2-981e-452a-8412-7c6aecbaa2e1" //임시 나중에 Security에서 멤버에서 가져올것
+//        );
 
         Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
 
         int buyer_id = deal.getBuyer().getId();
+        String userKey = deal.getBuyer().getUserKey();
 
         Account buyer_info = memberAccountRepository.findByMemberId(buyer_id);
         String buyer_account = buyer_info.getAccount_number();
 
 
-        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
-                .header(ssafyApiHeaderRequest)
-                .accountNo(buyer_account)
-                .build();
+//        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
+//                .header(ssafyApiHeaderRequest)
+//                .accountNo(buyer_account)
+//                .build();
+//
+//        InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
+//                ACCOUNT_BALANCE_CODE,
+//                ssafyApiRequest,
+//                InquireDemandDepositAccountBalance.class
+//        );
 
-        InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
-                ACCOUNT_BALANCE_CODE,
-                ssafyApiRequest,
-                InquireDemandDepositAccountBalance.class
-        );
+        // 구매자 계좌 잔액 조회
+        AccountBalanceResponse response = ssafyApiClient.accountBalance(userKey, buyer_account);
 
         BuyerBalanceAndAccount buyerInfo = BuyerBalanceAndAccount.builder()
-                .buyer_balance(response.getRec().getAccountBalance())
+                .buyer_balance(response.getRec().getAccountNo())
                 .deal_account(deal.getAccount())
                 .winning_bid(deal.getWinning_bid())
                 .build();

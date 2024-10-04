@@ -1,7 +1,11 @@
 import './DealButton.css';
 
-const DealButton = () => {
-  return <div className="btnPush btnOrange">송금하기</div>;
+const DealButton = ({ onClick }) => {
+  return (
+    <div className="btnPush btnOrange" onClick={onClick}>
+      송금하기
+    </div>
+  );
 };
 
 export default DealButton;

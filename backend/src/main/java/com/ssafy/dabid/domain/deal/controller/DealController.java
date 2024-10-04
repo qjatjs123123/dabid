@@ -9,6 +9,7 @@ import com.ssafy.dabid.domain.deal.repository.ChatMessageRepository;
 import com.ssafy.dabid.domain.deal.service.DealService;
 import com.ssafy.dabid.domain.member.entity.Member;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
+import com.ssafy.dabid.global.api.ssafy.response.AccountBalanceResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +40,12 @@ public class DealController {
 
     @PostMapping("/account/seller/{deal-id}")
     public InquireDemandDepositAccountBalance selectSellerAccount(@PathVariable("deal-id") int dealId) {
-        return dealService.findSellerAccount(dealId, 2);
+        return dealService.findSellerAccount(dealId);
     }
 
     @PostMapping("/account/buyer/{deal-id}")
     public BuyerBalanceAndAccount selectBuyerAccount(@PathVariable("deal-id") int dealId) {
-        return dealService.findBuyerAccount(dealId, 2);
+        return dealService.findBuyerAccount(dealId);
     }
 
     @PostMapping("/courier/{deal-id}")
