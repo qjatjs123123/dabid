@@ -384,4 +384,22 @@ public class MemberServiceImpl implements MemberService {
         return new CommonResponseDto();
     }
 
+    @Override
+    public CommonResponseDto getUserInfo() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Account account = memberAccountRepository.findByMember(member);
+
+        GetUserInfoResponseDto dto = new GetUserInfoResponseDto();
+        dto.setEmail(member.getEmail());
+        dto.setRole(String.valueOf(member.getRole()));
+        dto.setPoint(member.getPoint());
+        dto.setNickname(member.getNickname());
+        dto.setImageUrl(member.getImageUrl());
+        dto.setPhoneNumber(member.getPhoneNumber());
+        dto.setAccountNo(account.getAccount_number());
+        dto.setAccountActive(account.getIsActive());
+
+        return dto;
+    }
 }

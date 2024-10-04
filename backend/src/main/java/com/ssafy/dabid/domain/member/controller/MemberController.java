@@ -98,4 +98,9 @@ public class MemberController {
     public ResponseEntity<?> phoneCheck(@Valid @RequestBody CheckPhoneAuthRequestDto dto){
         return ResponseEntity.ok(memberService.checkPhoneAuth(dto));
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getInfo(){
+        return ResponseEntity.ok(memberService.getUserInfo());
+    }
 }
