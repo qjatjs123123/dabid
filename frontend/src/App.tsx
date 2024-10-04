@@ -1,6 +1,6 @@
 import './App.css';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { PAGE_URL } from './util/Constants';
+import { MEMBER_API_URL, PAGE_URL } from './util/Constants';
 import PrivateRoute from './util/PrivateRoute';
 import About from './pages/About';
 import Deal from './pages/Deal/Deal';
@@ -16,14 +16,20 @@ import { modalState } from './stores/recoilStores/Member/modalState';
 import AuctionList from './pages/Auction/AuctionList';
 import AuctionInput from './pages/Auction/components/Auctions/AuctionInput';
 import AuctionDetail from './pages/Auction/AuctionDetail';
+import Inquiry from './pages/Inquiry/Inquiry';
+import { UserInfo, userState } from './stores/recoilStores/Member/userState';
+import axios from './api/axiosConfig';
 
 function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
+  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const navigate = useNavigate();
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = async () => {
+    const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
+    await setUserInfo(response.data);
     setModalOpen(false);
-    const email = 'xorjsghkd1011@gmail.com';
+    const email = userInfo ? userInfo.email : ''; // 'xorjsghkd1011@gmail.com';
     init(email);
     navigate(PAGE_URL.HOME); // 로그인 성공 후 홈으로 리다이렉트
   };
@@ -34,6 +40,7 @@ function App() {
 
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
+        <Route path={`${PAGE_URL.HELP}`} element={<Inquiry />} />
         <Route path={`${PAGE_URL.SIGN_UP}`} element={<Signup />} />
 
         <Route element={<PrivateRoute />}>

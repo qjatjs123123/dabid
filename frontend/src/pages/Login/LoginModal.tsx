@@ -25,34 +25,32 @@ const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onLoginSucces
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setValues({ ...values, [e.target.id]: e.target.value });
-    setErrorMessage(''); // 입력할 때 에러 메시지 초기화
+    setErrorMessage('');
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    // 이메일과 비밀번호가 빈 값인지 확인
     if (!values.email || !values.password) {
-      setErrorMessage('이메일과 비밀번호를 입력하세요.'); // 빈 값일 때 에러 메시지 설정
+      setErrorMessage('이메일과 비밀번호를 입력하세요.');
       return;
     }
 
     try {
       const response = await login(values);
       if (response.code !== 'SU') {
-        setErrorMessage('이메일 또는 비밀번호가 일치하지 않습니다.'); // 로그인 실패 시 에러 메시지 설정
+        setErrorMessage('이메일 또는 비밀번호가 일치하지 않습니다.');
         return;
       }
 
-      // 로그인 성공 시 토큰 저장
       localStorage.setItem('accessToken', response.accessToken);
       localStorage.setItem('refreshToken', response.refreshToken);
-      setToken(response.accessToken); // Recoil 상태 업데이트
+      setToken(true);
 
-      onLoginSuccess(); // 로그인 성공 시 호출
+      onLoginSuccess();
     } catch (error) {
-      console.error(error); // 에러를 콘솔에 기록
-      setErrorMessage('로그인 중 오류가 발생했습니다.'); // API 호출 중 오류 발생 시 에러 메시지 설정
+      console.error(error);
+      setErrorMessage('로그인 중 오류가 발생했습니다.');
     }
   };
 
@@ -63,9 +61,8 @@ const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onLoginSucces
   };
 
   const handleClose = () => {
-    // 모달 닫기 전에 폼 데이터 초기화
     setValues({ email: '', password: '' });
-    setErrorMessage(''); // 에러 메시지 초기화
+    setErrorMessage('');
     onClose();
   };
 
@@ -74,7 +71,7 @@ const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onLoginSucces
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-      onClick={handleBackgroundClick} // 배경 클릭 시 모달 닫기
+      onClick={handleBackgroundClick}
     >
       <div className="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 w-[500px]">
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">로그인</h2>

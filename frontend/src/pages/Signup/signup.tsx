@@ -226,7 +226,7 @@ const Signup: React.FC = () => {
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 정규식
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // 비밀번호: 최소 8자, 문자와 숫자 포함
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$/; // 비밀번호: 최소 8자, 최대 13자, 문자 숫자 특수문자 포함
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -268,7 +268,7 @@ const Signup: React.FC = () => {
 
       // 로그인 성공 후 홈으로 이동
       if (loginResponse.code === 'SU') {
-        setToken(loginResponse.accessToken);
+        setToken(true);
         localStorage.setItem('accessToken', loginResponse.accessToken); // 로그인 성공 시 token 저장
         localStorage.setItem('refreshToken', loginResponse.refreshToken);
         navigate(`${PAGE_URL.HOME}`); // 홈으로 이동
@@ -352,7 +352,9 @@ const Signup: React.FC = () => {
             />
             {passwordStatus.password && <span className="text-green-500 ml-2">✔️</span>}
             {errors.passwordFormatError && (
-              <p className="text-red-500">비밀번호는 최소 8자, 문자와 숫자가 포함되어야 함니다.</p>
+              <p className="text-red-500">
+                비밀번호는 최소 8자, 최대 13자로 문자와 숫자, 특수문자로 구성되어야 함니다.
+              </p>
             )}
           </div>
 

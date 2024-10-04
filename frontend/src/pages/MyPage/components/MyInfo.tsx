@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import axios from '../../../api/axiosConfig';
 import { UserInfo, userState } from '../../../stores/recoilStores/Member/userState';
 import { MEMBER_API_URL } from '../../../util/Constants';
+import { formatNumberWithCommas } from '../../../util/moneyComma';
 
 const MyInfo: React.FC = () => {
   const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
@@ -81,7 +82,6 @@ const MyInfo: React.FC = () => {
       const response = await axios.post(`${MEMBER_API_URL.POINT_IN}`, { amount: pointAmount });
       console.log(response);
       if (response.data.code === 'SU') {
-        // 충전에 성공하면 회원 정보 갱신하기
         const res = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
         await setUserInfo(res.data);
         setPointStatus({ warning: false, message: '포인트 충전이 완료되었습니다.' });
@@ -135,7 +135,7 @@ const MyInfo: React.FC = () => {
             <p className="text-xl my-3">이메일: {userInfo.email}</p>
             <p className="text-xl my-3">전화번호: {userInfo.phoneNumber}</p>
             <div className="text-xl my-3">
-              계좌:
+              <span>계좌: </span>
               <input type="text" value={userInfo.accountNo} disabled />
               {!status.accountCheck && (
                 <>
@@ -170,18 +170,18 @@ const MyInfo: React.FC = () => {
           <br />
           <hr />
           <br />
-          <p>포인트: {userInfo.point}</p>
+          <p>포인트: {formatNumberWithCommas(userInfo.point)}</p>
           <div className="my-4">
-            <p>충전할 금액:</p>
+            <p>충전/환전할 금액:</p>
             <div className="flex space-x-2 mb-2">
               <button onClick={() => addPoint(5000)} className="bg-gray-200 rounded px-2 py-1">
-                +5000
+                +5,000
               </button>
               <button onClick={() => addPoint(10000)} className="bg-gray-200 rounded px-2 py-1">
-                +10000
+                +10,000
               </button>
               <button onClick={() => addPoint(50000)} className="bg-gray-200 rounded px-2 py-1">
-                +50000
+                +50,000
               </button>
             </div>
             <input

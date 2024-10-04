@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { list, send } from '../../api/ChatbotAPI';
 import { getImgUrl } from '../../util/Functions';
+import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
+import { useRecoilState } from 'recoil';
 
 interface ModalProps {
   isOpen: boolean;
@@ -69,6 +71,7 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null); // 대화창을 위한 ref
+  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
 
   useEffect(() => {
     if (isOpen) {
@@ -82,7 +85,9 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   const fetchChatHistory = async () => {
     try {
-      const email = 'xorjsghkd1011@gmail.com';
+      const email = userInfo ? userInfo.email : ''; // 'xorjsghkd1011@gmail.com';
+      if (email === '') return;
+
       const history = await list(email);
 
       if (!history.length) {
@@ -109,7 +114,8 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     setChatHistory((prev) => [...prev, { role: 'user', content: message }]);
 
     try {
-      const email = 'xorjsghkd1011@gmail.com';
+      const email = userInfo ? userInfo.email : ''; // 'xorjsghkd1011@gmail.com';
+      if (email === '') return;
       const response = await send(email, message);
       setChatHistory((prev) => [...prev, { role: 'assistant', content: response.reply }]);
       setInputValue('');

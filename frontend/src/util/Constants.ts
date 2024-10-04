@@ -42,6 +42,13 @@ export const MEMBER_API_URL = {
   ACCOUNT_BALANCE: '/api/member/balance',
 };
 
+export const INQUIRY_API_URL = {
+  INQUIRY_LIST: '/api/inquiry/my-list',
+  INQUIRY_CREATE: '/api/inquiry',
+  INQUIRY_PRINT: '/api/inquiry/file',
+  INQUIRY_EXCEL: '/api/inquiry/excel',
+};
+
 export const AUCTION_API_URL = {
   GET_AUCTION_CONTENT: '/api/auctions',
   GET_AUCTION_INTERACTION: 'api/biddings',
