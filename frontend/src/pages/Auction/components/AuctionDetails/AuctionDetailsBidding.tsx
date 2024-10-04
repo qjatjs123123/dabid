@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import BiddingInput from './AuctionDeatilsComponents/BiddingInput';
+// import BiddingInput from './AuctionDeatilsComponents/BiddingInput';
 import BiddingStatus from './AuctionDeatilsComponents/BiddingStatus';
 
 interface AuctionData {
@@ -43,9 +43,9 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
   const calculateTimeRemaining = (finishedAt: number[]) => {
     const [year, month, day, hour, minute, second, millisecond] = finishedAt;
-    console.log('불러온 경매 마감일: ' + finishedAt);
+    // console.log('불러온 경매 마감일: ' + finishedAt);
     const endDate = new Date(year, month - 1, day, hour, minute, second, 0);
-    console.log('불러온 경매 마감일 변환 결과: ' + endDate);
+    // console.log('불러온 경매 마감일 변환 결과: ' + endDate);
     const now = new Date(
       Date.UTC(
         new Date().getUTCFullYear(),
@@ -57,7 +57,6 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
         0,
       ),
     );
-    // const timeDiff = endDate.getTime() - now.getTime();
     const timeDiff = endDate.getTime() - now.getTime();
 
     if (timeDiff <= 0) {
@@ -108,16 +107,15 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
           <p className="text-xl font-semibold">{auctionData.person}명</p>
         </div>
 
-        <div>
+        {/* <div>
           <BiddingInput
             auctionId={auctionData.auctionId}
             isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
-            // finishedAt={auctionData.finishedAt}
-            // formatNumber={formatNumber}
+            bid={auctionData.bid}
           />
-        </div>
+        </div> */}
 
         <div>
           <BiddingStatus
@@ -125,6 +123,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
             isOwner={auctionData.owner}
             isParticipant={auctionData.participant}
             isFirstMember={auctionData.firstMember}
+            bid={auctionData.bid}
           />
         </div>
       </div>
