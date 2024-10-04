@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import chatIcon from '../../assets/chat/chatIcon.svg';
 import sendChat from '../../assets/chat/sendChat.svg';
+import profile from '../../assets/chat/img.jpg';
 import { useRecoilValue } from 'recoil';
 import { curDealIdState } from '../../stores/recoilStores/Deal/stateDealId';
 import { fetchChatMessages } from '../../api/chatApi';
@@ -94,10 +95,12 @@ const Chat = () => {
                 <div key={index} className={`mb-1 ${message.email === email ? 'text-right' : 'text-left'}`}>
                   {/* 프로필 사진과 시간 추가 */}
                   {message.email !== email ? (
-                    <div className="flex items-center space-x-2">
-                      <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" />
+                    <div className="flex items-center space-x-1">
+                      <img src={profile} alt="Profile" className="w-6 h-6 rounded-full" />
+                      {/* <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" /> */}
                       <div className="text-[8px] text-gray-500 font-semibold">
-                        {message.nickname}
+                        {/* {message.nickname}  */}
+                        무시무시한 감자 &nbsp;
                         {moment(message.createdAt).format('HH:mm')}
                       </div>
                     </div>

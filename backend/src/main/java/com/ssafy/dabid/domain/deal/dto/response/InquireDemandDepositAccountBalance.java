@@ -23,7 +23,7 @@ public class InquireDemandDepositAccountBalance {
         private String accountNo;
 
         @JsonProperty("accountBalance")
-        private String accountBalance;
+        private Long accountBalance;
     }
 
 }
