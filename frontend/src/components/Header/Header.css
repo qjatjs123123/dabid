@@ -41,3 +41,30 @@
 .navbar-logo-img {
   @apply h-[50px];
 }
+
+.dropdown {
+  position: relative; /* 부모 요소의 위치를 기준으로 설정 */
+}
+
+.user-info {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute; /* 드롭다운 메뉴를 절대 위치로 설정 */
+  bottom: 100%; /* 부모 요소의 위쪽에 위치 */
+  left: 0; /* 왼쪽 정렬 */
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 10px;
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}

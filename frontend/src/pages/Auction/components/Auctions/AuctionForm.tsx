@@ -26,10 +26,10 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
       formData.append('images', image);
     });
 
-    const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+    const accessToken = localStorage.getItem('accessToken');
 
     try {
-      const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_ENDPOINT}/api/auctions`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,

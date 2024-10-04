@@ -8,13 +8,15 @@ import {
   phoneNumberCheck,
   checkDuplication,
 } from '../../api/MemberAPI'; // API 호출 import
-import { PAGE_URL } from '../../util/Constants';
+import { MEMBER_API_URL, PAGE_URL } from '../../util/Constants';
 import { useRecoilState } from 'recoil';
 import { loginState } from '../../stores/recoilStores/Member/loginState';
+import axios from 'axios';
 
 const Signup: React.FC = () => {
   const [_, setToken] = useRecoilState(loginState); // 컴포넌트 최상위에서 호출
   const navigate = useNavigate();
+  const [imagePreview, setImagePreview] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     email: '',
     nickname: '',
@@ -225,8 +227,20 @@ const Signup: React.FC = () => {
     }
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(file); //reader.result as string);
+        // setFormData({ ...formData, image: URL.createObjectURL(file) }); // 파일 데이터 저장
+      };
+      reader.readAsDataURL(file); // 파일을 Data URL로 변환
+    }
+  };
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 정규식
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // 비밀번호: 최소 8자, 문자와 숫자 포함
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$/; // 비밀번호: 최소 8자, 최대 13자, 문자 숫자 특수문자 포함
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -252,13 +266,25 @@ const Signup: React.FC = () => {
     }
 
     try {
-      const response = await signup({
-        email: formData.email,
-        password: formData.password,
-        password_check: formData.confirmPassword,
-        nickname: formData.nickname,
-        phoneNumber: formData.phoneNumber,
-      });
+      console.log(formData);
+      console.log(imagePreview);
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_UP}`,
+        {
+          email: formData.email,
+          password: formData.password,
+          password_check: formData.confirmPassword,
+          nickname: formData.nickname,
+          phoneNumber: formData.phoneNumber,
+          image: imagePreview ? imagePreview : null,
+        },
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
       console.log('회원가입 성공:', response);
 
       const loginResponse = await login({
@@ -268,7 +294,7 @@ const Signup: React.FC = () => {
 
       // 로그인 성공 후 홈으로 이동
       if (loginResponse.code === 'SU') {
-        setToken(loginResponse.accessToken);
+        setToken(true);
         localStorage.setItem('accessToken', loginResponse.accessToken); // 로그인 성공 시 token 저장
         localStorage.setItem('refreshToken', loginResponse.refreshToken);
         navigate(`${PAGE_URL.HOME}`); // 홈으로 이동
@@ -283,6 +309,13 @@ const Signup: React.FC = () => {
       <div className="container mx-auto p-6 min-w-[500px] max-w-[1000px]">
         <h2 className="text-2xl font-bold text-center mb-6">회원 가입</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="mb-10">
+            {imagePreview && (
+              <img src={URL.createObjectURL(imagePreview)} alt="미리보기" className="w-full h-48 object-cover mb-4" />
+            )}
+            <input type="file" accept="image/*" onChange={handleImageUpload} className="mb-4" />
+          </div>
+
           <div className="mb-10">
             <label className="block mb-3 text-xl">이메일</label>
             <div className="flex items-center">
@@ -352,7 +385,9 @@ const Signup: React.FC = () => {
             />
             {passwordStatus.password && <span className="text-green-500 ml-2">✔️</span>}
             {errors.passwordFormatError && (
-              <p className="text-red-500">비밀번호는 최소 8자, 문자와 숫자가 포함되어야 함니다.</p>
+              <p className="text-red-500">
+                비밀번호는 최소 8자, 최대 13자로 문자와 숫자, 특수문자로 구성되어야 함니다.
+              </p>
             )}
           </div>
 

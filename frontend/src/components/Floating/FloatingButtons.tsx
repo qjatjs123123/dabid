@@ -17,7 +17,7 @@ const FloatingActionButtons = () => {
   const openChatbot = () => setIsChatbotOpen(true);
   const closeChatbot = () => setIsChatbotOpen(false);
 
-  if (isLoggedIn) return null; // 로그인하지 않은 경우 버튼 숨김
+  if (!isLoggedIn) return null; // 로그인하지 않은 경우 버튼 숨김
 
   return (
     <div className="fixed bottom-10 right-10 flex flex-col space-y-5">

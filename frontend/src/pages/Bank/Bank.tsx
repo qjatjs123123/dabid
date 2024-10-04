@@ -1,6 +1,10 @@
-// src/components/Modal.js
 import React, { useEffect, useState } from 'react';
+import axios from '../../api/axiosConfig';
 import { getImgUrl } from '../../util/Functions';
+import { MEMBER_API_URL } from '../../util/Constants';
+import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
+import { useRecoilState } from 'recoil';
+import { formatNumberWithCommas } from '../../util/moneyComma';
 
 interface ModalProps {
   isOpen: boolean;
@@ -9,21 +13,47 @@ interface ModalProps {
 
 const BankModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState<boolean>(isOpen);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
+  const [accountBalance, setAccountBalance] = useState(0);
 
   useEffect(() => {
+    const getBankInfo = async () => {
+      try {
+        const infoResponse = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
+        await setUserInfo(infoResponse.data);
+
+        const balanceResponse = await axios.get(`${MEMBER_API_URL.ACCOUNT_BALANCE}`);
+        await setAccountBalance(balanceResponse.data.balance);
+
+        const response = await axios.get(`${MEMBER_API_URL.ACCOUNT_TRANSACTION}`);
+        setTransactions(response.data.list);
+      } catch (error) {
+        console.error('Error fetching bank info:', error);
+      }
+    };
+
     if (isOpen) {
       setIsVisible(true);
+      getBankInfo();
     } else {
       const timer = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.currentTarget === e.target) {
+      onClose();
+    }
+  };
+
   if (!isVisible) return null;
 
   return (
     <div
       className={`fixed inset-0 flex items-end justify-end transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+      onClick={handleBackgroundClick} // 배경 클릭 이벤트 추가
     >
       <div
         className={`bg-gray-100 h-2/3 rounded-3xl shadow-lg max-w-lg w-full mb-10 transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-10'}`}
@@ -45,25 +75,42 @@ const BankModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <div className={`bg-white flex flex-col h-36 justify-evenly px-6 rounded-3xl`}>
             <div>
               <p className="text-4xl font-semibold">
-                <i>123-4567890-123</i>
+                <i>{userInfo?.accountNo}</i>
               </p>
             </div>
             <div>
               <p className="text-3xl font-semibold">
-                <i>10,000,000 </i>원
+                <i>{formatNumberWithCommas(accountBalance)}</i> 원
               </p>
             </div>
           </div>
 
-          <div className={`bg-white h-72 mt-6 py-1 px-4 rounded-3xl`}>
+          <div className={`bg-white h-72 mt-6 py-1 px-4 rounded-3xl overflow-y-scroll`}>
             <h3 className="mt-6 text-2xl font-bold">최근 거래 내역</h3>
             <div className="mt-2">
-              <p className="text-gray-600">09/03</p>
-              <p className="text-green-500">+ 30,000 다비드 포인트 환전 13:01</p>
-              <p className="text-red-500">- 30,000 다비드 낙찰금 결제 13:01</p>
-              <p className="text-gray-600">09/01</p>
-              <p className="text-red-500">- 30,000 다비드 포인트 결제 13:01</p>
-              <p className="text-green-500">+ 1 다비드 계좌 인증 0123 13:01</p>
+              {Array.isArray(transactions) && transactions.length > 0 ? (
+                transactions.slice(0, 5).map((transaction, index) => (
+                  <div
+                    key={index}
+                    className={`flex justify-between ${transaction.transactionTypeName.includes('출금') ? 'text-red-500' : 'text-green-500'} mb-2`}
+                  >
+                    <span>
+                      {transaction.transactionSummary} {transaction.transactionTypeName}{' '}
+                      {formatNumberWithCommas(transaction.transactionBalance)}원
+                    </span>
+                    <span>
+                      {transaction.transactionDate.slice(0, 4) +
+                        '/' +
+                        transaction.transactionDate.slice(4, 6) +
+                        '/' +
+                        transaction.transactionDate.slice(6, 8)}{' '}
+                      {transaction.transactionTime.slice(0, 2) + ':' + transaction.transactionTime.slice(2, 4)}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p>거래 내역이 없습니다.</p>
+              )}
             </div>
           </div>
         </div>
