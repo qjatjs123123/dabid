@@ -1,12 +1,14 @@
 import redis
 import json
 from flask import Flask, request, session
+from flask_cors import CORS
 from chatbot import Chatbot
 from common import model
 from characters import system_role, instruction
 from memory_manager import MemoryManager
 
 app = Flask(__name__)
+CORS(app, resources={'/': {'origins': 'http://j11a505.p.ssafy.io:5173'}})
 
 bidme = Chatbot(model.basic, instruction)
 
