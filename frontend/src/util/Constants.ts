@@ -46,3 +46,9 @@ export const AUCTION_API_URL = {
   GET_AUCTION_CONTENT: '/api/auctions',
   GET_AUCTION_INTERACTION: 'api/biddings',
 };
+
+export const CHATBOT_API_URL = {
+  INITIATE_CHATBOT: '/chatbot/init',
+  GET_CHAT_HISTORY: '/chatbot/list',
+  POST_QUESTION: '/chatbot/ask',
+};
