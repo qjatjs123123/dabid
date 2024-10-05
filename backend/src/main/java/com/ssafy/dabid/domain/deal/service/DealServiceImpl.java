@@ -356,6 +356,7 @@ public class DealServiceImpl implements DealService {
                 .created_at(deal.getCreatedAt())
                 .isSeller(member.getId() == deal.getSeller().getId())
                 .winning_bid(deal.getWinning_bid())// Seller 여부 설정
+                .account(deal.getAccount())
                 .build();
 
         return dto;

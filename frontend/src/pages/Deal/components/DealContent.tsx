@@ -12,7 +12,6 @@ interface DealProps {
     winning_bid: number;
     status: string;
     isTimerVisible: boolean;
-    account: string;
   };
 }
 
