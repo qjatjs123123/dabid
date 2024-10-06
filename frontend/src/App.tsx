@@ -4,7 +4,6 @@ import { MEMBER_API_URL, PAGE_URL } from './util/Constants';
 import PrivateRoute from './util/PrivateRoute';
 import About from './pages/About';
 import Deal from './pages/Deal/Deal';
-import Auction from './pages/Auction/Auction';
 import LoginModal from './pages/Login/LoginModal';
 import Mypage from './pages/MyPage/Mypage';
 import FloatingActionButtons from './components/Floating/FloatingButtons';
@@ -39,15 +38,15 @@ function App() {
 
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
-        <Route path={`${PAGE_URL.HELP}`} element={<Inquiry />} />
         <Route path={`${PAGE_URL.SIGN_UP}`} element={<Signup />} />
         <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
 
-        <Route element={<PrivateRoute />}>
+        <Route element={<PrivateRoute setModalOpen={setModalOpen} />}>
           <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
           <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
           <Route path={`${PAGE_URL.AUCTION_DETAIL}`} element={<AuctionDetail />} />
           <Route path={`${PAGE_URL.AUCTION_INPUT}`} element={<AuctionInput />} />
+          <Route path={`${PAGE_URL.HELP}`} element={<Inquiry />} />
         </Route>
       </Routes>
 

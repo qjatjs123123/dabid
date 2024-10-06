@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import InquiryList from './InquiryList';
 import InquiryInput from './InquiryInput';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
@@ -24,7 +24,6 @@ const Inquiry = () => {
 
   const saveInquiry = async () => {
     try {
-      //const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_PRINT}`);
       const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_EXCEL}`);
       if (response.data.code !== 'SU') {
         console.log(response.data);

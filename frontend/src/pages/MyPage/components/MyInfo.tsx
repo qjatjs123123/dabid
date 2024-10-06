@@ -133,7 +133,8 @@ const MyInfo: React.FC = () => {
       ) : userInfo ? (
         <>
           <div>
-            {userInfo.imageUrl && <img src={userInfo.imageUrl} alt="사용자 이미지" />}
+            <p className="text-xl my-3">프로필 사진</p>
+            {userInfo.imageUrl && <img src={userInfo.imageUrl} alt="사용자 이미지" className="rounded-full" />}
             <p className="text-xl my-3">닉네임: {userInfo.nickname}</p>
             <p className="text-xl my-3">이메일: {userInfo.email}</p>
             <p className="text-xl my-3">전화번호: {userInfo.phoneNumber}</p>
