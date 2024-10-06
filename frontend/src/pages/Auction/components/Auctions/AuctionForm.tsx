@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 임포트
+import { UserInfo, useUpdateUserState, userState } from '../../../../stores/recoilStores/Member/userState';
+import { useRecoilState } from 'recoil';
+import axios from '../../../../api/axiosConfig';
+import { MEMBER_API_URL } from '../../../../util/Constants';
 
 interface AuctionFormProps {
   images: File[]; // AuctionImage에서 가져온 이미지
@@ -11,6 +15,7 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
   const [duration, setDuration] = useState('3');
   const [detail, setDescription] = useState('');
   const navigate = useNavigate(); // useNavigate 훅 사용
+  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +45,12 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
       if (response.ok) {
         // 성공 시 처리
         alert('경매가 성공적으로 등록되었습니다.'); // 알림 표시
+        try {
+          const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
+          setUserInfo(response.data);
+        } catch (error) {
+          console.error('User info update failed:', error);
+        }
         navigate('/auction'); // 페이지 이동
       } else {
         // 오류 처리

@@ -85,7 +85,7 @@ const BankModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <div className={`bg-white h-72 mt-6 py-1 px-4 rounded-3xl overflow-y-scroll`}>
+          <div className={`bg-white h-2/3 mt-6 py-1 px-4 rounded-3xl overflow-y-auto`}>
             <h3 className="mt-6 text-2xl font-bold">최근 거래 내역</h3>
             <div className="mt-2">
               {Array.isArray(transactions) && transactions.length > 0 ? (

@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  signup,
-  login,
-  randomNickname,
-  phoneNumberAuth,
-  phoneNumberCheck,
-  checkDuplication,
-} from '../../api/MemberAPI'; // API 호출 import
+import { login, randomNickname, phoneNumberAuth, phoneNumberCheck, checkDuplication } from '../../api/MemberAPI'; // API 호출 import
 import { MEMBER_API_URL, PAGE_URL } from '../../util/Constants';
 import { useRecoilState } from 'recoil';
 import { loginState } from '../../stores/recoilStores/Member/loginState';
 import axios from 'axios';
+import { init } from '../../api/ChatbotAPI';
 
 const Signup: React.FC = () => {
   const [_, setToken] = useRecoilState(loginState); // 컴포넌트 최상위에서 호출
@@ -48,6 +42,7 @@ const Signup: React.FC = () => {
     nullEmail: false,
     nullNickname: false,
     nullPhoneNumber: false,
+    nullProfileImage: false,
     emailExists: false,
     nicknameExists: false,
     phoneExists: false,
@@ -73,7 +68,8 @@ const Signup: React.FC = () => {
       passwordStatus.password_check &&
       duplicateStatus.email &&
       duplicateStatus.nickname &&
-      duplicateStatus.phone
+      duplicateStatus.phone &&
+      imagePreview
     );
   };
 
@@ -241,8 +237,9 @@ const Signup: React.FC = () => {
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 정규식
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$/;
   // const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$/;
+
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,13}$/;
   // 비밀번호: 최소 8자, 최대 13자, 문자 숫자 특수문자 포함
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -269,8 +266,8 @@ const Signup: React.FC = () => {
     }
 
     try {
-      console.log(formData);
-      console.log(imagePreview);
+      // console.log(formData);
+      // console.log(imagePreview);
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_UP}`,
         {
@@ -299,6 +296,9 @@ const Signup: React.FC = () => {
         setToken(true);
         localStorage.setItem('accessToken', loginResponse.accessToken); // 로그인 성공 시 token 저장
         localStorage.setItem('refreshToken', loginResponse.refreshToken);
+        console.log(formData);
+        init(formData.email);
+
         navigate(`${PAGE_URL.HOME}`); // 홈으로 이동
       }
     } catch (error) {
@@ -477,9 +477,14 @@ const Signup: React.FC = () => {
             </>
           )}
 
-          <button type="submit" className="bg-green-500 text-white rounded px-4 py-2" disabled={!canSubmit()}>
-            회원가입
-          </button>
+          {!canSubmit() && <p className="text-red-500 text-lg">사진을 포함한 모든 항목을 입력하세요.</p>}
+          {canSubmit() && (
+            <button type="submit" className="bg-green-500 text-white rounded px-4 py-2" disabled={!canSubmit()}>
+              회원가입
+            </button>
+          )}
+
+          <div className="h-[300px]"></div>
         </form>
       </div>
     </>
