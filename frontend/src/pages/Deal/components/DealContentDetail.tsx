@@ -5,6 +5,7 @@ import DealContentDetailSkeleton from '../skeletons/DealContentDetailSkeleton';
 import DealButton from '../../../components/Button/DealButton';
 import DeliveryStatusSearch from './DeliveryStatusSearch';
 import DealStatus from './DealStatus';
+import DealAccount from './DealAccount';
 
 const DealContentDetail = () => {
   const { dealContentDetail: deal, showSkeleton } = useDealContentDetail();
@@ -44,7 +45,7 @@ const DealContentDetail = () => {
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[35px] mb-[35px]"></div>
 
           <DeliveryStatusSearch />
-
+          <DealAccount />
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[45px] mb-[45px]"></div>
           <DealStatus />
           <div className="mb-[100px]"></div>
