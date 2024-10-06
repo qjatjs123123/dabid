@@ -29,8 +29,7 @@ function App() {
     const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
     await setUserInfo(response.data);
     setModalOpen(false);
-    const email = userInfo ? userInfo.email : ''; // 'xorjsghkd1011@gmail.com';
-    init(email);
+    init(response.data.email);
     navigate(PAGE_URL.HOME); // 로그인 성공 후 홈으로 리다이렉트
   };
 

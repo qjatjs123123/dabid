@@ -24,8 +24,8 @@ const Inquiry = () => {
 
   const saveInquiry = async () => {
     try {
-      const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_PRINT}`);
-      // const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_EXCEL}`);
+      //const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_PRINT}`);
+      const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_EXCEL}`);
       if (response.data.code !== 'SU') {
         console.log(response.data);
       }
