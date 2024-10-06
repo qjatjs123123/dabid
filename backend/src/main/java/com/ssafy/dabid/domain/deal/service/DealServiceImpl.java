@@ -1,6 +1,8 @@
 package com.ssafy.dabid.domain.deal.service;
 
 import com.ssafy.dabid.domain.auction.entity.Auction;
+import com.ssafy.dabid.domain.auction.entity.AuctionDocument;
+import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
@@ -50,6 +52,7 @@ public class DealServiceImpl implements DealService {
     private final DealRepository dealRepository;
     private final MemberRepository memberRepository;
     private final AuctionRepository auctionRepository;
+    private final AuctionElasticSearchRepository auctionElasticSearchRepository;
     private final MemberAccountRepository memberAccountRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final DeliveryTrackerAPIClient deliveryTrackerAPIClient;
@@ -431,6 +434,10 @@ public class DealServiceImpl implements DealService {
 
         auction.kill();
         auctionJpaRepository.save(auction);
+        AuctionDocument auctionDocument = auctionElasticSearchRepository.findById(String.valueOf(auctionId)).orElse(null);
+        if(auctionDocument != null) {
+            auctionElasticSearchRepository.delete(auctionDocument);
+        }
 
         log.info("스케쥴러 테스트 호출 - endAuctionAndMakeDeal 종료");
     }
