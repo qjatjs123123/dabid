@@ -5,23 +5,23 @@ spring:
   # Elasticsearch
   elasticsearch:
     rest:
-      uris: http://elasticsearch:9200
+      uris: 13.124.170.198:9200
 
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 10MB
+      max-file-size: 25MB
+      max-request-size: 25MB
 
   # Scheduler ThreadCount
   quartz:
     properties:
-      org.quartz.threadPool.threadCount: 20
+      org.quartz.threadPool.threadCount: 50
 
   # MySQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://localhost:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://13.124.170.198:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     password: dabid
 
   # SQL Encoding
@@ -53,7 +53,7 @@ spring:
       password: dabid
       # url: jdbc:redis://root:dabid@172.19.63.93:6379
     mongodb:
-      uri: mongodb://root:dabid@172.23.40.252:27017/dabid?authSource=admin
+      uri: mongodb://root:dabid@13.124.170.198:27017/dabid?authSource=admin
 
   kafka:
     bootstrap-servers: 13.124.170.198:9092

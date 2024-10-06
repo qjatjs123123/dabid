@@ -92,9 +92,6 @@ public class BiddingServiceImpl implements BiddingService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         log.info(email);
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않는 회원입니다."));
-        if(!Objects.equals(auction.getMember().getId(), member.getId())) {
-            throw new IllegalArgumentException("경매 등록자가 아니기에 포기가 불가능합니다.");
-        }
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         log.info("경매 참여 포기 가능 여부 확인");
@@ -136,8 +133,8 @@ public class BiddingServiceImpl implements BiddingService {
         log.info("입찰 성공 여부 판단 시작");
         if (auction.getFirstBid() >= bid) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
             log.info("입찰 실패! - 1등 입찰가보다 적은 입찰 금액!");
-            if (auction.getSecondBid() < bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
-                log.info("2등 입찰가보다 높은 입찰 금액이므로 표기 2등 입찰가 수정");
+            if (auction.getSecondBid() < bid && auction.getFirstBid() != bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
+                log.info("1등 입찰가보다 낮고 2등 입찰가보다 높은 입찰 금액이므로 표기 2등 입찰가 수정");
                 auction.setSecondBid(bid);
             }
             auctionJpaRepository.save(auction);

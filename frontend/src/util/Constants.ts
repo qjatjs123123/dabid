@@ -1,12 +1,11 @@
 export const PAGE_URL = {
   HOME: '/',
   DEAL: '/deal',
-  AUCTION: '/auction',
 
   INFO: '/info',
   HELP: '/help',
   SIGN_UP: '/sign-up',
-  CREATE: '/create',
+  CREATE: '/auction/input',
   MY_PAGE: '/my-page',
 
   AUCTION_LIST: '/auction',
@@ -32,6 +31,7 @@ export const MEMBER_API_URL = {
   PHONE_AUTH: '/api/member/auth/phone-auth',
   PHONE_CHECK: '/api/member/auth/phone-check',
 
+  MY_INFO: '/api/member/info',
   ACCOUNT_AUTH: '/api/member/account-auth',
   ACCOUNT_CHECK: '/api/member/account-check',
   POINT_IN: '/api/member/point-in',
@@ -41,9 +41,22 @@ export const MEMBER_API_URL = {
   ACCOUNT_BALANCE: '/api/member/balance',
 };
 
+export const INQUIRY_API_URL = {
+  INQUIRY_LIST: '/api/inquiry/my-list',
+  INQUIRY_CREATE: '/api/inquiry/',
+  INQUIRY_PRINT: '/api/inquiry/file',
+  INQUIRY_EXCEL: '/api/inquiry/excel',
+};
+
 export const AUCTION_API_URL = {
   GET_AUCTION_CONTENT: '/api/auctions',
   GET_AUCTION_INTERACTION: 'api/biddings',
+};
+
+export const CHATBOT_API_URL = {
+  INITIATE_CHATBOT: '/chatbot/init',
+  GET_CHAT_HISTORY: '/chatbot/list',
+  POST_QUESTION: '/chatbot/ask',
 };
 
 export const DELIVERY = {

@@ -32,4 +32,6 @@ public interface MemberService {
     CommonResponseDto requestPhoneAuth(PhoneAuthRequestDto dto);
 
     CommonResponseDto checkPhoneAuth(CheckPhoneAuthRequestDto dto);
+
+    CommonResponseDto getUserInfo();
 }

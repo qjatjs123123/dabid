@@ -1,36 +1,50 @@
 import React, { useEffect, useState } from 'react';
+import axios from '../../api/axiosConfig';
 import { Link } from 'react-router-dom';
-import { PAGE_URL } from '../../util/Constants';
+import { MEMBER_API_URL, PAGE_URL } from '../../util/Constants';
 import { getImgUrl } from '../../util/Functions';
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../stores/recoilStores/Member/modalState';
-// import { userState } from '../../stores/recoilStores/Member/userState'; // 유저 정보 State
 import { loginState } from '../../stores/recoilStores/Member/loginState';
+import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
+import { formatNumberWithCommas } from '../../util/moneyComma';
 import './Header.css';
+import UserDropdown from './Dropdown';
 
 const NavBar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [_, setModalOpen] = useRecoilState(modalState);
-  // const [user, setUser] = useRecoilState(userState); 유저 정보 저장 State
   const [token, setToken] = useRecoilState(loginState);
 
   useEffect(() => {
-    if (token !== '') {
+    const storedAccessToken = localStorage.getItem('accessToken');
+    if (storedAccessToken) {
       setIsAuthenticated(true);
+      setToken(true);
+
+      const fetchUserInfo = async () => {
+        try {
+          const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
+          await setUserInfo(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchUserInfo(); // 사용자 정보를 가져옵니다.
     }
-  }, [token]);
+  }, [token, setToken]);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
-    setToken('');
+    setToken(false);
     window.location.href = `${PAGE_URL.HOME}`;
   };
 
   const toggleMenu = () => {
-    console.log(isAuthenticated);
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -43,10 +57,10 @@ const NavBar: React.FC = () => {
         <div className={`navbar-menu`}>
           <ul className="navbar-list">
             <li className="navbar-item">
-              <Link to={`${PAGE_URL.AUCTION}`}>
+              <Link to={`${PAGE_URL.AUCTION_LIST}`}>
                 <img src={getImgUrl('navbar/nav-info.png')} alt="경매 둘러보기" className="navbar-logo-img" />
               </Link>
-              <Link to={`${PAGE_URL.AUCTION}`}>경매 둘러보기</Link>
+              <Link to={`${PAGE_URL.AUCTION_LIST}`}>경매 둘러보기</Link>
             </li>
 
             <li className="navbar-item">
@@ -64,23 +78,7 @@ const NavBar: React.FC = () => {
                 </button>
               </li>
             )}
-
-            {isAuthenticated && (
-              <>
-                <li className="navbar-item">
-                  <Link to={`${PAGE_URL.MY_PAGE}`}>
-                    <img src={getImgUrl('navbar/nav-sign-up.png')} alt="임시 이미지" className="navbar-logo-img" />
-                  </Link>
-                  <Link to={`${PAGE_URL.MY_PAGE}`}>마이페이지</Link>
-                </li>
-                <li className="navbar-item">
-                  <button onClick={handleLogout}>
-                    <img src={getImgUrl('navbar/nav-sign-up.png')} alt="임시 이미지" className="navbar-logo-img" />
-                  </button>
-                  <button onClick={handleLogout}>로그아웃</button>
-                </li>
-              </>
-            )}
+            {isAuthenticated && <UserDropdown />}
           </ul>
         </div>
         <button className="navbar-button" type="button" onClick={toggleMenu}>
@@ -100,7 +98,7 @@ const NavBar: React.FC = () => {
       <div className={`toggle-navbar-menu${isMenuOpen ? ' open' : ''}`}>
         <ul className="navbar-list">
           <li className="navbar-item">
-            <Link to={`${PAGE_URL.AUCTION}`}>경매 둘러보기</Link>
+            <Link to={`${PAGE_URL.AUCTION_LIST}`}>경매 둘러보기</Link>
           </li>
 
           <li className="navbar-item">
