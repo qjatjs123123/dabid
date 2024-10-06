@@ -29,8 +29,9 @@ function App() {
     const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
     await setUserInfo(response.data);
     setModalOpen(false);
-    const email = userInfo ? userInfo.email : ''; // 'xorjsghkd1011@gmail.com';
-    init(email);
+    // const email = userInfo ? userInfo.email : ''; // 'xorjsghkd1011@gmail.com';
+    // console.log('handleLoginSuccess:', email); // 'xorjsghkd1011@gmail.com'
+    init(response.data.email);
     navigate(PAGE_URL.HOME); // 로그인 성공 후 홈으로 리다이렉트
   };
 
@@ -42,11 +43,11 @@ function App() {
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
         <Route path={`${PAGE_URL.HELP}`} element={<Inquiry />} />
         <Route path={`${PAGE_URL.SIGN_UP}`} element={<Signup />} />
+        <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
 
         <Route element={<PrivateRoute />}>
           <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
           <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
-          <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
           <Route path={`${PAGE_URL.AUCTION_DETAIL}`} element={<AuctionDetail />} />
           <Route path={`${PAGE_URL.AUCTION_INPUT}`} element={<AuctionInput />} />
         </Route>
