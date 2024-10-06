@@ -47,8 +47,12 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
         setRegistSuccessOpen(true);
       } else {
         // 오류 처리
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || '경매 등록에 실패했습니다.'); // 에러 메시지 설정
+        if (response.status === 403) {
+          setErrorMessage('로그인이 필요합니다.'); // 403 에러 처리
+        } else {
+          const errorData = await response.json();
+          setErrorMessage(errorData.message || '경매 등록에 실패했습니다.'); // 에러 메시지 설정
+        }
         setErrorModalOpen(true); // 에러 모달 열기
       }
     } catch (error) {
