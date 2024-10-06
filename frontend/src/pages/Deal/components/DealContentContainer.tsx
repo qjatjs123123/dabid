@@ -16,12 +16,13 @@ const DealContentContainer = () => {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const IsExistContent = () => {
-    if (curDealId === -1 && dealContentList && dealContentList.pages.length === 1) return false;
+    if (curDealId === -1 && dealContentList && !dealContentList.pages[0].hasOwnProperty('content')) return false;
     return true;
   };
 
   useEffect(() => {
     if (curDealId === -1 && dealContentList) {
+      console.log(curDealId, dealContentList, dealContentList.pages.length);
       if (!IsExistContent()) return;
 
       const firstId = dealContentList.pages[0]?.content[0]?.id ?? -1;
