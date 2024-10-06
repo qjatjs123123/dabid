@@ -181,6 +181,7 @@ const Signup: React.FC = () => {
       }
     } catch (error) {
       console.error('전화번호 인증 실패:', error);
+      setErrors({ ...errors, phoneVerification: true });
     }
   };
 
@@ -240,7 +241,9 @@ const Signup: React.FC = () => {
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 정규식
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$/; // 비밀번호: 최소 8자, 최대 13자, 문자 숫자 특수문자 포함
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$/;
+  // const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,13}$/;
+  // 비밀번호: 최소 8자, 최대 13자, 문자 숫자 특수문자 포함
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -273,7 +276,6 @@ const Signup: React.FC = () => {
         {
           email: formData.email,
           password: formData.password,
-          password_check: formData.confirmPassword,
           nickname: formData.nickname,
           phoneNumber: formData.phoneNumber,
           image: imagePreview ? imagePreview : null,
@@ -309,9 +311,14 @@ const Signup: React.FC = () => {
       <div className="container mx-auto p-6 min-w-[500px] max-w-[1000px]">
         <h2 className="text-2xl font-bold text-center mb-6">회원 가입</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="mb-10">
+          <label className="block mb-3 text-xl">프로필 사진</label>
+          <div className="mb-10 text-center flex flex-row">
             {imagePreview && (
-              <img src={URL.createObjectURL(imagePreview)} alt="미리보기" className="w-full h-48 object-cover mb-4" />
+              <img
+                src={URL.createObjectURL(imagePreview)}
+                alt="미리보기"
+                className="h-[300px] object-cover mb-4 mr-10"
+              />
             )}
             <input type="file" accept="image/*" onChange={handleImageUpload} className="mb-4" />
           </div>
@@ -385,14 +392,12 @@ const Signup: React.FC = () => {
             />
             {passwordStatus.password && <span className="text-green-500 ml-2">✔️</span>}
             {errors.passwordFormatError && (
-              <p className="text-red-500">
-                비밀번호는 최소 8자, 최대 13자로 문자와 숫자, 특수문자로 구성되어야 함니다.
-              </p>
+              <p className="text-red-500">비밀번호는 최소 8자, 최대 13자로 문자와 숫자로 구성되어야 함니다.</p>
             )}
           </div>
 
           <div className="mt-10">
-            <label className="block mb-1 text-xl">비밀번호 확인</label>
+            <label className="block mb-3 text-xl">비밀번호 확인</label>
             <input
               type="password"
               name="confirmPassword"
@@ -408,7 +413,7 @@ const Signup: React.FC = () => {
           </div>
 
           <div className="mt-10">
-            <label className="block mb-1 text-xl">전화번호</label>
+            <label className="block mb-3 text-xl">전화번호</label>
             <div className="flex items-center">
               <input
                 type="tel"
@@ -467,8 +472,8 @@ const Signup: React.FC = () => {
                   인증 확인
                 </button>
                 {phoneStatus.success && <span className="text-green-500 ml-2">✔️</span>}
-                {errors.phoneVerification && <p className="text-red-500">인증 코드가 올바르지 않습니다.</p>}
               </div>
+              {errors.phoneVerification && <p className="text-red-500">인증 코드가 올바르지 않습니다.</p>}
             </>
           )}
 
