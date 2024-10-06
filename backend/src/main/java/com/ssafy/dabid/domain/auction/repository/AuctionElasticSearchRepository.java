@@ -9,6 +9,6 @@ import java.util.List;
 public interface AuctionElasticSearchRepository extends ElasticsearchRepository<AuctionDocument, String> {
     List<AuctionDocument> findAllByOrderByCreatedAtDesc();
 
-    @Query("{\"match_phrase\": {\"title\": \"?0\"}}, \"sort\": [{\"createdAt\": {\"order\": \"desc\"}}]")
+    @Query("{\"wildcard\": {\"title\": \"*?0*\"}}, \"sort\": [{\"createdAt\": {\"order\": \"desc\"}}]")
     List<AuctionDocument> findByTitleContainingOrderByCreatedAtDesc(String title);
 }
