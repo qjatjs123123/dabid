@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import AuctionDetailsImage from './components/AuctionDetails/AuctionDetailsImage';
 import AuctionDetailsBidding from './components/AuctionDetails/AuctionDetailsBidding';
 import AuctionDetailsDescription from './components/AuctionDetails/AuctionDetailsDescription';
+import { PAGE_URL } from '../../util/Constants';
 
 interface AuctionData {
   auctionId: number;
@@ -23,6 +25,7 @@ interface AuctionData {
 }
 
 const AuctionDeatil: React.FC = () => {
+  const navigate = useNavigate();
   const { auctionId } = useParams<{ auctionId: string }>();
   const [auctionData, setAuctionData] = useState<AuctionData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +51,7 @@ const AuctionDeatil: React.FC = () => {
         console.log(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        navigate(PAGE_URL.AUCTION_LIST);
       }
     };
 
