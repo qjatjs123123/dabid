@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import chatIcon from '../../assets/chat/chatIcon.svg';
 import sendChat from '../../assets/chat/sendChat.svg';
 import profile from '../../assets/chat/img.jpg';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { curDealIdState } from '../../stores/recoilStores/Deal/stateDealId';
 import { fetchChatMessages } from '../../api/chatApi';
 import useWebSocket from '../../business/hooks/useDeal/useDealWebsocket';
 import moment from 'moment';
+import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
 
 interface Message {
   dealId: number;
@@ -22,10 +23,12 @@ const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]); // 메시지 목록
   const [newMessage, setNewMessage] = useState(''); // 새 메시지
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+  const [userInfo] = useRecoilState<UserInfo | null>(userState);
 
   const dealId = useRecoilValue(curDealIdState); // 현재 거래 ID
   const token = localStorage.getItem('accessToken'); // 토큰 가져오기
-  const email = localStorage.getItem('email'); // 로그인한 사용자 이메일
+  const email = userInfo?.email; // 로그인한 사용자 이메일
+  // const email = localStorage.getItem('email'); // 로그인한 사용자 이메일
   // const email = 'ssafy7@gmail.com';
 
   // 웹소켓 훅을 사용해 메시지를 수신하고 전송

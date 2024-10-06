@@ -20,7 +20,7 @@ const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, deal }) 
   // 송금 API 호출 함수
   const handleTransfer = async () => {
     try {
-      const response = await axios.post(`/api/transfer/${deal.id}`); // dealId로 API 호출
+      const response = await axios.post(`/api/deal/transfer/${deal.id}`); // dealId로 API 호출
       if (response.status === 200) {
         // 송금 성공 시 DealContentDetail로 이동
         navigate(`/deal/${deal.id}`);
