@@ -33,7 +33,7 @@ export const login = async ({ email, password }: LoginParams): Promise<LoginCont
 interface SignupParams {
   email: string;
   password: string;
-  password_check: string;
+  // password_check: string;
   nickname: string;
   phoneNumber: string;
   image: File | null;
