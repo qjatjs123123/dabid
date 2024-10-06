@@ -103,15 +103,18 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       if (response.ok) {
         // alert('경매에 참여하셨습니다.');
         setModalResultMessage('경매에 참여하셨습니다.');
+        setModalResultIsOpen(true);
         // navigate(0);
       } else {
         // alert('경매 참여에 실패했습니다.');
         setModalResultMessage('경매에 실패했습니다.');
+        setModalResultIsOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
       // alert('네트워크 오류가 발생했습니다.');
       setModalResultMessage('네트워크 오류가 발생했습니다.');
+      setModalResultIsOpen(true);
     } finally {
       closeModal();
     }
@@ -131,15 +134,18 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       if (response.ok) {
         // alert('경매 참여를 포기하였습니다.');
         setModalResultMessage('경매 참여를 포기하였습니다.');
+        setModalResultIsOpen(true);
         // navigate(0);
       } else {
         // alert('경매 참여 포기에 실패했습니다.');
         setModalResultMessage('경매 참여 포기에 실패했습니다.');
+        setModalResultIsOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
       // alert('네트워크 오류가 발생했습니다.');
       setModalResultMessage('네트워크 오류가 발생했습니다.');
+      setModalResultIsOpen(true);
     } finally {
       closeModal();
     }
@@ -159,19 +165,23 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       if (response.status === 200) {
         // alert('경매 입찰에 성공하였습니다.');
         setModalResultMessage('경매 입찰에 성공하였습니다.');
-        navigate(0);
+        setModalResultIsOpen(true);
+        // navigate(0);
       } else if (response.status === 202) {
         // alert('입찰 금액이 부족합니다.');
         setModalResultMessage('입찰 금액이 부족합니다.');
-        navigate(0);
+        setModalResultIsOpen(true);
+        // navigate(0);
       } else {
         // alert('경매 입찰에 실패했습니다.');
         setModalResultMessage('경매 입찰에 실패했습니다.');
+        setModalResultIsOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
       // alert('네트워크 오류가 발생했습니다.');
       setModalResultMessage('네트워크 오류가 발생했습니다.');
+      setModalResultIsOpen(true);
     } finally {
       closeModal();
     }

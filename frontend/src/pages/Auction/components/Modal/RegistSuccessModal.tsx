@@ -10,15 +10,12 @@ const RegistSuccessModal: React.FC<RegistSuccessModalProps> = ({ isRegistSuccess
   if (!isRegistSuccessOpen) return null; // 모달이 열려있지 않으면 아무것도 렌더링하지 않음
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-md">
-        <h2 className="text-lg font-semibold mb-4">경매가 성공적으로 등록되었습니다.</h2>
-        <div className="flex justify-end">
-          {' '}
-          <button
-            onClick={onRegistSuccessClose}
-            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
-          >
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h2 className="text-xl font-bold mb-4">알림</h2>
+        <p>경매가 성공적으로 등록되었습니다.</p>
+        <div className="flex justify-end mt-4">
+          <button onClick={onRegistSuccessClose} className="mr-2 bg-gray-300 text-black px-4 py-2 rounded">
             확인
           </button>
         </div>
