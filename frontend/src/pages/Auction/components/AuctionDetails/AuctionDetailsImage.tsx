@@ -40,7 +40,7 @@ const AuctionDetailsImage: React.FC<AuctionDetailsImageProps> = ({ images }) => 
   }, [selectedIndex]);
 
   return (
-    <div className="bg-gray-100 flex flex-col items-center m-4 p-5 rounded-lg">
+    <div className="bg-gray-100 flex flex-col items-center mt-4 mb-4 p-5 rounded-lg">
       {/* 큰 이미지 표시 영역 */}
       <div className="w-full mb-4 grid place-items-center">
         <img

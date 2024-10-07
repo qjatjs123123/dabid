@@ -71,7 +71,7 @@ const AuctionDeatil: React.FC = () => {
   return (
     <div className="container">
       <div className="flex flex-row mt-4">
-        <div className="flex-12">{auctionData.title}</div>
+        <div className="flex-12 text-2xl font-bold">{auctionData.title}</div>
       </div>
 
       <div className="flex flex-row">
@@ -83,6 +83,10 @@ const AuctionDeatil: React.FC = () => {
           <AuctionDetailsDescription detail={auctionData.detail} />
         </div>
       </div>
+
+      {/* <div className="flex flex-row w-full mt-4">
+        <AuctionDetailsDescription detail={auctionData.detail} />
+      </div> */}
     </div>
   );
 };
