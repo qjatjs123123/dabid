@@ -38,7 +38,7 @@ const DealContentDetail = () => {
           거래 종료
         </button>
       ); // 거래 종료 상태일 때 버튼 비활성화
-    } else if (deal.status === 'PAYMENT_COMPLETE') {
+    } else if (deal.status === 'PAYMENT_COMPLETE' || deal.status === 'IN_TRANSIT' || deal.status === 'DELIVERED') {
       return <CloseButton onClick={openConfirmModal} />; // 인수 확인 모달 열기
     } else {
       return <DealButton onClick={openTransferModal} />; // 송금 모달 열기
