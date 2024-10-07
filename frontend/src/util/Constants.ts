@@ -116,4 +116,11 @@ export const MESSAGE = {
   DELIVERY_NO_CONTENTS: '운송장 미등록 상태이거나 업체에서 상품을 준비중입니다.',
   FIND_NO_CONTENTS: '검색결과가 없습니다.',
   DEAL_LIST_NO_CONTENTS: '텅',
+  API_POST_ENROLL: '저장중...',
+  API_POST_SUCESS: '운송장이 저장되었습니다.',
+  API_ERROR: '오류가 발생하였습니다.'
 };
+
+export const DELAY_TIME_START = 400;
+export const DELAY_TIME_END = 700;
+export const DELAY_TIME_END_LONG = 3000;

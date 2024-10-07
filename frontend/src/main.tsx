@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Header from './components/Header/Header.tsx';
 import Nav from './components/Nav/Nav.tsx';
 import { useState } from 'react';
+import SnackBarUI from './components/SnackBar/SnackBarUI.tsx';
 // Create a client
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
         <Header />
         <Nav />
         <App />
+        <SnackBarUI />
       </QueryClientProvider>
     </BrowserRouter>
   </RecoilRoot>,
