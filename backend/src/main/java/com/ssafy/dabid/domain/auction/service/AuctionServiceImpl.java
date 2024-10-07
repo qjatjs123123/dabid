@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +34,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuctionServiceImpl implements AuctionService{
     private final AuctionMapper auctionMapper;
+    private final BiddingSMSService biddingSMSService;
     @Value("${point.buy.deposit}")
     private int deposit;
 
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionElasticSearchRepository auctionElasticSearchRepository;
-    private final AuctionInfoRepository auctionInfoRepository;
     private final AuctionInfoMongoRepository auctionInfoMongoRepository;
     private final AuctionImageRepository auctionImageRepository;
     private final MemberRepository memberRepository;
@@ -47,27 +48,70 @@ public class AuctionServiceImpl implements AuctionService{
     private final QuartzSchedulerService schedulerService;
     private final S3Util s3Util;
 
-    //    public List<AuctionListDto> getAuctions(){
-//        log.info("getAuctions 시작");
-//        log.info("Active Auction 조회");
-//        List<Auction> auctions = auctionJpaRepository.findAllAuctions();
-//
-//        log.info("조회된 Auction을 AuctionListDto로 변환");
-//        List<AuctionListDto> results = new ArrayList<>();
-//        for (Auction auction : auctions){
-//            results.add(
-//                    AuctionListDto.builder()
-//                            .auctionId(auction.getId())
-//                            .title(auction.getTitle())
-//                            .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
-//                            .category(auction.getCategory().toString())
-//                            .build()
-//            );
-//        }
-//
-//        log.info("getAuctions 종료");
-//        return results;
-//    }
+    @Override
+    public List<AuctionListDto> getMyAuctions() {
+        log.info("getMyAuctions 시작");
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        log.info("사용자 정보 불러오기");
+        int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
+
+        log.info("Auction 전체 리스트 가져오기");
+        List<Auction> auctions = auctionJpaRepository.findAll();
+
+        log.info("내가 등록한 경매 리스트 가져오기");
+        List<AuctionListDto> result = new ArrayList<>();
+        for (Auction auction : auctions) {
+            if(auction.getMember().getId() == memberId){
+                result.add(AuctionListDto.builder()
+                        .auctionId(String.valueOf(auction.getId()))
+                        .title(auction.getTitle())
+                        .thumbnail(auction.getThumbnail())
+                        .secondBid(String.valueOf(auction.getSecondBid()))
+                        .person(auctionInfoMongoRepository.countByAuctionId(auction.getId()))
+                        .createdAt(auction.getCreatedAt())
+                        .finishedAt(auction.getFinishedAt())
+                        .build());
+            }
+
+        }
+
+        log.info("getMyAuctions 종료");
+        return result;
+    }
+
+    @Override
+    public List<AuctionListDto> getJoinAuctions(){
+        log.info("getJoinAuctions 시작");
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        log.info("사용자 정보 불러오기");
+        int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
+
+        log.info("Auction 전체 리스트 가져오기");
+        List<AuctionDocument> auctions = auctionElasticSearchRepository.findAllByOrderByCreatedAtDesc();
+
+        log.info("내가 참가한 경매 리스트 가져오기");
+        List<AuctionListDto> result = new ArrayList<>();
+        for (AuctionDocument auction : auctions) {
+            String auctionId = auction.getId();
+
+            AuctionInfo auctionInfo = auctionInfoMongoRepository.findByAuctionIdAndMemberId(Integer.parseInt(auctionId), memberId).orElse(null);
+            if (auctionInfo != null) {
+                result.add(AuctionListDto.builder()
+                        .auctionId(auctionId)
+                        .title(auction.getTitle())
+                        .thumbnail(auction.getThumbnail())
+                        .secondBid(auction.getSecondBid())
+                        .person(auctionInfoMongoRepository.countByAuctionId(Integer.parseInt(auctionId)))
+                        .createdAt(auction.getCreatedAt())
+                        .finishedAt(auction.getFinishedAt())
+                        .build());
+            }
+        }
+
+        return result;
+    }
 
     @Override
     public List<AuctionListDto> getAuctions(){
@@ -324,6 +368,7 @@ public class AuctionServiceImpl implements AuctionService{
         for(Member member : members){
             member.increasePoint(buyerDeposit);
             memberRepository.save(member);
+            biddingSMSService.sendParticipant(member);
         }
     }
 

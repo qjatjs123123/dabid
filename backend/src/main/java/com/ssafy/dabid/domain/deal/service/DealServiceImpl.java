@@ -6,6 +6,7 @@ import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
+import com.ssafy.dabid.domain.auction.service.BiddingSMSService;
 import com.ssafy.dabid.domain.deal.dto.request.ChatMessageRequestDto;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequestNo;
@@ -61,6 +62,7 @@ public class DealServiceImpl implements DealService {
     // 스케줄러 임의 실행 테스트 start
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionService auctionService;
+    private final BiddingSMSService biddingSMSService;
     // 스케줄러 임의 실행 테스트 end
 
     private static final String baseURL = "/edu/demandDeposit/";
@@ -442,6 +444,7 @@ public class DealServiceImpl implements DealService {
             createDeal(auctionId);
             // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
             //              -> 판매자에게 "니 거래로 넘어감!"
+            biddingSMSService.sendSellerAndBidder(auctionId);
             log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");
         }
 
