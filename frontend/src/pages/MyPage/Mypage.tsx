@@ -30,7 +30,7 @@ const Mypage: React.FC = () => {
             <li key={page}>
               <button
                 onClick={() => setLocalActivePage(page)}
-                className={`block text-black p-3 ${localActivePage === page ? 'bg-gray-200' : ''} hover:font-bold`}
+                className={`block text-black p-3 ${localActivePage === page ? 'bg-gray-200' : ' '} hover:font-bold`}
               >
                 {page}
               </button>

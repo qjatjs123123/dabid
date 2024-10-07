@@ -64,7 +64,7 @@ const UserDropdown = () => {
             <li>
               <Link to={`${PAGE_URL.MY_PAGE}`} className="flex items-center px-4 py-2 hover:bg-gray-100">
                 <img src={getImgUrl('navbar/nav-mypage.svg')} alt="마이페이지" className="max-h-5 w-5 mr-2" />
-                <p className="text-sm">마이페이지</p>
+                <p className="text-sm">마이 페이지</p>
               </Link>
             </li>
             <li>
