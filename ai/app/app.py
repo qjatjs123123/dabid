@@ -6,12 +6,13 @@ from chatbot import Chatbot
 from common import model
 from characters import system_role, instruction
 from memory_manager import MemoryManager
+from function_calling import FunctionCalling, func_specs
 
 app = Flask(__name__)
 CORS(app)
-# CORS(app, resources={'/chatbot': {'origins': ['http://j11a505.p.ssafy.io:5173', 'http://localhost:8000']}})
 
 bidme = Chatbot(model.basic, instruction)
+func_calling = FunctionCalling(model = model.basic)
 
 memoryManager = MemoryManager()
 
@@ -50,7 +51,13 @@ def reply():
     for item in context_list:
         context.append(json.loads(item))
 
-    response = bidme.send_request(context)
+    analyzed_dict = func_calling.analyze(content, func_specs)
+
+    if(analyzed_dict.get("function_call")):
+        response = func_calling.run(analyzed_dict, context)
+    else:
+        response = bidme.send_request(context)
+        
     bidme.handle_token_limit(response, context)
     bidme.clean_context(context)
     response_json = {"role" : response['choices'][0]['message']["role"], "content" : response['choices'][0]['message']["content"]}
