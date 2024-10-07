@@ -34,6 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuctionServiceImpl implements AuctionService{
     private final AuctionMapper auctionMapper;
+    private final BiddingSMSService biddingSMSService;
     @Value("${point.buy.deposit}")
     private int deposit;
 
@@ -360,6 +361,7 @@ public class AuctionServiceImpl implements AuctionService{
         for(Member member : members){
             member.increasePoint(buyerDeposit);
             memberRepository.save(member);
+            biddingSMSService.sendParticipant(member);
         }
     }
 
