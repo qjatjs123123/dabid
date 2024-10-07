@@ -16,14 +16,15 @@ func_calling = FunctionCalling(model = model.basic)
 
 memoryManager = MemoryManager()
 
-# 리액트 저장소에 email이 저장되어있다면 session을 사용할 필요는 없을 듯
+# TODO : 에러 처리 추가
 
-# post 방식
 @app.route("/chatbot/init", methods=['POST'])
 def init():
     # 프론트에서 로그인 성공 후 호출됨
     # 해당 user의 context를 초기화하고 system role을 추가한다
     user_id = request.json.get('email')
+    print(f"${user_id}의 대화 내역을 초기화합니다.")
+
     memoryManager.clear(user_id)
     memoryManager.add(user_id, json.dumps({"role": "system", "content": system_role}, ensure_ascii=False))
     return "OK"
@@ -32,6 +33,8 @@ def init():
 @app.route("/chatbot/list")
 def list():
     user_id = request.args.get('email')
+    print(f"${user_id}의 대화 내역을 조회합니다.")
+
     context_list = memoryManager.list(user_id)
     response = []
     for item in context_list[1:]:
@@ -45,6 +48,8 @@ def reply():
     # 대화 내용 갱신은 프론트에서 처리. 단 context에는 제대로 추가된다
     user_id = request.json['email']
     content = request.json['message']
+    print(f"${user_id}의 질문 ${content}에 대한 답변을 요청합니다.")
+
     memoryManager.add(user_id, json.dumps({"role" : "user", "content" : content}, ensure_ascii=False))
     context_list = memoryManager.list(user_id)
     context = []

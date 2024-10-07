@@ -1,34 +1,30 @@
 from common import client, model, makeup_response 
 
 topic_details = {
-    "다비드":"This is the site name. 다비드 applies an auction system to the buying and selling of used items, allowing buyers to secure desired items by paying slightly more even if they discover them later than others. Sellers can often sell at a higher price than expected. After a successful bid, 다비드 ensures a safe transaction through an escrow system using a virtual account to prevent fraud.",
+    "다비드":"이 사이트의 이름입니다. 다비드에서는 중고 제품 매매에 경매 시스템을 적용하여, 구매자는 원하던 중고 제품을 남들보다 늦게 발견하더라도 돈만 더 내면 물건을 얻을 수 있으며, 판매자는 중고 제품을 기대하던 가격보다 더 비싸게 팔 수 있습니다. 또한 다비드는 낙찰 후 '가상 계좌를 통한 에스크로 방식 거래'를 통해 사기를 방지하고 안전한 거래를 보장합니다.",
     "비딩":
 """
-This auction method, used by 다비드, is also called a 'Vickrey Auction'.
-Only the second-highest bid amount is displayed rather than the current highest bid amount, and bidders attempt to bid without knowing the highest.
-Bids only register if they exceed the current highest bid, updating the highest and second-highest bids.
-If the bid is below the highest bid, it is canceled. When the auction ends, the top bidder purchases at the second-highest bid price.
-Through bidding, sellers can encourage competition, and buyers may purchase at prices below their target amount.
+다비드에서 채택한 경매 방식입니다. '비크리 경매'라고도 부르는 이 방식에서는 경매에서 현재 최고가가 아닌 두 번째로 높은 입찰가만 공개되고, 입찰자는 최고가를 알지 못한 채 입찰을 시도하게 됩니다. 입찰 금액이 최고가보다 높을 경우에만 입찰이 인정되고 최고가와 두 번째 입찰가가 갱신됩니다. 입찰 금액이 최고가보다 낮으면 입찰 자체가 취소됩니다. 경매가 종료되면, 최고가를 제시한 입찰자가 두 번째 입찰 금액을  지불하게 됩니다. 비딩을 통해 판매자는 구매자들의 경쟁을 유도할 수 있고 구매자는 물건을 목표 금액보다 저렴하게 구매할 수 있습니다.
 """,
-    "에스크로":"다비드 uses an escrow system where a neutral third party (다비드) mediates between the seller and buyer. Buyers deposit payment into 다비드’s virtual account rather than sending it directly to the seller.",
-    "포인트":"다비드 uses points as a deposit for auction registration and participation to prevent misuse by buyers and sellers. To join or register an auction, users must charge their account with points via 'My Page' after verifying their account with a 1 KRW deposit. Unused points are refundable.",
-    "회원정보":"Users can view their membership information on '마이페이지'. For security, 다비드 restricts changes to membership details after sign-up to prevent impersonation.",
-    "경매등록":"Sellers can register an auction by depositing 5,000 points. When registering, sellers describe the product, upload images, and set an auction period. Detailed descriptions and images can increase buyer interest. When the auction ends, the seller receives a notification and the deposit back. Sellers can cancel an auction midway, though they will not be refunded the deposit",
-    "경매참여":"Buyers interested in bidding must pay a deposit of 30% of the starting bid in points. They may then bid multiple times without additional points. Participants can check if they are the highest bidder. Non-highest bidders can exit the auction at any time and receive their points back. If an auction is canceled, all participants are notified and refunded. If successful, the highest bidder becomes the winning bidder and proceeds with the transaction with the seller. The winning bidder is refunded their points after the transaction is complete.",
-    "거래":"Sellers and buyers proceed via 다비드’s transaction page, where they can view updates and message each other. The winning bidder must deposit the final bid amount into 다비드’s virtual account within two days of the auction ending. Sellers confirm the deposit and ship the item, registering the tracking number. This allows buyers to track the shipment. After confirming receipt, buyers check the item condition and click '인수확인'. If no issues arise, the transaction is completed successfully.",
-    "은행":"다비드 provides a 1 million KRW test account to support cash-strapped job seekers. Test accounts are automatically issued upon registration and are managed through '다비드뱅크', the virtual bank within 다비드.",
-    "고객센터":"Some issues may arise during the auction or transaction that require assistance beyond the system’s capabilities. Customer support can be contacted for prompt resolution. For privacy, users can only view inquiries they have submitted.",
-    "개발자":
+    "에스크로":"다비드에서 채택한 거래 방식입니다. 판매자와 구매자 사이에서 신뢰할 수 있는 중립적인 제삼자, 즉 다비드가 거래를 중개합니다. 구매자는 금액을 판매자가 아닌 다비드의 거래용 가상 계좌로 입금합니다.",
+    "포인트":"다비드에서 포인트는 경매 등록과 참여에 대한 보증금으로 활용됩니다. 보증금을 적용하여 판매자와 구매자의 악의적인 행동을 예방할 수 있습니다. 경매 참여나 등록을 위해서는 다비드의 마이페이지에서 1원 인증으로 등록한 내 계좌로 포인트를 충전해서 사용해야 합니다. 사용하지 않는 포인트를 계좌로 환급받을 수 있습니다.",
+    "회원정보":"유저 본인의 회원 정보는 '마이페이지'에서 확인할 수 있습니다. 사칭 방지를 위해 다비드에서는 회원가입 이후에는 회원 정보의 수정을 제한했습니다.",
+    "경매등록":"판매자는 보증금으로 5000 포인트를 지불하고 경매를 등록할 수 있습니다. 경매를 등록할 때는 제품에 대한 설명을 작성하고 이미지를 첨부한 뒤 경매 기간을 설정해야 합니다. 설명과 이미지가 자세할수록 구매자들의 경매 참여율이 높아질 것입니다. 경매 기간이 만료되면 판매자는 종료 알림을 받고 포인트를 돌려 받습니다. 판매자는 경매 진행 도중에도 경매를 중단할 수 있습니다. 이 경우 포인트를 돌려 받지 못합니다.",
+    "경매참여":"물품 구매를 희망하는 유저는 해당 물품 경매의 시작 입찰가의 30%를 포인트로 지불하고 경매에 참여할 수 있습니다. 참여 후에는 포인트 추가 지불 없이 얼마든지 입찰을 시도할 수 있습니다. 참가자는 경매에서 자신이 최고가 입찰자인지 확인할 수 있습니다. 최고가 입찰자를 제외한 모든 참가자는 경매를 도중에 포기하고 포인트를 돌려받을 수 있습니다. 경매가 도중에 취소되면 모든 참가자가 알림을 받고 포인트를 돌려 받습니다. 경매가 성공적으로 종료되면 최고가 입찰자가 낙찰자가 되어 판매자와 거래를 진행하게 됩니다. 낙찰자는 거래를 정상적으로 마친 후에 포인트를 돌려 받을 수 있습니다.",
+    "거래":"판매자와 구매자는 다비드의 거래 페이지에서 거래를 진행하게 됩니다. 둘은 거래 진행 상황을 실시간으로 확인하고 채팅을 주고 받을 수 있습니다. 낙찰에 성공한 구매자는 경매 종료 후 이틀 이내에 다비드의 가상 계좌에 낙찰액을 입금해야 합니다. 판매자는 가상계좌에 돈이 입금된 사실을 확인한 뒤 택배를 배송하고, 배송한 택배의 송장번호를 등록해야 합니다. 송장 번호를 등록하면 구매자는 택배 배송 상황을 확인할 수 있습니다. 택배가 도착한 사실을 확인하면 구매자는 물품의 상태를 확인하고 '인수하기' 버튼을 누릅니다. 이 일련의 절차가 문제 없이 진행되면 거래가 성공적으로 종료됩니다.",
+    "은행과 계좌":"가난한 취업 준비생들의 서비스 이용을 위해 다비드에서는 100만원이 입금된 테스트용 계좌를 제공하고 있습니다. 테스트 계좌는 회원 가입 시 자동으로 발급되며, 다비드 내부의 가상 은행 '다비드뱅크'에서 계좌를 관리할 수 있습니다.",
+    "고객센터":"경매나 거래 중 시스템적으로 해결하지 못하는 문제가 발생할 수 있습니다. 고객센터에서 문의를 작성하면 빠른 시일 내에 적절한 조치를 받을 수 있습니다. 개인 정보 유출 우려가 있으므로 유저는 자신이 작성한 문의만 확인할 수 있습니다.",
+    "사람":
 """
-다비드 and 비드미 were developed by six programmers in their 20s, described here by name and characteristics:
-유우준 (Diligent; resembles 조원상, the lead vocalist of the band "LUCY"),
-조성욱 (Smart; skilled developer),
-이민정 (Intimidating),
-홍범선 (Reliable),
-장윤주 (Talented),
-황태건 (Useless)
+다비드와 비드미를 개발한 6명의 20대 프로그래머들입니다. 비드미는 나머지 사람들에 대해서는 알지 못합니다.
+유우준(부지런함, 밴드 "LUCY"의 메인 보컬 "조원상"을 닮음)
+조성욱(똑똑함, 개발을 잘함) 
+이민정(무서움)
+홍범선(든든함)
+장윤주(재능있음)
+황태건(쓸모없음)
 """
-    }
+}
 def get_details(topic):
     return topic_details.get(topic)
 
@@ -56,14 +52,14 @@ def get_details_enter_auction():
 def get_details_deal():
     return get_details("거래")
 
-def get_details_bank():
-    return get_details("은행")
+def get_details_bank_account():
+    return get_details("은행과 계좌")
 
 def get_details_cs():
     return get_details("고객센터")
 
-def get_details_dev():
-    return get_details("개발자")
+def get_details_person():
+    return get_details("사람")
 
 func_specs = [
         {
@@ -75,28 +71,28 @@ func_specs = [
         },
         {
             "name": "get_details_bidding",
-            "description": "다비드의 비딩 시스템에 대한 정보 제공",
+            "description": "비딩에 대한 정보 제공",
             "parameters": {
                 "type": "void"
             },
         },
         {
             "name": "get_details_escrow",
-            "description": "다비드의 에스크로 거래 시스템에 대한 정보 제공",
+            "description": "에스크로 거래에 대한 정보 제공",
             "parameters": {
                 "type": "void"
             },
         },
         {
             "name": "get_details_point",
-            "description": "다비드에서 사용하는 포인트에 대한 정보 제공",
+            "description": "포인트에 대한 정보 제공",
             "parameters": {
                 "type": "void"
             },
         },
         {
             "name": "get_details_user_info",
-            "description": "다비드의 회원 정책에 대한 정보 제공",
+            "description": "회원 정책에 대한 정보 제공",
             "parameters": {
                 "type": "void"
             },
@@ -123,8 +119,8 @@ func_specs = [
             },
         },
         {
-            "name": "get_details_bank",
-            "description": "다비드의 은행 '다비드뱅크'에 대한 정보 제공",
+            "name": "get_details_bank_account",
+            "description": "다비드의 은행 '다비드뱅크'와 다비드에서 제공하는 '테스트 계좌'에 대한 정보 제공",
             "parameters": {
                 "type": "void"
             },
@@ -137,8 +133,8 @@ func_specs = [
             },
         },
         {
-            "name": "get_details_dev",
-            "description": "다비드 사이트를 만든 개발자들에 대한 정보 제공",
+            "name": "get_details_person",
+            "description": "비드미가 아는 사람들에 대한 정보 제공",
             "parameters": {
                 "type": "void"
             },
@@ -158,9 +154,9 @@ class FunctionCalling:
             "get_details_apply_auction" : get_details_apply_auction,
             "get_details_enter_auction" : get_details_enter_auction,
             "get_details_deal" : get_details_deal,
-            "get_details_bank" : get_details_bank,
+            "get_details_bank_account" : get_details_bank_account,
             "get_details_cs" : get_details_cs,
-            "get_details_dev" : get_details_dev,
+            "get_details_person" : get_details_person,
         }
         self.model = model
 
