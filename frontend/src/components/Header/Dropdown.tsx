@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
 import { formatNumberWithCommas } from '../../util/moneyComma';
 import { loginState } from '../../stores/recoilStores/Member/loginState';
 import { PAGE_URL } from '../../util/Constants';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getImgUrl } from '../../util/Functions';
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useRecoilValue<UserInfo | null>(userState);
   const [, setToken] = useRecoilState(loginState);
+
+  const location = useLocation();
+
+  // 페이지가 변경될 때마다 토글 메뉴 닫기
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
