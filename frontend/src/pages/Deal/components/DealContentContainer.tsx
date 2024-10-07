@@ -22,7 +22,7 @@ const DealContentContainer = () => {
 
   useEffect(() => {
     if (curDealId === -1 && dealContentList) {
-      console.log(curDealId, dealContentList, dealContentList.pages.length);
+      // console.log(curDealId, dealContentList, dealContentList.pages.length);
       if (!IsExistContent()) return;
 
       const firstId = dealContentList.pages[0]?.content[0]?.id ?? -1;

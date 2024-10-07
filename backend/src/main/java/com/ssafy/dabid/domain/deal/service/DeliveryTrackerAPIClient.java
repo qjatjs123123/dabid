@@ -2,6 +2,7 @@ package com.ssafy.dabid.domain.deal.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
+import com.ssafy.dabid.domain.deal.dto.request.CourierRequestNo;
 import com.ssafy.dabid.domain.deal.entity.CarrierId;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
@@ -21,7 +22,7 @@ public class DeliveryTrackerAPIClient {
     private final WebClient webClient;
     private static final String baseURL = "https://apis.tracker.delivery/graphql";
 
-    public String trackPackage(CourierRequest courierRequest) {
+    public String trackPackage(CourierRequestNo courierRequest) {
         // GraphQL 쿼리 정의
         String query = "query Track($carrierId: ID!, $trackingNumber: String!) { " +
                 "track(carrierId: $carrierId, trackingNumber: $trackingNumber) { " +
@@ -29,7 +30,7 @@ public class DeliveryTrackerAPIClient {
 
         // 변수 설정
         Map<String, Object> variables = new HashMap<>();
-        variables.put("carrierId", courierRequest.getCarrierId().getCarrierId());
+        variables.put("carrierId", courierRequest.getCarrierId());
         variables.put("trackingNumber", courierRequest.getTrackingNumber());
 
         // 요청 바디 구성

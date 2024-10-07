@@ -51,6 +51,7 @@ public class DealController {
     @PostMapping("/courier/{deal-id}")
     public Status insertCourier(@PathVariable("deal-id") int dealId,
                                 @RequestBody @Valid CourierRequest courierRequest) {
+        System.out.println("zzzzzz");
         return dealService.findDeliveryStatus(courierRequest, dealId);
     }
 

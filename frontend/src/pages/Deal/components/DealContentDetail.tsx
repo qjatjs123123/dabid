@@ -11,7 +11,6 @@ import DealAccount from './DealAccount';
 
 import TransferModal from './TransferModal';
 
-
 const DealContentDetail = () => {
   const { dealContentDetail: deal, showSkeleton } = useDealContentDetail();
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
@@ -39,10 +38,7 @@ const DealContentDetail = () => {
               <DealContentUserProfile />
             </div>
             <div className="flex-1 flex justify-end">
-              <div className="w-[180px]">
-                {/* 송금하기 버튼 클릭 시 모달 열기 */}
-                <DealButton onClick={openModal} />
-              </div>
+              <div className="w-[180px]">{!deal.seller ? <DealButton onClick={openModal} /> : <></>}</div>
             </div>
           </div>
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
@@ -54,8 +50,9 @@ const DealContentDetail = () => {
           <div className="mb-[8px] text-[17px] leading-tight">{deal.detail}</div>
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[35px] mb-[35px]"></div>
 
-          <DeliveryStatusSearch />
-          <DealAccount />
+          <DeliveryStatusSearch IsSeller={deal.seller} />
+          {deal.seller ? <DealAccount /> : <></>}
+
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[45px] mb-[45px]"></div>
           <DealStatus />
           <div className="mb-[100px]"></div>

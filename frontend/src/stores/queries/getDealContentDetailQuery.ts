@@ -12,6 +12,9 @@ interface DealContent {
   status: string;
   isTimerVisible: boolean;
   account: string;
+  carrierId: string | null;
+  trackingNumber: string | null;
+  seller: boolean
 }
 
 export function getDealContentDetailQuery(dealId: number) {
@@ -24,5 +27,6 @@ export function getDealContentDetailQuery(dealId: number) {
       return response.data; // 응답 데이터 반환
     },
     enabled: dealId !== -1, // dealId가 -1이 아닐 때만 쿼리 활성화
+    staleTime: 1000,
   });
 }
