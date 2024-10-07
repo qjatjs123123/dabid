@@ -275,6 +275,9 @@ public class AuctionServiceImpl implements AuctionService{
 
         member.decreasePoint(deposit);
 
+        if(dto.getImages() == null)
+            throw new IllegalStateException("이미지가 존재하지 않습니다.");
+
         log.info("S3 이미지 가져오기");
         List<String> imageList = s3Util.uploadFiles(dto.getImages());
 
