@@ -6,13 +6,9 @@ const DealAccount = () => {
   const curDealId = useRecoilValue(curDealIdState);
   const { data, refetch, isStale } = getDealSellerAccountQuery(curDealId);
 
-  console.log(data);
-
   const handleRefresh = () => {
     if (isStale) {
-      refetch(); // 데이터가 stale 상태일 때만 refetch 호출
-    } else {
-      console.log('캐시된 데이터 사용:', data);
+      refetch();
     }
   };
 
