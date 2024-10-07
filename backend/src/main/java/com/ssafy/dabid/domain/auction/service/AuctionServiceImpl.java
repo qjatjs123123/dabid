@@ -53,10 +53,13 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("getMyAuctions 시작");
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        log.info("사용자 정보 불러오기");
         int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
 
+        log.info("Auction 전체 리스트 가져오기");
         List<Auction> auctions = auctionJpaRepository.findAll();
 
+        log.info("내가 등록한 경매 리스트 가져오기");
         List<AuctionListDto> result = new ArrayList<>();
         for (Auction auction : auctions) {
             if(auction.getMember().getId() == memberId){
@@ -73,6 +76,7 @@ public class AuctionServiceImpl implements AuctionService{
 
         }
 
+        log.info("getMyAuctions 종료");
         return result;
     }
 
@@ -81,10 +85,13 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("getJoinAuctions 시작");
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        log.info("사용자 정보 불러오기");
         int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
 
+        log.info("Auction 전체 리스트 가져오기");
         List<AuctionDocument> auctions = auctionElasticSearchRepository.findAllByOrderByCreatedAtDesc();
 
+        log.info("내가 참가한 경매 리스트 가져오기");
         List<AuctionListDto> result = new ArrayList<>();
         for (AuctionDocument auction : auctions) {
             String auctionId = auction.getId();
