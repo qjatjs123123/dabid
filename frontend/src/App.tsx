@@ -7,7 +7,7 @@ import Deal from './pages/Deal/Deal';
 import LoginModal from './pages/Login/LoginModal';
 import Mypage from './pages/MyPage/Mypage';
 import FloatingActionButtons from './components/Floating/FloatingButtons';
-import SignUp from './pages/Signup/SignUp';
+import SignUp from './pages/SignUp/SignUp';
 import { init } from './api/ChatbotAPI';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState';
@@ -37,7 +37,7 @@ function App() {
 
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
-        <Route path={`${PAGE_URL.SIGN_UP}`} element={<Signup />} />
+        <Route path={`${PAGE_URL.SIGN_UP}`} element={<SignUp />} />
         <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
 
         <Route element={<PrivateRoute setModalOpen={setModalOpen} />}>
