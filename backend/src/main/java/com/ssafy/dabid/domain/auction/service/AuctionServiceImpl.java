@@ -57,7 +57,7 @@ public class AuctionServiceImpl implements AuctionService{
         int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
 
         log.info("Auction 전체 리스트 가져오기");
-        List<Auction> auctions = auctionJpaRepository.findAll();
+        List<Auction> auctions = auctionJpaRepository.findAllAuctions();
 
         log.info("내가 등록한 경매 리스트 가져오기");
         List<AuctionListDto> result = new ArrayList<>();
@@ -66,7 +66,7 @@ public class AuctionServiceImpl implements AuctionService{
                 result.add(AuctionListDto.builder()
                         .auctionId(String.valueOf(auction.getId()))
                         .title(auction.getTitle())
-                        .thumbnail(auction.getThumbnail())
+                        .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
                         .secondBid(String.valueOf(auction.getSecondBid()))
                         .person(auctionInfoMongoRepository.countByAuctionId(auction.getId()))
                         .createdAt(auction.getCreatedAt())
@@ -101,7 +101,7 @@ public class AuctionServiceImpl implements AuctionService{
                 result.add(AuctionListDto.builder()
                         .auctionId(auctionId)
                         .title(auction.getTitle())
-                        .thumbnail(auction.getThumbnail())
+                        .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
                         .secondBid(auction.getSecondBid())
                         .person(auctionInfoMongoRepository.countByAuctionId(Integer.parseInt(auctionId)))
                         .createdAt(auction.getCreatedAt())
