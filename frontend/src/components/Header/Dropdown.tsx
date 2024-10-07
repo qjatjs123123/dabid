@@ -68,6 +68,12 @@ const UserDropdown = () => {
               </Link>
             </li>
             <li>
+              <Link to={`${PAGE_URL.DEAL}`} className="flex items-center px-4 py-2 hover:bg-gray-100">
+                <img src={getImgUrl('navbar/nav-deal.svg')} alt="경매 등록" className="max-h-5 w-5 mr-2" />
+                <p className="text-sm">내 거래</p>
+              </Link>
+            </li>
+            <li>
               <Link to={`${PAGE_URL.AUCTION_INPUT}`} className="flex items-center px-4 py-2 hover:bg-gray-100">
                 <img src={getImgUrl('navbar/nav-create.svg')} alt="경매 등록" className="max-h-5 w-5 mr-2" />
                 <p className="text-sm">경매 등록하기</p>

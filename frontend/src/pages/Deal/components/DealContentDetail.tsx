@@ -47,7 +47,12 @@ const DealContentDetail = () => {
 
   return (
     <div className="flex-3 max-h-[calc(100vh-150px)] overflow-y-auto w-full scroll-hide scroll-hide">
-      <div className="w-full h-[80px]"></div>
+      <div className="w-full h-[80px] flex justify-end">
+        <div className="relative">
+          <i className="fa fa-ban text-[25px] cursor-pointer mt-[30px] mr-[30px]"></i>
+          <p className="arrow_box1 ">신고</p>
+        </div>
+      </div>
       <div className="h-[calc(100%-80px)] px-[90px]">
         <div>
           <img
@@ -66,7 +71,7 @@ const DealContentDetail = () => {
           </div>
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
           <div className="text-[30px] font-[600] mb-[4px] leading-tight ">{deal.title}</div>
-          <DealContentTimer dealQuery={deal} fontSize="11px" />
+          <DealContentTimer dealQuery={deal} fontSize="16px" />
           {/* <div className="mb-[4px] text-[16px] text-[#868e96] font-[400]">12시간 06분 전</div> */}
           <div className="mb-[25px]">
             <span className="font-[800] text-[19px]">{formatNumberWithCommas(deal.winning_bid)} 원</span>
