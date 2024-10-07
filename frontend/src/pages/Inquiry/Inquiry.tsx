@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import InquiryList from './InquiryList';
 import InquiryInput from './InquiryInput';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
@@ -8,7 +8,7 @@ import { INQUIRY_API_URL } from '../../util/Constants';
 
 const Inquiry = () => {
   const [activePage, setActivePage] = useState<string>('문의 목록');
-  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
+  const [userInfo] = useRecoilState<UserInfo | null>(userState);
 
   const renderContent = () => {
     switch (activePage) {

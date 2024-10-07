@@ -1,5 +1,5 @@
 // src/components/FloatingActionButtons.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { loginState } from '../../stores/recoilStores/Member/loginState';
 import { getImgUrl } from '../../util/Functions';

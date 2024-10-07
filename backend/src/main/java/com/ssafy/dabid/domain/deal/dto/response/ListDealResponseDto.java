@@ -18,4 +18,5 @@ public class ListDealResponseDto {
     private int winning_bid;
     private String status;
     private boolean isTimerVisible;
+    private LocalDateTime created_at;
 }

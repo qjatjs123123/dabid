@@ -267,6 +267,7 @@ public class DealServiceImpl implements DealService {
                     .winning_bid(deal.getWinning_bid())
                     .status(sta)
                     .isTimerVisible(isTimerVisible)  // 타이머 표시 여부 전달
+                    .created_at(deal.getCreatedAt())
                     .build();
 
             result.add(dto);
@@ -316,6 +317,7 @@ public class DealServiceImpl implements DealService {
                     .winning_bid(deal.getWinning_bid())
                     .status(sta)
                     .isTimerVisible(isTimerVisible)  // 타이머 표시 여부 전달
+                    .created_at(deal.getCreatedAt())
                     .build();
 
             result.add(dto);
@@ -373,6 +375,7 @@ public class DealServiceImpl implements DealService {
                 .isSeller(member.getId() == deal.getSeller().getId())
                 .winning_bid(deal.getWinning_bid())// Seller 여부 설정
                 .account(deal.getAccount())
+                .created_at(deal.getCreatedAt())
                 .build();
         System.out.println(dto.toString());
         return dto;

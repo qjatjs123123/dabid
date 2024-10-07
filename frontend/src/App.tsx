@@ -4,11 +4,10 @@ import { MEMBER_API_URL, PAGE_URL } from './util/Constants';
 import PrivateRoute from './util/PrivateRoute';
 import About from './pages/About';
 import Deal from './pages/Deal/Deal';
-import Auction from './pages/Auction/Auction';
 import LoginModal from './pages/Login/LoginModal';
 import Mypage from './pages/MyPage/Mypage';
 import FloatingActionButtons from './components/Floating/FloatingButtons';
-import Signup from './pages/Signup/Signup';
+import SignUp from './pages/Signup/SignUp';
 import { init } from './api/ChatbotAPI';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState';
@@ -22,7 +21,7 @@ import axios from './api/axiosConfig';
 
 function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
-  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
+  const [, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const navigate = useNavigate();
 
   const handleLoginSuccess = async () => {
@@ -40,7 +39,7 @@ function App() {
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
         <Route path={`${PAGE_URL.HELP}`} element={<Inquiry />} />
-        <Route path={`${PAGE_URL.SIGN_UP}`} element={<Signup />} />
+        <Route path={`${PAGE_URL.SIGN_UP}`} element={<SignUp />} />
 
         <Route element={<PrivateRoute />}>
           <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />

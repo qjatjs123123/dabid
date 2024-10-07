@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
 import { formatNumberWithCommas } from '../../util/moneyComma';
@@ -10,7 +10,7 @@ import { getImgUrl } from '../../util/Functions';
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useRecoilValue<UserInfo | null>(userState);
-  const [token, setToken] = useRecoilState(loginState);
+  const [, setToken] = useRecoilState(loginState);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);

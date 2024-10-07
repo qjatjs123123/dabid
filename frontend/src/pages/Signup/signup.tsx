@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  signup,
-  login,
-  randomNickname,
-  phoneNumberAuth,
-  phoneNumberCheck,
-  checkDuplication,
-} from '../../api/MemberAPI'; // API 호출 import
+import { login, randomNickname, phoneNumberAuth, phoneNumberCheck, checkDuplication } from '../../api/MemberAPI'; // API 호출 import
 import { MEMBER_API_URL, PAGE_URL } from '../../util/Constants';
 import { useRecoilState } from 'recoil';
 import { loginState } from '../../stores/recoilStores/Member/loginState';
 import axios from 'axios';
 
-const Signup: React.FC = () => {
+const SignUp: React.FC = () => {
   const [_, setToken] = useRecoilState(loginState); // 컴포넌트 최상위에서 호출
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState<File | null>(null);
@@ -481,4 +474,4 @@ const Signup: React.FC = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

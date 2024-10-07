@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import chatIcon from '../../assets/chat/chatIcon.svg';
 import sendChat from '../../assets/chat/sendChat.svg';
 import profile from '../../assets/chat/img.jpg';
@@ -26,13 +26,13 @@ const Chat = () => {
   const [userInfo] = useRecoilState<UserInfo | null>(userState);
 
   const dealId = useRecoilValue(curDealIdState); // 현재 거래 ID
-  const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+  // const token = localStorage.getItem('accessToken'); // 토큰 가져오기
   const email = userInfo?.email; // 로그인한 사용자 이메일
   // const email = localStorage.getItem('email'); // 로그인한 사용자 이메일
   // const email = 'ssafy7@gmail.com';
 
   // 웹소켓 훅을 사용해 메시지를 수신하고 전송
-  const { sendMessage, disconnect } = useWebSocket(dealId, (newMessage: Message) => {
+  const { sendMessage } = useWebSocket(dealId, (newMessage: Message) => {
     setMessages((prevMessages) => [...prevMessages, newMessage]); // 새 메시지를 수신하면 추가
   });
 

@@ -7,7 +7,6 @@ import { useRecoilState } from 'recoil';
 import { modalState } from '../../stores/recoilStores/Member/modalState';
 import { loginState } from '../../stores/recoilStores/Member/loginState';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
-import { formatNumberWithCommas } from '../../util/moneyComma';
 import './Header.css';
 import UserDropdown from './Dropdown';
 
@@ -17,7 +16,7 @@ const NavBar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [_, setModalOpen] = useRecoilState(modalState);
   const [token, setToken] = useRecoilState(loginState);
-
+  console.log(userInfo);
   useEffect(() => {
     const storedAccessToken = localStorage.getItem('accessToken');
     if (storedAccessToken) {

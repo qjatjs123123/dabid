@@ -10,11 +10,12 @@ interface DealContent {
   image: string;
   winning_bid: number;
   status: string;
-  isTimerVisible: boolean;
+  timerVisible: boolean;
   account: string;
   carrierId: string | null;
   trackingNumber: string | null;
-  seller: boolean
+  seller: boolean;
+  created_at: [number, number, number, number, number, number, number]; 
 }
 
 export function getDealContentDetailQuery(dealId: number) {

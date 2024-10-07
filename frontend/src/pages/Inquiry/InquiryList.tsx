@@ -3,7 +3,7 @@
 // 관리자는 출력 버튼이 따로 있게 할 건지...
 // 일반 유저: 본인 문의 목록 페이지, 문의 생성 페이지 / 관리자: 고객센터 클릭 시 문의 파일 출력
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '../../api/axiosConfig';
 import { INQUIRY_API_URL } from '../../util/Constants';
 

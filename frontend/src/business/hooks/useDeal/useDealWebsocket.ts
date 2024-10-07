@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from 'react';
-import SockJS from 'sockjs-client';
 import Stomp, { Client } from 'stompjs';
 
 const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
@@ -17,7 +16,7 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
   //     });
   //   });
   // };
-  const [isConnected, setIsConnected] = useState(false);
+  const [, setIsConnected] = useState(false);
   const reconnectInterval = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttempts = useRef(0);
   const maxReconnectAttempts = 5; // 재연결 시도 횟수 제한

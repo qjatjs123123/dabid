@@ -22,13 +22,13 @@ const usePostCourierInfo = (curDealId: number, deliveryNumber: string, carrierId
             });
             return { previousData };
         },
-        onError: (err, variables, context) => {
+        onError: (_err, _variables, context) => {
             if (context?.previousData) {
                 queryClient.setQueryData([`dealContentDetailKey_${curDealId}`], context.previousData);
             }
             queryClient.invalidateQueries({ queryKey: [`dealContentDetailKey_${curDealId}`] });
         },
-        onSettled: (data, error, variables, context) => {
+        onSettled: (_data, _error, _variables, _context) => {
             queryClient.invalidateQueries({ queryKey: [`dealContentDetailKey_${curDealId}`] });
         },
     });

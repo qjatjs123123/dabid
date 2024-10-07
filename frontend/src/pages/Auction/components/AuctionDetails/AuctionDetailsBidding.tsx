@@ -43,7 +43,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
   const [timeRemaining, setTimeRemaining] = useState<string>('--시간 --분 --초');
 
   const calculateTimeRemaining = (finishedAt: number[]) => {
-    const [year, month, day, hour, minute, second, millisecond] = finishedAt;
+    const [year, month, day, hour, minute, second] = finishedAt;
     // console.log('불러온 경매 마감일: ' + finishedAt);
     const endDate = new Date(year, month - 1, day, hour, minute, second, 0);
     // console.log('불러온 경매 마감일 변환 결과: ' + endDate);
