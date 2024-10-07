@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import chatIcon from '../../assets/chat/chatIcon.svg';
 import sendChat from '../../assets/chat/sendChat.svg';
 import profile from '../../assets/chat/img.jpg';
@@ -26,11 +26,11 @@ const Chat = () => {
   const [userInfo] = useRecoilState<UserInfo | null>(userState);
 
   const dealId = useRecoilValue(curDealIdState); // 현재 거래 ID
-  // const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+  const token = localStorage.getItem('accessToken'); // 토큰 가져오기
   const email = userInfo?.email; // 로그인한 사용자 이메일
 
   // 웹소켓 훅을 사용해 메시지를 수신하고 전송
-  const { sendMessage } = useWebSocket(dealId, (newMessage: Message) => {
+  const { sendMessage, disconnect } = useWebSocket(dealId, (newMessage: Message) => {
     setMessages((prevMessages) => [...prevMessages, newMessage]); // 새 메시지를 수신하면 추가
   });
 
@@ -97,11 +97,9 @@ const Chat = () => {
                   {/* 프로필 사진과 시간 추가 */}
                   {message.email !== email ? (
                     <div className="flex items-center space-x-1">
-                      {/* <img src={profile} alt="Profile" className="w-6 h-6 rounded-full" /> */}
                       <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" />
                       <div className="text-[8px] text-gray-500 font-semibold">
                         {message.nickname} &nbsp;
-                        {/* 무시무시한 감자 &nbsp; */}
                         {moment(message.createdAt).format('HH:mm')}
                       </div>
                     </div>
