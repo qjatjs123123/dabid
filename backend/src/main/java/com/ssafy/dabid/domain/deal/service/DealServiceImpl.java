@@ -70,10 +70,11 @@ public class DealServiceImpl implements DealService {
         String carrierId = String.valueOf(courierRequest.getCarrierId()); // Enum에서 carrierId 값을 가져옵니다.
         String modifiedCarrierId = carrierId.toLowerCase().replace("_", ".");
         CourierRequestNo cn = new CourierRequestNo(modifiedCarrierId, courierRequest.getTrackingNumber());
+        log.info(carrierId + " " + modifiedCarrierId);
         String status = deliveryTrackerAPIClient.trackPackage(cn);
-
+        log.info(status);
         Status newStatus = null;
-        System.out.println(status);
+
         if (status.isEmpty()) return Status.ERROR;
 
         if (status.equals(Status.DELIVERED)) newStatus = Status.DELIVERED;
