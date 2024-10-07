@@ -1,11 +1,19 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { PAGE_URL } from './Constants';
 
-const PrivateRoute = () => {
+interface PrivateRouteProps {
+  setModalOpen: (isOpen: boolean) => void;
+}
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ setModalOpen }) => {
   const isAuthenticated =
     localStorage.getItem('accessToken') !== null && localStorage.getItem('accessToken') !== undefined;
 
-  return isAuthenticated ? <Outlet /> : <Navigate to={`${PAGE_URL.MY_PAGE}`} replace />;
+  if (!isAuthenticated) {
+    setModalOpen(true);
+  }
+
+  return isAuthenticated ? <Outlet /> : <Navigate to={`${PAGE_URL.HOME}`} replace />;
 };
 
 export default PrivateRoute;

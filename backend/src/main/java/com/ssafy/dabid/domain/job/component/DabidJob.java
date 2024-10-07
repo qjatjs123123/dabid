@@ -5,6 +5,7 @@ import com.ssafy.dabid.domain.auction.entity.AuctionDocument;
 import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
+import com.ssafy.dabid.domain.auction.service.BiddingSMSService;
 import com.ssafy.dabid.domain.deal.service.DealService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class DabidJob implements Job {
     private final AuctionElasticSearchRepository auctionElasticSearchRepository;
     private final AuctionService auctionService;
     private final DealService dealService;
+    private final BiddingSMSService biddingSMSService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -53,6 +55,8 @@ public class DabidJob implements Job {
             dealService.createDeal(auctionId);
             // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
             //              -> 판매자에게 "니 거래로 넘어감!"
+            biddingSMSService.sendSellerAndBidder(auctionId);
+
             log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");
         }
 

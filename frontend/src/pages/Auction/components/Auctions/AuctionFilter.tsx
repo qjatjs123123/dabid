@@ -11,13 +11,11 @@ const AuctionFilter: React.FC<AuctionFilterProps> = ({ setAuctionList }) => {
   const navigate = useNavigate();
 
   const handleSearch = async () => {
-    // if (!searchTerm) return; // 검색어가 비어있으면 요청하지 않음
-
     const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
 
     try {
       // SearchAuctionTitle DTO 형식으로 요청 본문을 구성
-      const requestBody = JSON.stringify({ title: searchTerm });
+      const requestBody = JSON.stringify({ title: searchTerm }); // 빈 문자열로도 요청 가능
 
       const response = await fetch('https://j11a505.p.ssafy.io/api/auctions/title', {
         method: 'POST',
@@ -39,6 +37,13 @@ const AuctionFilter: React.FC<AuctionFilterProps> = ({ setAuctionList }) => {
     }
   };
 
+  // Enter 키 눌림 처리
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch(); // Enter 키가 눌리면 검색 수행
+    }
+  };
+
   return (
     <div className="filter-container w-1/6 p-4 fixed h-auto border border-gray-300 bg-white shadow-md">
       <h2 className="text-lg font-bold mb-4">검색 필터</h2>
@@ -48,6 +53,7 @@ const AuctionFilter: React.FC<AuctionFilterProps> = ({ setAuctionList }) => {
         className="w-full mb-2 p-2 border border-gray-300 rounded"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)} // 입력값 업데이트
+        onKeyDown={handleKeyDown} // Enter 키 눌림 이벤트 핸들러 추가
       />
       <button
         className="w-full p-2 bg-blue-500 text-white rounded"

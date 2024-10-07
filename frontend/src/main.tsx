@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Header from './components/Header/Header.tsx';
 import Nav from './components/Nav/Nav.tsx';
+import { useState } from 'react';
 // Create a client
 const queryClient = new QueryClient();
 

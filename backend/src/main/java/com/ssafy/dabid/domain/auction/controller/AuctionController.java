@@ -20,6 +20,16 @@ public class AuctionController {
     private final AuctionService service;
     private final S3Util s3Util;
 
+    @GetMapping("/mine")
+    public ResponseEntity<?> getMyAuction(){
+        return new ResponseEntity<>(service.getMyAuctions(), HttpStatus.OK);
+    }
+
+    @GetMapping("/joining")
+    public ResponseEntity<?> getJoinAuction(){
+        return new ResponseEntity<>(service.getJoinAuctions(), HttpStatus.OK);
+    }
+
     @GetMapping("")
     public ResponseEntity<?> getAuctions() {
         return new ResponseEntity<>(service.getAuctions(), HttpStatus.OK);

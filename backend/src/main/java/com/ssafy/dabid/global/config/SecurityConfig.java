@@ -56,10 +56,7 @@ public class SecurityConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.addAllowedOrigin("http://127.0.0.1:5500"); // 로컬 테스트용 오리진
-        corsConfiguration.addAllowedOrigin("http://localhost:5500"); // 로컬 테스트용 오리진
         corsConfiguration.addAllowedOrigin("http://j11a505.p.ssafy.io");
-//        corsConfiguration.addAllowedOrigin("http://j11a505.p.ssafy.io");
         corsConfiguration.addAllowedOrigin("http://localhost:5173");// 잠시 추가
         corsConfiguration.addAllowedOrigin("https://finopenapi.ssafy.io/ssafy/api/v1");
         corsConfiguration.addAllowedMethod("*");
