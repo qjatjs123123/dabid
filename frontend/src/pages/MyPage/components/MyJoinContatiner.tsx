@@ -42,7 +42,7 @@ const AuctionContainer: React.FC<AuctionContainerProps> = ({ auctionList, setAuc
       try {
         const accessToken = localStorage.getItem('accessToken');
 
-        const response = await fetch('https://j11a505.p.ssafy.io/api/auctions', {
+        const response = await fetch('https://j11a505.p.ssafy.io/api/auctions/joining', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

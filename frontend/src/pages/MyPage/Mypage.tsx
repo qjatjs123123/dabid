@@ -1,36 +1,33 @@
 import React, { useState } from 'react';
 import MyInfo from './components/MyInfo';
 import Deal from '../Deal/Deal';
-import AuctionMyList from '../Auction/AuctionMyList';
+import MyCreateList from './components/MyCreateList';
+import MyJoinList from './components/MyJoinList';
+import { useRecoilState } from 'recoil';
+import { activePageState } from '../../stores/recoilStores/activePageState';
 
 const Mypage: React.FC = () => {
-  const [activePage, setActivePage] = useState<string>('내 정보');
+  const [localActivePage, setLocalActivePage] = useState<string>('내 정보');
+  const [activePage, setActivePage] = useRecoilState(activePageState);
 
   const renderContent = () => {
-    switch (activePage) {
+    switch (localActivePage) {
       case '내 정보':
         return <MyInfo />;
       case '내 거래':
-        return (
-          <div>
-            <Deal />
-          </div>
-        );
+        return <Deal />;
       case '생성한 경매':
-        return (
-          <div>
-            <AuctionMyList />
-          </div>
-        );
+        return <MyCreateList />;
       case '참여한 경매':
-        return (
-          <div>
-            <AuctionMyList />
-          </div>
-        );
+        return <MyJoinList />;
       default:
         return null;
     }
+  };
+
+  const handlePageChange = (page: string) => {
+    setLocalActivePage(page); // 로컬 상태 업데이트
+    setActivePage(page); // App의 activePage 상태 업데이트
   };
 
   return (
@@ -38,22 +35,22 @@ const Mypage: React.FC = () => {
       <nav className="h-[30px]">
         <ul className="flex space-x-4">
           <li>
-            <button onClick={() => setActivePage('내 정보')} className="text-blue-600 hover:underline">
+            <button onClick={() => handlePageChange('내 정보')} className="text-blue-600 hover:underline">
               내 정보
             </button>
           </li>
           <li>
-            <button onClick={() => setActivePage('내 거래')} className="text-blue-600 hover:underline">
+            <button onClick={() => handlePageChange('내 거래')} className="text-blue-600 hover:underline">
               내 거래
             </button>
           </li>
           <li>
-            <button onClick={() => setActivePage('생성한 경매')} className="text-blue-600 hover:underline">
+            <button onClick={() => handlePageChange('생성한 경매')} className="text-blue-600 hover:underline">
               생성한 경매
             </button>
           </li>
           <li>
-            <button onClick={() => setActivePage('참여한 경매')} className="text-blue-600 hover:underline">
+            <button onClick={() => handlePageChange('참여한 경매')} className="text-blue-600 hover:underline">
               참여한 경매
             </button>
           </li>

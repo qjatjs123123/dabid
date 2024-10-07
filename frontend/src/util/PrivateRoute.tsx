@@ -11,7 +11,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ setModalOpen }) => {
     localStorage.getItem('accessToken') !== null && localStorage.getItem('accessToken') !== undefined;
 
   if (!isAuthenticated) {
-    setModalOpen(true); // 로그인 모달 열기
+    setModalOpen(true);
   }
 
   return isAuthenticated ? <Outlet /> : <Navigate to={`${PAGE_URL.HOME}`} replace />;

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import AuctionContainer from './components/Auctions/AuctionContainer';
-import AuctionFilter from './components/Auctions/AuctionFilter';
+import MyCreateContatiner from './MyCreateContatiner';
 
 export class AuctionListDto {
   auctionId: string;
@@ -37,7 +36,7 @@ const Auction: React.FC = () => {
     <div>
       <div>
         <div className="container mx-auto">
-          <AuctionContainer auctionList={auctionList} setAuctionList={setAuctionList} />
+          <MyCreateContatiner auctionList={auctionList} setAuctionList={setAuctionList} />
         </div>
       </div>
     </div>

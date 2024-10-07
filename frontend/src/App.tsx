@@ -23,7 +23,6 @@ function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
   const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const navigate = useNavigate();
-
   const handleLoginSuccess = async () => {
     const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
     await setUserInfo(response.data);
@@ -44,7 +43,7 @@ function App() {
         <Route element={<PrivateRoute setModalOpen={setModalOpen} />}>
           <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
           <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
-          <Route path={`${PAGE_URL.AUCTION_DETAIL}`} element={<AuctionDetail />} />
+          <Route path={PAGE_URL.AUCTION_DETAIL} element={<AuctionDetail />} />
           <Route path={`${PAGE_URL.AUCTION_INPUT}`} element={<AuctionInput />} />
           <Route path={`${PAGE_URL.HELP}`} element={<Inquiry />} />
         </Route>

@@ -67,6 +67,12 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
 
       if (response.ok) {
         alert('경매가 성공적으로 취소되었습니다.');
+        try {
+          const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
+          setUserInfo(response.data);
+        } catch (error) {
+          console.error('User info update failed:', error);
+        }
         navigate(PAGE_URL.AUCTION_LIST);
       } else {
         alert('경매 취소에 실패했습니다.');
