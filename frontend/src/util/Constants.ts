@@ -16,6 +16,8 @@ export const PAGE_URL = {
 export const DEAL_API_URL = {
   GET_DEAL_CONTENT_LIST: '/api/deal/list',
   GET_DEAL_CONTENT_DETAIL: '/api/deal/list',
+  GET_DEAL_SELLER_ACCOUNT: '/api/deal/account/seller',
+  POST_DEAL_COURIER_INFO: 'api/deal/courier'
 };
 
 export const SKELETON_TIME = {

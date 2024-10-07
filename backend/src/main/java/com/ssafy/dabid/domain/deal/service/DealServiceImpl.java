@@ -8,6 +8,7 @@ import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
 import com.ssafy.dabid.domain.deal.dto.request.ChatMessageRequestDto;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
+import com.ssafy.dabid.domain.deal.dto.request.CourierRequestNo;
 import com.ssafy.dabid.domain.deal.entity.ChatMessage;
 import com.ssafy.dabid.domain.deal.repository.ChatMessageRepository;
 import com.ssafy.dabid.global.api.ssafy.request.SsafyApiHeaderRequest;
@@ -66,9 +67,13 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public Status findDeliveryStatus(CourierRequest courierRequest, int dealId) {
-        String status = deliveryTrackerAPIClient.trackPackage(courierRequest);
-        Status newStatus = null;
+        String carrierId = String.valueOf(courierRequest.getCarrierId()); // Enum에서 carrierId 값을 가져옵니다.
+        String modifiedCarrierId = carrierId.toLowerCase().replace("_", ".");
+        CourierRequestNo cn = new CourierRequestNo(modifiedCarrierId, courierRequest.getTrackingNumber());
+        String status = deliveryTrackerAPIClient.trackPackage(cn);
 
+        Status newStatus = null;
+        System.out.println(status);
         if (status.isEmpty()) return Status.ERROR;
 
         if (status.equals(Status.DELIVERED)) newStatus = Status.DELIVERED;
@@ -337,7 +342,12 @@ public class DealServiceImpl implements DealService {
             String trackingNumber = deal.getTrackingNumber();
             CourierRequest request = CourierRequest.builder()
                     .carrierId(carrierId).trackingNumber(trackingNumber).build();
-            String status = deliveryTrackerAPIClient.trackPackage(request);
+
+            String carrierId1 = String.valueOf(request.getCarrierId()); // Enum에서 carrierId 값을 가져옵니다.
+            String modifiedCarrierId = carrierId1.toLowerCase().replace("_", ".");
+            CourierRequestNo cn = new CourierRequestNo(modifiedCarrierId, request.getTrackingNumber());
+
+            String status = deliveryTrackerAPIClient.trackPackage(cn);
             log.info("호출 후 상태 : {}", status);
 
             //  status 갱신
@@ -346,6 +356,8 @@ public class DealServiceImpl implements DealService {
             dealRepository.save(deal);
         }
 
+
+
         DealResponseDto dto = DealResponseDto.builder()
                 .id(deal.getId())
                 .seller_nickname(deal.getSeller().getNickname())
@@ -353,7 +365,7 @@ public class DealServiceImpl implements DealService {
                 .detail(deal.getDetail())
                 .image(deal.getImage())
 //                .image(s3Util.generateFileUrl(deal.getImage()))
-                .status(deal.getStatus() != null ? deal.getStatus().name() : Status.BID_SUCCESS.name())
+                .status(deal.getStatus() != null ? deal.getStatus().name() : String.valueOf(Status.BID_SUCCESS))
                 .carrierId(deal.getCarrier_id() != null ? deal.getCarrier_id().name() : null)
                 .trackingNumber(deal.getTrackingNumber())
                 .created_at(deal.getCreatedAt())
@@ -361,7 +373,7 @@ public class DealServiceImpl implements DealService {
                 .winning_bid(deal.getWinning_bid())// Seller 여부 설정
                 .account(deal.getAccount())
                 .build();
-
+        System.out.println(dto.toString());
         return dto;
     }
 
