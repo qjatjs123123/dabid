@@ -267,7 +267,8 @@ public class DealServiceImpl implements DealService {
 //                    .image(s3Util.generateFileUrl(deal.getImage()))
                     .image(deal.getImage())
                     .winning_bid(deal.getWinning_bid())
-                    .status(sta)
+//                    .status(sta)
+                    .status(deal.getStatus() != null ? deal.getStatus().name() : String.valueOf(Status.BID_SUCCESS))
                     .isTimerVisible(isTimerVisible)  // 타이머 표시 여부 전달
                     .created_at(deal.getCreatedAt())
                     .build();

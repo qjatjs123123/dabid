@@ -103,6 +103,15 @@ export const DEAL_STAGE = [
   { name: '거래 완료', id: 'TRANSACTION_DONE' },
 ];
 
+export const DEAL_STAGE_2 = [
+  { name: '낙찰', id: 'BID_SUCCESS', color: '#34C759' },  // 초록색
+  { name: '입금완료', id: 'PAYMENT_COMPLETE', color: '#FFD60A' }, // 노란색
+  { name: '배송중', id: 'IN_TRANSIT', color: '#0A84FF' }, 
+  { name: '배송완료', id: 'DELIVERED', color: '#FF9F0A' }, // 주황색
+  { name: '거래 완료', id: 'TRANSACTION_DONE', color: 'gray' }, // 파란색
+  { name: '거래 오류', id: 'ERROR', color: '#FF3B30' }, // 빨간색
+];
+
 export const MESSAGE = {
   DELIVERY_NO_CONTENTS: '운송장 미등록 상태이거나 업체에서 상품을 준비중입니다.',
   FIND_NO_CONTENTS: '검색결과가 없습니다.',

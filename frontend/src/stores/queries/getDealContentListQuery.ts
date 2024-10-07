@@ -11,7 +11,7 @@ interface DealContent {
   winning_bid: number;
   status: string;
   created_at: [number, number, number, number, number, number, number]; 
-  isTimerVisible: boolean;
+  timerVisible: boolean;
 }
 
 interface DealContentListResponse {

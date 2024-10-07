@@ -13,7 +13,6 @@ interface UserResponse {
 const DealContentUserProfile = () => {
   const memberQuery = getDealProfileQuery();
   if (!memberQuery.data) return;
-  console.log(memberQuery.data);
   const { imageUrl, nickname } = memberQuery.data as UserResponse;
 
   return (

@@ -44,7 +44,7 @@ const DealContentDetail = () => {
           </div>
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
           <div className="text-[30px] font-[600] mb-[4px] leading-tight ">{deal.title}</div>
-          <DealContentTimer />
+          <DealContentTimer dealQuery={deal} />
           {/* <div className="mb-[4px] text-[16px] text-[#868e96] font-[400]">12시간 06분 전</div> */}
           <div className="mb-[25px]">
             <span className="font-[800] text-[19px]">{formatNumberWithCommas(deal.winning_bid)} 원</span>

@@ -2,6 +2,7 @@ import React from 'react';
 import useDealContent from '../../../business/hooks/useDeal/useDealContent';
 import DealContentContainer from '../components/DealContentUserProfile';
 import { formatNumberWithCommas } from '../../../util/moneyComma';
+import DealContentTimer from './DealContentTimer';
 interface DealProps {
   deal: {
     id: number;
@@ -11,7 +12,8 @@ interface DealProps {
     image: string;
     winning_bid: number;
     status: string;
-    isTimerVisible: boolean;
+    timerVisible: boolean;
+    created_at: [number, number, number, number, number, number, number];
   };
 }
 
@@ -35,8 +37,10 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
         <span className="text-[20px]  font-[800] mr-[3px]">{formatNumberWithCommas(deal.winning_bid)}</span>
         <span>원</span>
       </div>
-
-      <DealContentContainer />
+      <div className="flex justify-between items-center h-full">
+        <DealContentContainer />
+        <DealContentTimer dealQuery={deal} fontSize="11px" />
+      </div>
     </div>
   );
 };
