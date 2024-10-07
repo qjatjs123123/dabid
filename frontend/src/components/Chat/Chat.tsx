@@ -28,8 +28,6 @@ const Chat = () => {
   const dealId = useRecoilValue(curDealIdState); // 현재 거래 ID
   // const token = localStorage.getItem('accessToken'); // 토큰 가져오기
   const email = userInfo?.email; // 로그인한 사용자 이메일
-  // const email = localStorage.getItem('email'); // 로그인한 사용자 이메일
-  // const email = 'ssafy7@gmail.com';
 
   // 웹소켓 훅을 사용해 메시지를 수신하고 전송
   const { sendMessage } = useWebSocket(dealId, (newMessage: Message) => {
@@ -99,11 +97,11 @@ const Chat = () => {
                   {/* 프로필 사진과 시간 추가 */}
                   {message.email !== email ? (
                     <div className="flex items-center space-x-1">
-                      <img src={profile} alt="Profile" className="w-6 h-6 rounded-full" />
-                      {/* <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" /> */}
+                      {/* <img src={profile} alt="Profile" className="w-6 h-6 rounded-full" /> */}
+                      <img src={message.profile} alt="Profile" className="w-6 h-6 rounded-full" />
                       <div className="text-[8px] text-gray-500 font-semibold">
-                        {/* {message.nickname}  */}
-                        무시무시한 감자 &nbsp;
+                        {message.nickname} &nbsp;
+                        {/* 무시무시한 감자 &nbsp; */}
                         {moment(message.createdAt).format('HH:mm')}
                       </div>
                     </div>

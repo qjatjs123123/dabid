@@ -4,24 +4,46 @@ import { formatNumberWithCommas } from '../../../util/moneyComma';
 import DealContentUserProfile from './DealContentUserProfile';
 import DealContentDetailSkeleton from '../skeletons/DealContentDetailSkeleton';
 import DealButton from '../../../components/Button/DealButton';
+import CloseButton from '../../../components/Button/CloseButton';
+import ConfirmCloseModal from './ConfirmCloseModal'; // ConfirmCloseModal 임포트
 import DeliveryStatusSearch from './DeliveryStatusSearch';
 import DealStatus from './DealStatus';
-
 import DealAccount from './DealAccount';
-
 import TransferModal from './TransferModal';
 import DealContentTimer from './DealContentTimer';
 
 const DealContentDetail = () => {
   const { dealContentDetail: deal, showSkeleton } = useDealContentDetail();
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
+  const [isModalOpen, setIsModalOpen] = useState(false); // 송금 모달 상태
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // 인수 확인 모달 상태
 
   if (showSkeleton || !deal) {
     return <DealContentDetailSkeleton />; // 스켈레톤 UI를 보여줌
   }
 
-  const openModal = () => setIsModalOpen(true); // 모달 열기 함수
-  const closeModal = () => setIsModalOpen(false); // 모달 닫기 함수
+  const openTransferModal = () => setIsModalOpen(true); // 송금 모달 열기
+  const closeTransferModal = () => setIsModalOpen(false); // 송금 모달 닫기
+
+  const openConfirmModal = () => setIsConfirmModalOpen(true); // 인수 확인 모달 열기
+  const closeConfirmModal = () => setIsConfirmModalOpen(false); // 인수 확인 모달 닫기
+
+  // 상태에 따른 버튼 렌더링
+  const renderButton = () => {
+    if (deal.status === 'TRANSACTION_DONE') {
+      return (
+        <button
+          className="w-full mt-4 mb-4 text-lg font-semibold text-white rounded-lg bg-orange-300 transition-all duration-200 py-3"
+          disabled
+        >
+          거래 종료
+        </button>
+      ); // 거래 종료 상태일 때 버튼 비활성화
+    } else if (deal.status === 'PAYMENT_COMPLETE') {
+      return <CloseButton onClick={openConfirmModal} />; // 인수 확인 모달 열기
+    } else {
+      return <DealButton onClick={openTransferModal} />; // 송금 모달 열기
+    }
+  };
 
   return (
     <div className="flex-3 max-h-[calc(100vh-150px)] overflow-y-auto w-full scroll-hide scroll-hide">
@@ -39,7 +61,7 @@ const DealContentDetail = () => {
               <DealContentUserProfile />
             </div>
             <div className="flex-1 flex justify-end">
-              <div className="w-[180px]">{!deal.seller ? <DealButton onClick={openModal} /> : <></>}</div>
+              <div className="w-[180px]">{!deal.seller ? renderButton() : <></>}</div>
             </div>
           </div>
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
@@ -62,12 +84,13 @@ const DealContentDetail = () => {
       </div>
 
       {/* 송금 모달 */}
-      <TransferModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        deal={deal}
-        // transferAmount={deal.winning_bid} // 송금 금액
-        // accountNumber={deal.account} // 임의의 계좌번호
+      <TransferModal isOpen={isModalOpen} onClose={closeTransferModal} deal={deal} />
+
+      {/* 인수 확인 모달 */}
+      <ConfirmCloseModal
+        isOpen={isConfirmModalOpen}
+        onClose={closeConfirmModal}
+        dealId={deal.id} // 인수 확인 API 호출 함수
       />
     </div>
   );

@@ -361,7 +361,14 @@ public class DealServiceImpl implements DealService {
             dealRepository.save(deal);
         }
 
+        boolean isSeller = member.getId() == deal.getSeller().getId();
+        boolean isTimerVisible = false; // 입금 전 타이머 표시 여부
 
+        if(!isSeller && deal.getStatus() == Status.BID_SUCCESS){
+            isTimerVisible = true;
+        } else{
+            isTimerVisible = false;
+        }
 
         DealResponseDto dto = DealResponseDto.builder()
                 .id(deal.getId())
@@ -378,6 +385,7 @@ public class DealServiceImpl implements DealService {
                 .winning_bid(deal.getWinning_bid())// Seller 여부 설정
                 .account(deal.getAccount())
                 .created_at(deal.getCreatedAt())
+                .isTimerVisible(isTimerVisible)
                 .build();
         System.out.println(dto.toString());
         return dto;
@@ -422,6 +430,7 @@ public class DealServiceImpl implements DealService {
                 .trackingNumber(deal.getTrackingNumber())
                 .created_at(deal.getCreatedAt())
                 .isSeller(buyer.getId() == deal.getSeller().getId())  // Seller 여부 설정
+                .isTimerVisible(false)
                 .build();
 
         return dto;
