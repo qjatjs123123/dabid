@@ -9,7 +9,6 @@ import axios from '../../../../../api/axiosConfig';
 import { useRecoilState } from 'recoil';
 import { UserInfo, userState } from '../../../../../stores/recoilStores/Member/userState';
 import BiddingResultModal from '../../Modal/BiddingResultModal';
-import { PAGE_URL } from '../../../../../util/Constants';
 
 interface BiddingStatusProps {
   auctionId: number;
@@ -76,7 +75,6 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       });
 
       if (response.ok) {
-
         try {
           const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
           setUserInfo(response.data);
@@ -87,7 +85,6 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
 
         setModalResultMessage('경매가 성공적으로 취소되었습니다.');
         setModalResultIsOpen(true);
-
       } else {
         // alert('경매 취소에 실패했습니다.');
         setModalResultMessage('경매 취소에 실패했습니다.');
@@ -115,7 +112,6 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       });
 
       if (response.ok) {
-
         try {
           const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
           setUserInfo(response.data);
@@ -127,7 +123,6 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
         setModalResultMessage('경매에 참여하셨습니다.');
         setModalResultIsOpen(true);
         // navigate(0);
-
       } else {
         // alert('경매 참여에 실패했습니다.');
         setModalResultMessage('경매에 실패했습니다.');
@@ -155,8 +150,6 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       });
 
       if (response.ok) {
-
-
         try {
           const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
           setUserInfo(response.data);
@@ -168,7 +161,6 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
         setModalResultMessage('경매 참여를 포기하였습니다.');
         setModalResultIsOpen(true);
         // navigate(0);
-
       } else {
         // alert('경매 참여 포기에 실패했습니다.');
         setModalResultMessage('경매 참여 포기에 실패했습니다.');
