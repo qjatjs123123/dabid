@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import CancelAuctionModal from '../../Modal/CancelAuctionModal';
 import JoinAuctionModal from '../../Modal/JoinAuctionModal';
 import GiveupBiddingModal from '../../Modal/GiveupBiddingModal';

@@ -10,6 +10,7 @@ interface DealContent {
   image: string;
   winning_bid: number;
   status: string;
+  created_at: [number, number, number, number, number, number, number]; 
   isTimerVisible: boolean;
 }
 

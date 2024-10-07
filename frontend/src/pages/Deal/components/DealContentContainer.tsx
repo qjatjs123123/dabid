@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import useDealContentList from '../../../business/hooks/useDeal/useDealContentList';
 import DealContent from './DealContent';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -55,9 +55,7 @@ const DealContentContainer = () => {
   return (
     <div className="max-h-[calc(100vh-150px)] overflow-y-auto flex flex-col border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)] scroll-hide">
       {curDealId !== -1 && dealContentList ? (
-        dealContentList.pages.map((page, pageIndex) =>
-          page.content.map((deal) => <DealContent key={deal.id} deal={deal} />),
-        )
+        dealContentList.pages.map((page) => page.content.map((deal) => <DealContent key={deal.id} deal={deal} />))
       ) : (
         <div className="text-center text-[50px]">
           <p>{MESSAGE.DEAL_LIST_NO_CONTENTS}</p>{' '}

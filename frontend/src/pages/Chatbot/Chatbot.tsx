@@ -71,7 +71,7 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null); // 대화창을 위한 ref
-  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
+  const [userInfo] = useRecoilState<UserInfo | null>(userState);
 
   useEffect(() => {
     if (isOpen) {

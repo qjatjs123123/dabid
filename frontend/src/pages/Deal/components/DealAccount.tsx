@@ -7,9 +7,8 @@ const DealAccount = () => {
   const { data, refetch, isStale } = getDealSellerAccountQuery(curDealId);
 
   const handleRefresh = () => {
-    if (isStale) {
-      refetch();
-    }
+    if (!isStale) return;
+    refetch();
   };
 
   return (

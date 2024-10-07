@@ -7,7 +7,7 @@ import Deal from './pages/Deal/Deal';
 import LoginModal from './pages/Login/LoginModal';
 import Mypage from './pages/MyPage/Mypage';
 import FloatingActionButtons from './components/Floating/FloatingButtons';
-import Signup from './pages/Signup/Signup';
+import SignUp from './pages/Signup/SignUp';
 import { init } from './api/ChatbotAPI';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState';
@@ -21,7 +21,7 @@ import axios from './api/axiosConfig';
 
 function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
-  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
+  const [, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const navigate = useNavigate();
   const handleLoginSuccess = async () => {
     const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);

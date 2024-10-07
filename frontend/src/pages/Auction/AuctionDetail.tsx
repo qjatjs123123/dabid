@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import AuctionDetailsImage from './components/AuctionDetails/AuctionDetailsImage';
 import AuctionDetailsBidding from './components/AuctionDetails/AuctionDetailsBidding';

@@ -7,7 +7,7 @@ import { loginState } from '../../stores/recoilStores/Member/loginState';
 import axios from 'axios';
 import { init } from '../../api/ChatbotAPI';
 
-const Signup: React.FC = () => {
+const SignUp: React.FC = () => {
   const [_, setToken] = useRecoilState(loginState); // 컴포넌트 최상위에서 호출
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState<File | null>(null);
@@ -491,4 +491,4 @@ const Signup: React.FC = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

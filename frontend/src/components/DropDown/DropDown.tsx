@@ -1,5 +1,3 @@
-import { useRef, useState } from 'react';
-
 type DeliveryOption = {
   id: string;
   name: string;

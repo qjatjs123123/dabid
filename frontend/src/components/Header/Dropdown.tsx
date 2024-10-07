@@ -10,9 +10,8 @@ import { getImgUrl } from '../../util/Functions';
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useRecoilValue<UserInfo | null>(userState);
-  const [token, setToken] = useRecoilState(loginState);
-  // console.log('userInfo:', userInfo);
-  // console.log(userInfo?.accountActive);
+  const [, setToken] = useRecoilState(loginState);
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };

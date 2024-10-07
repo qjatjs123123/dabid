@@ -9,9 +9,6 @@ import DeliveryStatusModal from './DeliveryStatusModal';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isModalState } from '../../../stores/recoilStores/Deal/stateModal';
 import { useEffect } from 'react';
-import { getDealContentDetailQuery } from '../../../stores/queries/getDealContentDetailQuery';
-import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
-import useDealContentDetail from '../../../business/hooks/useDeal/useDealContentDetail';
 
 export interface DeliveryStatus {
   code: string; // 상태 코드 (예: "DELIVERED", "IN_TRANSIT", "OUT_FOR_DELIVERY")
@@ -65,7 +62,7 @@ const DeliveryStatusSearch: React.FC<DeliveryStatusSearchProps> = ({ IsSeller })
     postCourierInfo,
   } = useDeliveryTracker();
 
-  const curDealId = useRecoilValue(curDealIdState);
+  // const curDealId = useRecoilValue(curDealIdState);
 
   const isModalOpen = useRecoilValue(isModalState);
   const setIsModalOpen = useSetRecoilState(isModalState);
