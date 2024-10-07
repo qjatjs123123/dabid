@@ -430,6 +430,7 @@ public class DealServiceImpl implements DealService {
                 .trackingNumber(deal.getTrackingNumber())
                 .created_at(deal.getCreatedAt())
                 .isSeller(buyer.getId() == deal.getSeller().getId())  // Seller 여부 설정
+                .isTimerVisible(false)
                 .build();
 
         return dto;
