@@ -1,17 +1,6 @@
 import axios from 'axios';
 import { MEMBER_API_URL } from '../util/Constants';
 
-// const TOKEN_TYPE = localStorage.getItem("tokenType");
-// let ACCESS_TOKEN = localStorage.getItem('accessToken');
-
-// export const AuthApi = axios.create({
-//   baseURL: 'https://j11a505.p.ssafy.io',
-//   headers: {
-//     'Content-Type': 'application/json',
-//     Authorization: `Bearer ${ACCESS_TOKEN}`,
-//   },
-// });
-
 interface LoginParams {
   email: string;
   password: string;
@@ -30,25 +19,6 @@ export const login = async ({ email, password }: LoginParams): Promise<LoginCont
 
   return response.data; // 로그인 성공 여부와 토큰을 반환
 };
-interface SignupParams {
-  email: string;
-  password: string;
-  // password_check: string;
-  nickname: string;
-  phoneNumber: string;
-  image: File | null;
-}
-
-export const signup = async ({ email, password, nickname, phoneNumber, image }: SignupParams): Promise<any> => {
-  const data = { email, password, nickname, phoneNumber, image };
-  const response = await axios.post(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.SIGN_UP}`, data);
-  return response.data;
-};
-
-// export const logout = async (): Promise<any> => {
-//   localStorage.removeItem('accessToken');
-//   return null;
-// };
 
 export const randomNickname = async (): Promise<string> => {
   const response = await axios.get(`${import.meta.env.VITE_SERVER_ENDPOINT}${MEMBER_API_URL.RANDOM_NICKNAME}`);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
 import { formatNumberWithCommas } from '../../util/moneyComma';
@@ -11,7 +11,8 @@ const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useRecoilValue<UserInfo | null>(userState);
   const [token, setToken] = useRecoilState(loginState);
-
+  // console.log('userInfo:', userInfo);
+  // console.log(userInfo?.accountActive);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -28,23 +29,27 @@ const UserDropdown = () => {
       <button
         id="dropdownDefaultButton"
         onClick={toggleDropdown}
-        className="font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+        className="font-medium rounded-lg text-sm px-5 py-2.5 flex flex-row"
         type="button"
       >
-        <span className="ml-2">
-          {userInfo?.nickname} 님
-          <br />
-          {formatNumberWithCommas(userInfo?.point ?? 0)} p
-        </span>
-        <svg
-          className={`w-2.5 h-2.5 ms-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 10 6"
-        >
-          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-        </svg>
+        <img src={`${userInfo?.imageUrl}`} alt="" className="h-[30px] m-1 rounded-full" />
+        <div className="text-center inline-flex items-center">
+          <span className="ml-2">
+            {userInfo?.nickname} 님
+            <br />
+            {!userInfo?.accountActive && <span className="text-red-500">계좌 등록 필요</span>}
+            {userInfo?.accountActive && `${formatNumberWithCommas(userInfo?.point ?? 0)} p`}
+          </span>
+          <svg
+            className={`w-2.5 h-2.5 ms-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 6"
+          >
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+          </svg>
+        </div>
       </button>
 
       {isOpen && (

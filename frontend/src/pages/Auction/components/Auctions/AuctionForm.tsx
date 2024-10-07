@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 임포트
+
+import { UserInfo, useUpdateUserState, userState } from '../../../../stores/recoilStores/Member/userState';
+import { useRecoilState } from 'recoil';
+import axios from '../../../../api/axiosConfig';
+import { MEMBER_API_URL } from '../../../../util/Constants';
+
 import RegistSuccessModal from '../Modal/RegistSuccessModal'; // 성공 모달 컴포넌트 임포트
 import AuctionErrorModal from '../Modal/AuctionErrorModal'; // 에러 모달 컴포넌트 임포트
+
 
 interface AuctionFormProps {
   images: File[]; // AuctionImage에서 가져온 이미지
@@ -16,6 +23,7 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 메시지 상태
   const [isErrorModalOpen, setErrorModalOpen] = useState<boolean>(false); // 에러 모달 상태
   const navigate = useNavigate(); // useNavigate 훅 사용
+  const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +51,20 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
       });
 
       if (response.ok) {
+
+        // 성공 시 처리
+        // alert('경매가 성공적으로 등록되었습니다.'); // 알림 표시
+        try {
+          const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
+          setUserInfo(response.data);
+        } catch (error) {
+          console.error('User info update failed:', error);
+        }
+        navigate('/auction'); // 페이지 이동
+
         // 성공 시 모달 열기
         setRegistSuccessOpen(true);
+
       } else {
         // 오류 처리
         if (response.status === 403) {

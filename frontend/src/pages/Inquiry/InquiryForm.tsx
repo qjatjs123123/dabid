@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate 훅 임포트
-import { INQUIRY_API_URL, PAGE_URL } from '../../util/Constants';
+import { INQUIRY_API_URL } from '../../util/Constants';
 import axios from '../../api/axiosConfig';
 
 interface InquiryFormProps {
@@ -15,8 +14,6 @@ const InquiryForm: React.FC<InquiryFormProps> = ({ images }) => {
     content: '',
     images: [],
   });
-
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,9 +38,9 @@ const InquiryForm: React.FC<InquiryFormProps> = ({ images }) => {
           },
         },
       );
-
       if (response.data.code === 'SU') {
-        navigate(`${PAGE_URL.HELP}`);
+        // redirect(`${PAGE_URL.HELP}`);
+        window.location.reload();
       } else {
         console.error('문의 등록 실패:', response.data);
       }
