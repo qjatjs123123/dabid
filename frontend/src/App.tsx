@@ -7,7 +7,7 @@ import Deal from './pages/Deal/Deal';
 import LoginModal from './pages/Login/LoginModal';
 import Mypage from './pages/MyPage/Mypage';
 import FloatingActionButtons from './components/Floating/FloatingButtons';
-import SignUp from './pages/SignUp/SignUp';
+import SignUp from './pages/Signup/Signup';
 import { init } from './api/ChatbotAPI';
 import { useRecoilState } from 'recoil';
 import { modalState } from './stores/recoilStores/Member/modalState';
