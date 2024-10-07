@@ -3,12 +3,14 @@ package com.ssafy.dabid.domain.deal.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
+@ToString
 public class DealResponseDto {
     private int id;
     private String seller_nickname;

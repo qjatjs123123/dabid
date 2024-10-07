@@ -9,6 +9,9 @@ import DeliveryStatusModal from './DeliveryStatusModal';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isModalState } from '../../../stores/recoilStores/Deal/stateModal';
 import { useEffect } from 'react';
+import { getDealContentDetailQuery } from '../../../stores/queries/getDealContentDetailQuery';
+import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
+import useDealContentDetail from '../../../business/hooks/useDeal/useDealContentDetail';
 
 export interface DeliveryStatus {
   code: string; // 상태 코드 (예: "DELIVERED", "IN_TRANSIT", "OUT_FOR_DELIVERY")
@@ -46,9 +49,23 @@ export interface DeliveryResponse {
   };
 }
 
-const DeliveryStatusSearch = () => {
-  const { isOpen, deliveryCode, deliveryNumber, handleDropBoxOpen, handleDeliveryCodeSet, handleInputChange } =
-    useDeliveryTracker();
+interface DeliveryStatusSearchProps {
+  IsSeller: boolean; // IsSeller의 타입을 명시적으로 선언
+}
+
+const DeliveryStatusSearch: React.FC<DeliveryStatusSearchProps> = ({ IsSeller }) => {
+  const {
+    isOpen,
+    deliveryCode,
+    deliveryNumber,
+    isEnrollState,
+    handleDropBoxOpen,
+    handleDeliveryCodeSet,
+    handleInputChange,
+    postCourierInfo,
+  } = useDeliveryTracker();
+
+  const curDealId = useRecoilValue(curDealIdState);
 
   const isModalOpen = useRecoilValue(isModalState);
   const setIsModalOpen = useSetRecoilState(isModalState);
@@ -63,7 +80,11 @@ const DeliveryStatusSearch = () => {
     refetch();
     setIsModalOpen(true);
   };
+  let buttonLabel = '조회';
 
+  if (isEnrollState) {
+    buttonLabel = IsSeller ? '등록' : '조회';
+  }
   useEffect(() => {}, [info]);
 
   return (
@@ -86,7 +107,7 @@ const DeliveryStatusSearch = () => {
           value={deliveryNumber}
           onChange={handleInputChange}
         />
-        <SearchButton clickFunc={handleDeliverySearch} />
+        <SearchButton clickFunc={isEnrollState ? postCourierInfo : handleDeliverySearch} value={buttonLabel} />
       </div>
       {isModalOpen && info && <DeliveryStatusModal edges={info.data.track} />}
     </div>

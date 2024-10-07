@@ -26,7 +26,6 @@ public class AuctionDto {
     private int bid;
     private int firstBid;
     private String title;
-    private String category;
     private String detail;
 
     private String profileImage;

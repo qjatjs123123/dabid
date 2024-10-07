@@ -6,8 +6,10 @@ import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionRepository;
 import com.ssafy.dabid.domain.auction.service.AuctionService;
+import com.ssafy.dabid.domain.auction.service.BiddingSMSService;
 import com.ssafy.dabid.domain.deal.dto.request.ChatMessageRequestDto;
 import com.ssafy.dabid.domain.deal.dto.request.CourierRequest;
+import com.ssafy.dabid.domain.deal.dto.request.CourierRequestNo;
 import com.ssafy.dabid.domain.deal.entity.ChatMessage;
 import com.ssafy.dabid.domain.deal.repository.ChatMessageRepository;
 import com.ssafy.dabid.global.api.ssafy.request.SsafyApiHeaderRequest;
@@ -60,13 +62,19 @@ public class DealServiceImpl implements DealService {
     // 스케줄러 임의 실행 테스트 start
     private final AuctionJpaRepository auctionJpaRepository;
     private final AuctionService auctionService;
+    private final BiddingSMSService biddingSMSService;
     // 스케줄러 임의 실행 테스트 end
 
     private static final String baseURL = "/edu/demandDeposit/";
 
     @Override
     public Status findDeliveryStatus(CourierRequest courierRequest, int dealId) {
-        String status = deliveryTrackerAPIClient.trackPackage(courierRequest);
+        String carrierId = String.valueOf(courierRequest.getCarrierId()); // Enum에서 carrierId 값을 가져옵니다.
+        String modifiedCarrierId = carrierId.toLowerCase().replace("_", ".");
+        CourierRequestNo cn = new CourierRequestNo(modifiedCarrierId, courierRequest.getTrackingNumber());
+        log.info(carrierId + " " + modifiedCarrierId);
+        String status = deliveryTrackerAPIClient.trackPackage(cn);
+        log.info(status);
         Status newStatus = null;
 
         if (status.isEmpty()) return Status.ERROR;
@@ -337,7 +345,12 @@ public class DealServiceImpl implements DealService {
             String trackingNumber = deal.getTrackingNumber();
             CourierRequest request = CourierRequest.builder()
                     .carrierId(carrierId).trackingNumber(trackingNumber).build();
-            String status = deliveryTrackerAPIClient.trackPackage(request);
+
+            String carrierId1 = String.valueOf(request.getCarrierId()); // Enum에서 carrierId 값을 가져옵니다.
+            String modifiedCarrierId = carrierId1.toLowerCase().replace("_", ".");
+            CourierRequestNo cn = new CourierRequestNo(modifiedCarrierId, request.getTrackingNumber());
+
+            String status = deliveryTrackerAPIClient.trackPackage(cn);
             log.info("호출 후 상태 : {}", status);
 
             //  status 갱신
@@ -346,6 +359,8 @@ public class DealServiceImpl implements DealService {
             dealRepository.save(deal);
         }
 
+
+
         DealResponseDto dto = DealResponseDto.builder()
                 .id(deal.getId())
                 .seller_nickname(deal.getSeller().getNickname())
@@ -353,7 +368,7 @@ public class DealServiceImpl implements DealService {
                 .detail(deal.getDetail())
                 .image(deal.getImage())
 //                .image(s3Util.generateFileUrl(deal.getImage()))
-                .status(deal.getStatus() != null ? deal.getStatus().name() : Status.BID_SUCCESS.name())
+                .status(deal.getStatus() != null ? deal.getStatus().name() : String.valueOf(Status.BID_SUCCESS))
                 .carrierId(deal.getCarrier_id() != null ? deal.getCarrier_id().name() : null)
                 .trackingNumber(deal.getTrackingNumber())
                 .created_at(deal.getCreatedAt())
@@ -361,7 +376,7 @@ public class DealServiceImpl implements DealService {
                 .winning_bid(deal.getWinning_bid())// Seller 여부 설정
                 .account(deal.getAccount())
                 .build();
-
+        System.out.println(dto.toString());
         return dto;
     }
 
@@ -429,6 +444,7 @@ public class DealServiceImpl implements DealService {
             createDeal(auctionId);
             // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
             //              -> 판매자에게 "니 거래로 넘어감!"
+            biddingSMSService.sendSellerAndBidder(auctionId);
             log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");
         }
 

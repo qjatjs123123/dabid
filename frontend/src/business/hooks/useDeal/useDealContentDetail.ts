@@ -7,13 +7,14 @@ import { dealStatusState } from '../../../stores/recoilStores/Deal/stateDealStat
 
 const useDealContentDetail = () => {
     const curDealId = useRecoilValue(curDealIdState);
-
+    const [isEnrollState, setIsEnrollState] = useState(true);
     const dealQuery = getDealContentDetailQuery(curDealId);
     const [showSkeleton, setShowSkeleton] = useState(true);
     const setDealStatus = useSetRecoilState<string | undefined>(dealStatusState);
 
     useEffect(() => {
         setDealStatus(dealQuery.data?.status);
+        setIsEnrollState(dealQuery.data?.carrierId ? false : true)
     }, [dealQuery.data])
 
     useEffect(() => {
@@ -32,6 +33,7 @@ const useDealContentDetail = () => {
     return {
         dealContentDetail: dealQuery.data,
         showSkeleton,
+        isEnrollState
     };
 };
 

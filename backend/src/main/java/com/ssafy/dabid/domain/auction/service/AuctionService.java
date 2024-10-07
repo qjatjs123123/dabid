@@ -9,6 +9,8 @@ import org.quartz.SchedulerException;
 import java.util.List;
 
 public interface AuctionService {
+    List<AuctionListDto> getMyAuctions();
+    List<AuctionListDto> getJoinAuctions();
     List<AuctionListDto> getAuctions();
     List<AuctionListDto> getAuctionsTitle(SearchAuctionTitle searchAuctionTitle);
     List<AuctionListDto> getAuctionsTitleTest(SearchAuctionTitle searchAuctionTitle);

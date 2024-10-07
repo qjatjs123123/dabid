@@ -8,6 +8,8 @@ import { MEMBER_API_URL, PAGE_URL } from '../../../../../util/Constants';
 import axios from '../../../../../api/axiosConfig';
 import { useRecoilState } from 'recoil';
 import { UserInfo, userState } from '../../../../../stores/recoilStores/Member/userState';
+import BiddingResultModal from '../../Modal/BiddingResultModal';
+import { PAGE_URL } from '../../../../../util/Constants';
 
 interface BiddingStatusProps {
   auctionId: number;
@@ -32,6 +34,9 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
   const [inputBiddingValue, setInputBiddingValue] = useState('0');
   const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
 
+  const [modalResultIsOpen, setModalResultIsOpen] = useState(false);
+  const [modalResultMessage, setModalResultMessage] = useState('');
+
   const handleInputBiddingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputBiddingValue(e.target.value);
   };
@@ -54,6 +59,11 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
     setBiddingModalOpen(false);
   };
 
+  const closeResultModal = () => {
+    setModalResultIsOpen(false);
+    navigate(0);
+  };
+
   const cancelHandleConfirm = async () => {
     const accessToken = localStorage.getItem('accessToken');
     try {
@@ -66,7 +76,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       });
 
       if (response.ok) {
-        alert('경매가 성공적으로 취소되었습니다.');
+
         try {
           const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
           setUserInfo(response.data);
@@ -74,12 +84,20 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
           console.error('User info update failed:', error);
         }
         navigate(PAGE_URL.AUCTION_LIST);
+
+        setModalResultMessage('경매가 성공적으로 취소되었습니다.');
+        setModalResultIsOpen(true);
+
       } else {
-        alert('경매 취소에 실패했습니다.');
+        // alert('경매 취소에 실패했습니다.');
+        setModalResultMessage('경매 취소에 실패했습니다.');
+        setModalResultIsOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('네트워크 오류가 발생했습니다.');
+      // alert('네트워크 오류가 발생했습니다.');
+      setModalResultMessage('네트워크 오류가 발생했습니다.');
+      setModalResultIsOpen(true);
     } finally {
       closeModal();
     }
@@ -97,7 +115,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       });
 
       if (response.ok) {
-        alert('경매에 참여하셨습니다.');
+
         try {
           const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
           setUserInfo(response.data);
@@ -105,12 +123,21 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
           console.error('User info update failed:', error);
         }
         navigate(0);
+
+        setModalResultMessage('경매에 참여하셨습니다.');
+        setModalResultIsOpen(true);
+        // navigate(0);
+
       } else {
-        alert('경매 참여에 실패했습니다.');
+        // alert('경매 참여에 실패했습니다.');
+        setModalResultMessage('경매에 실패했습니다.');
+        setModalResultIsOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('네트워크 오류가 발생했습니다.');
+      // alert('네트워크 오류가 발생했습니다.');
+      setModalResultMessage('네트워크 오류가 발생했습니다.');
+      setModalResultIsOpen(true);
     } finally {
       closeModal();
     }
@@ -128,7 +155,8 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       });
 
       if (response.ok) {
-        alert('경매 참여를 포기하였습니다.');
+
+
         try {
           const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
           setUserInfo(response.data);
@@ -136,12 +164,21 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
           console.error('User info update failed:', error);
         }
         navigate(0);
+
+        setModalResultMessage('경매 참여를 포기하였습니다.');
+        setModalResultIsOpen(true);
+        // navigate(0);
+
       } else {
-        alert('경매 참여 포기에 실패했습니다.');
+        // alert('경매 참여 포기에 실패했습니다.');
+        setModalResultMessage('경매 참여 포기에 실패했습니다.');
+        setModalResultIsOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('네트워크 오류가 발생했습니다.');
+      // alert('네트워크 오류가 발생했습니다.');
+      setModalResultMessage('네트워크 오류가 발생했습니다.');
+      setModalResultIsOpen(true);
     } finally {
       closeModal();
     }
@@ -159,17 +196,25 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
       });
 
       if (response.status === 200) {
-        alert('경매 입찰에 성공하였습니다.');
-        navigate(0);
+        // alert('경매 입찰에 성공하였습니다.');
+        setModalResultMessage('경매 입찰에 성공하였습니다.');
+        setModalResultIsOpen(true);
+        // navigate(0);
       } else if (response.status === 202) {
-        alert('경매 입찰에 실패했습니다.');
-        navigate(0);
+        // alert('입찰 금액이 부족합니다.');
+        setModalResultMessage('입찰 금액이 부족합니다.');
+        setModalResultIsOpen(true);
+        // navigate(0);
       } else {
-        alert('경매 입찰에 실패했습니다.');
+        // alert('경매 입찰에 실패했습니다.');
+        setModalResultMessage('경매 입찰에 실패했습니다.');
+        setModalResultIsOpen(true);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('네트워크 오류가 발생했습니다.');
+      // alert('네트워크 오류가 발생했습니다.');
+      setModalResultMessage('네트워크 오류가 발생했습니다.');
+      setModalResultIsOpen(true);
     } finally {
       closeModal();
     }
@@ -262,6 +307,11 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
             />
           </div>
         )}
+        <BiddingResultModal
+          isOpen={modalResultIsOpen}
+          onClose={closeResultModal}
+          modalResultMessage={modalResultMessage}
+        />
       </div>
     </div>
   );
