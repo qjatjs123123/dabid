@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MyJoinContatiner from './MyJoinContatiner';
+import { getImgUrl } from '../../../util/Functions';
 
 export class AuctionListDto {
   auctionId: string;
@@ -37,6 +38,11 @@ const Auction: React.FC = () => {
       <div>
         <div className="container mx-auto">
           <MyJoinContatiner auctionList={auctionList} setAuctionList={setAuctionList} />
+          {auctionList.length === 0 && (
+            <div className="flex justify-center items-center">
+              <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] m-[100px]" />
+            </div>
+          )}
         </div>
       </div>
     </div>
