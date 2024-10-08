@@ -75,7 +75,7 @@ const AuctionContainer: React.FC<AuctionContainerProps> = ({ auctionList, setAuc
       {auctionList.map((auction, index) => (
         <div
           key={index}
-          className="card border border-gray-300 p-4 rounded w-10/12 mx-auto transition-transform duration-300 hover:scale-105 mb-4"
+          className="card border border-gray-300 p-4 rounded w-10/12 mx-auto transition-transform duration-300 hover:scale-105 mb-4 shadow-lg"
           onClick={() => handleAuctionClick(auction.auctionId)}
         >
           <input type="hidden" value={auction.auctionId} />
@@ -85,13 +85,14 @@ const AuctionContainer: React.FC<AuctionContainerProps> = ({ auctionList, setAuc
             className="w-full h-48 object-cover mb-2" // 높이를 48로 고정
           />
 
-          <h4 className="font-bold text-[18px]">{auction.title}</h4>
+          <h4 className="font-bold text-[18px] overflow-hidden text-ellipsis line-clamp-1">{auction.title}</h4>
+          {/* <h4 className="font-bold text-[18px]">
+            {auction.title.length > 15 ? `${auction.title.slice(0, 15)}...` : auction.title}
+          </h4> */}
 
           <div className="flex justify-between w-full mt-[10px] items-end">
             <p className="text-sm text-gray-600">참가자: {auction.person}명</p>
-            <p style={{ color: '#FF2334' }} className="text-[20px] font-bold">
-              {formatNumberWithCommas(Number(auction.secondBid))} 원
-            </p>
+            <p className="text-[20px] text-db_main font-bold">{formatNumberWithCommas(Number(auction.secondBid))} 원</p>
           </div>
         </div>
       ))}

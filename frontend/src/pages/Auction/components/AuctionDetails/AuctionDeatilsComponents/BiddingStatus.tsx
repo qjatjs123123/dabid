@@ -236,7 +236,10 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
         <input type="hidden" value={auctionId} />
         {isOwner ? (
           <div>
-            <button onClick={openModal} className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition">
+            <button
+              onClick={openModal}
+              className="bg-db_main text-white py-2 px-4 rounded hover:bg-db_hover transition"
+            >
               경매 취소
             </button>
             <CancelAuctionModal
@@ -249,16 +252,16 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
         ) : isParticipant && !isFirstMember ? (
           <div className="flex justify-around w-full">
             <button
-              onClick={openBiddingModal}
-              className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 transition"
-            >
-              입찰하기
-            </button>
-            <button
               onClick={openGiveupModal}
-              className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition ml-2"
+              className="bg-db_black text-white py-2 px-4 rounded hover:bg-gray-600 transition ml-2"
             >
               참여포기
+            </button>
+            <button
+              onClick={openBiddingModal}
+              className="bg-db_main text-white py-2 px-4 rounded hover:bg-db_hover transition"
+            >
+              입찰하기
             </button>
             <GiveupBiddingModal
               auctionId={auctionId}
@@ -280,7 +283,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
           <div>
             <button
               onClick={openModal}
-              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+              className="bg-db_main text-white py-2 px-4 rounded hover:bg-db_hover transition"
             >
               경매 참여
             </button>
