@@ -15,7 +15,7 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
       return;
     }
 
-    const socket = new WebSocket('wss://j11a505.p.ssafy.io/api/chat', ['v10.stomp', 'v12.stomp']);
+    const socket = new WebSocket('wss://j11a505.p.ssafy.io:443/api/chat', ['v10.stomp', 'v12.stomp']);
     stompClient.current = Stomp.over(socket)!;
 
     stompClient.current.connect(
