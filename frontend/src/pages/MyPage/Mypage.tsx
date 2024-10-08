@@ -24,7 +24,7 @@ const Mypage: React.FC = () => {
 
   return (
     <div className="container w-full border-gray-300 flex flex-col mt-4">
-      <nav className="h-[30px]">
+      {/* <nav className="h-[30px]">
         <ul className="flex">
           {['내 정보', '내 거래', '생성한 경매', '참여한 경매'].map((page) => (
             <li key={page}>
@@ -37,7 +37,7 @@ const Mypage: React.FC = () => {
             </li>
           ))}
         </ul>
-      </nav>
+      </nav> */}
       <br />
       <div>{renderContent()}</div>
       <div className="h-[200px]"></div>

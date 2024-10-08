@@ -40,7 +40,7 @@ const AuctionDetailsImage: React.FC<AuctionDetailsImageProps> = ({ images }) => 
   }, [selectedIndex]);
 
   return (
-    <div className="bg-gray-100 flex flex-col items-center mt-4 mb-4 p-5 rounded-lg">
+    <div className="bg-gray-100 flex flex-col items-center mt-4 mb-4 p-5 rounded-lg ">
       {/* 큰 이미지 표시 영역 */}
       <div className="w-full mb-4 grid place-items-center">
         <img
@@ -54,11 +54,11 @@ const AuctionDetailsImage: React.FC<AuctionDetailsImageProps> = ({ images }) => 
       <div className="flex items-center space-x-4 flex-wrap sm:flex-nowrap">
         {/* 왼쪽 화살표 */}
         <button onClick={handlePrev} className="bg-gray-300 text-3xl font-bold p-2 rounded-lg">
-          &lt;
+          <i className="fa fa-chevron-left"></i>
         </button>
 
         {/* 가로로 정렬된 이미지들 */}
-        <div className="flex space-x-4 overflow-x-auto">
+        <div className="flex space-x-4 overflow-x-auto scroll-hide">
           {images.map((img, index) => (
             <img
               key={index}
@@ -75,7 +75,7 @@ const AuctionDetailsImage: React.FC<AuctionDetailsImageProps> = ({ images }) => 
 
         {/* 오른쪽 화살표 */}
         <button onClick={handleNext} className="bg-gray-300 text-3xl font-bold p-2 rounded-lg">
-          &gt;
+          <i className="fa fa-chevron-right"></i>
         </button>
       </div>
     </div>

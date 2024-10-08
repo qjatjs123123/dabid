@@ -88,7 +88,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
   }, [auctionData.finishedAt]);
 
   return (
-    <div className="bg-gray-100 flex flex-col items-center m-4 p-5 rounded-lg">
+    <div className="bg-gray-100 flex flex-col items-center ml-4 p-5 rounded-lg">
       <div className="bg-white p-2 rounded-lg text-3xl font-bold w-full">{auctionData.title}</div>
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center m-4">
         <div className="flex justify-between items-center mb-4">
