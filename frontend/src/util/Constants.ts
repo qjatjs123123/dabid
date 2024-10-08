@@ -124,6 +124,8 @@ export const MESSAGE = {
   API_ACCOUNT_SUCCESS: '계좌 인증 요청 완료',
   API_ACCOUNT_ERROR: '계좌 인증 오류 발생',
   API_ACCOUNT_COMPLETE: '계좌 인증 완료',
+
+  API_SIGNUP_SUCCESS: '회원 가입 완료',
 };
 
 export const DELAY_TIME_START = 400;
