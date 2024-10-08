@@ -354,7 +354,8 @@ public class DealServiceImpl implements DealService {
             CourierRequestNo cn = new CourierRequestNo(modifiedCarrierId, request.getTrackingNumber());
 
             String status = deliveryTrackerAPIClient.trackPackage(cn);
-            log.info("호출 후 상태 : {}", status);
+
+            if (!status.equals("DELIVERED")) status = "IN_TRANSIT";
 
             //  status 갱신
             deal.setStatus(Status.valueOf(status));
