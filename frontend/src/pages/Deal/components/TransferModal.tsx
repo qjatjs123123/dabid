@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getDealContentDetailQuery } from '../../../stores/queries/getDealContentDetailQuery';
 import { useRecoilValue } from 'recoil';
 import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
+import { getDealContentListQuery } from '../../../stores/queries/getDealContentListQuery';
 
 interface TransferModalProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, deal }) 
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // 성공 메시지 상태
   const curDealId = useRecoilValue(curDealIdState);
   const { data: dealContentDetail, refetch } = getDealContentDetailQuery(curDealId);
-
+  const { data: dealContentDetail1, refetch: refetchDealContentList } = getDealContentListQuery();
   if (!isOpen) return null;
 
   // 송금 API 호출 함수
@@ -32,6 +33,7 @@ const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, deal }) 
           onClose(); // 모달 닫기
           // navigate(0); //
           refetch();
+          refetchDealContentList();
         }, 1500); // 1.5초 후 모달 닫고 페이지 이동
       }
     } catch (error) {
