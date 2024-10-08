@@ -18,10 +18,13 @@ import AuctionDetail from './pages/Auction/AuctionDetail';
 import Inquiry from './pages/Inquiry/Inquiry';
 import { UserInfo, userState } from './stores/recoilStores/Member/userState';
 import axios from './api/axiosConfig';
+import { useState } from 'react';
 
 function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
   const [, setUserInfo] = useRecoilState<UserInfo | null>(userState);
+  const [isBankOpenDeal, setIsBankOpenDeal] = useState<boolean>(false); // BankModal 상태 관리
+  const [isChatbotOpenDeal, setIsChatbotOpenDeal] = useState<boolean>(false); // ChatbotModal 상태 관리
   const navigate = useNavigate();
   const handleLoginSuccess = async () => {
     const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
@@ -41,7 +44,10 @@ function App() {
         <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
 
         <Route element={<PrivateRoute setModalOpen={setModalOpen} />}>
-          <Route path={`${PAGE_URL.DEAL}`} element={<Deal />} />
+          <Route
+            path={`${PAGE_URL.DEAL}`}
+            element={<Deal isBankOpenDeal={isBankOpenDeal} isChatbotOpenDeal={isChatbotOpenDeal} />}
+          />
           <Route path={`${PAGE_URL.MY_PAGE}`} element={<Mypage />} />
           <Route path={PAGE_URL.AUCTION_DETAIL} element={<AuctionDetail />} />
           <Route path={`${PAGE_URL.AUCTION_INPUT}`} element={<AuctionInput />} />
@@ -49,7 +55,7 @@ function App() {
         </Route>
       </Routes>
 
-      <FloatingActionButtons />
+      <FloatingActionButtons setIsBankOpenDeal={setIsBankOpenDeal} setIsChatbotOpenDeal={setIsChatbotOpenDeal} />
     </>
   );
 }

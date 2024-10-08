@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import chatIcon from '../../assets/chat/chatIcon.svg';
 import sendChat from '../../assets/chat/sendChat.svg';
-import profile from '../../assets/chat/img.jpg';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { curDealIdState } from '../../stores/recoilStores/Deal/stateDealId';
 import { fetchChatMessages } from '../../api/chatApi';
@@ -76,7 +75,7 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div className="fixed bottom-10 right-10 z-50 noto-sans-kr-bold">
+    <div className="fixed bottom-[173px] right-[33px] z-50 noto-sans-kr-bold">
       {isOpen ? (
         <>
           <div className="w-[350px] h-[500px] border border-gray-300 rounded-lg bg-white shadow-lg">
@@ -132,7 +131,6 @@ const Chat = () => {
                 className="flex-grow p-2 border-none focus:outline-none"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Write a message"
               />
               <button type="submit" className="p-2 text-white rounded-br-lg">
                 <img src={sendChat} alt="Chat Icon" className="w-full h-full" />
@@ -141,7 +139,10 @@ const Chat = () => {
           </div>
         </>
       ) : (
-        <button onClick={() => setIsOpen(true)} className="w-16 h-16 flex items-center justify-center rounded-full">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="h-[65px] w-[65px] flex items-center justify-center rounded-full"
+        >
           <img src={chatIcon} alt="Chat Icon" className="w-full h-full" />
         </button>
       )}

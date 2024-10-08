@@ -2,7 +2,12 @@ import Chat from '../../components/Chat/Chat';
 import DealContentContainer from './components/DealContentContainer';
 import DealContentDetail from './components/DealContentDetail';
 
-const Deal = () => {
+interface DealProps {
+  isBankOpenDeal: boolean;
+  isChatbotOpenDeal: boolean;
+}
+
+const Deal: React.FC<DealProps> = ({ isBankOpenDeal, isChatbotOpenDeal }) => {
   return (
     <>
       <div className="w-full lg:h-[45vh] sm:h-auto bg-[#D3EDFA] px-[15%] flex flex-col lg:flex-row justify-center items-center">
@@ -27,7 +32,8 @@ const Deal = () => {
           <DealContentDetail />
         </div>
         <div>
-          <Chat />
+          {/* <Chat /> */}
+          {!isBankOpenDeal && !isChatbotOpenDeal && <Chat />}
         </div>
       </div>
     </>
