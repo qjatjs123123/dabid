@@ -9,4 +9,5 @@ public interface StatusMessage {
     String NOT_ENOUGH_POINTS = "Not Enough Points.";
     String NOT_VERIFIED_ACCOUNT = "Not Verified Account.";
     String EXTERNAL_API_ERROR = "External API Error.";
+    String INTERNAL_SERVER_ERROR = "Internal Server Error.";
 }

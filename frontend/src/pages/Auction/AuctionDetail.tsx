@@ -70,23 +70,29 @@ const AuctionDeatil: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="flex flex-row mt-4">
-        <div className="flex-12 text-2xl font-bold">{auctionData.title}</div>
+      {/* 제목 */}
+      <div className="flex flex-col md:flex-row mt-4">
+        {/* <div className="flex-12 text-2xl font-bold">{auctionData.title}</div> */}
       </div>
 
-      <div className="flex flex-row">
-        <div className="flex-6">
+      {/* 이미지 및 입찰 정보 */}
+      <div className="flex flex-col lg:flex-row justify-center items-center">
+        {/* 이미지 섹션 */}
+        <div className="lg:flex-6 w-full lg:w-auto mb-4 lg:mb-0">
           <AuctionDetailsImage images={auctionData.images} />
         </div>
-        <div className="flex-6">
+
+        {/* 입찰 정보 섹션 */}
+        <div className="lg:flex-6 w-full lg:w-auto">
           <AuctionDetailsBidding auctionData={auctionData} />
-          <AuctionDetailsDescription detail={auctionData.detail} />
+          {/* <AuctionDetailsDescription detail={auctionData.detail} /> */}
         </div>
       </div>
 
-      {/* <div className="flex flex-row w-full mt-4">
+      {/* 설명 */}
+      <div className="flex flex-col w-full mt-4">
         <AuctionDetailsDescription detail={auctionData.detail} />
-      </div> */}
+      </div>
     </div>
   );
 };
