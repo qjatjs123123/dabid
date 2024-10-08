@@ -15,8 +15,9 @@ topic_details = {
     "은행과 계좌":"가난한 취업 준비생들의 서비스 이용을 위해 다비드에서는 100만원이 입금된 테스트용 계좌를 제공하고 있습니다. 테스트 계좌는 회원 가입 시 자동으로 발급되며, 다비드 내부의 가상 은행 '다비드뱅크'에서 계좌를 관리할 수 있습니다.",
     "고객센터":"경매나 거래 중 시스템적으로 해결하지 못하는 문제가 발생할 수 있습니다. 고객센터에서 문의를 작성하면 빠른 시일 내에 적절한 조치를 받을 수 있습니다. 개인 정보 유출 우려가 있으므로 유저는 자신이 작성한 문의만 확인할 수 있습니다.",
 }
+
 def get_details(topic):
-    return topic_details.get(topic)
+    return topic_details.get(topic, "해당 주제에 대한 정보를 찾을 수 없습니다.")
 
 def get_details_dabid():
     return get_details("다비드")
@@ -73,17 +74,17 @@ func_specs = [
         },
         {
             "name": "get_details_apply_auction",
-            "description": "다비드에서 경매를 등록하는 방법에 대한 정보 제공",
+            "description": "경매를 등록하는 방법에 대한 정보 제공",
  
         },
         {
             "name": "get_details_enter_auction",
-            "description": "다비드에서 경매에 참가하는 방법에 대한 정보 제공",
+            "description": "경매에 참가하는 방법에 대한 정보 제공",
  
         },
         {
             "name": "get_details_deal",
-            "description": "다비드에서 경매 물품을 거래하는 방법에 대한 정보 제공",
+            "description": "낙찰된 물품을 거래하는 방법에 대한 정보 제공",
  
         },
         {

@@ -30,11 +30,12 @@ const NavBar: React.FC = () => {
           await setUserInfo(response.data);
         } catch (error) {
           console.error(error);
+          handleLogout();
         }
       };
       fetchUserInfo(); // 사용자 정보를 가져옵니다.
     }
-  }, [token, setToken]);
+  }, [localStorage.getItem('accessToken')]);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
@@ -79,7 +80,11 @@ const NavBar: React.FC = () => {
             {isAuthenticated && <UserDropdown />}
           </ul>
         </div>
-        <button className="navbar-button" type="button" onClick={toggleMenu}>
+        <button
+          className="relative ml-auto h-6 max-h-[40px] w-6 max-w-[40px] select-none rounded-md text-center align-middle text-xs font-medium uppercase text-inherit transition-all hover:bg-transparent focus:bg-transparent active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:hidden"
+          type="button"
+          onClick={toggleMenu}
+        >
           <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
             <svg
               xmlns="http://www.w3.org/2000/svg"

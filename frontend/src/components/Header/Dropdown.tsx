@@ -31,7 +31,7 @@ const UserDropdown = () => {
   };
 
   return (
-    <div className="relative inline-block text-left z-[9999] hover:bg-slate-50 rounded">
+    <div className="relative inline-block text-left z-[9999] hover:bg-slate-100 rounded">
       <button
         id="dropdownDefaultButton"
         onClick={toggleDropdown}
@@ -80,10 +80,14 @@ const UserDropdown = () => {
               </Link>
             </li>
             <li>
-              <button onClick={handleLogout} className="flex items-center px-4 py-2 hover:bg-gray-100">
+              <Link
+                to={`${PAGE_URL.HOME}`}
+                onClick={handleLogout}
+                className="flex items-center px-4 py-2 hover:bg-gray-100"
+              >
                 <img src={getImgUrl('navbar/nav-logout.svg')} alt="로그아웃" className="max-h-5 w-5 mr-2" />
                 <p>로그아웃</p>
-              </button>
+              </Link>
             </li>
           </ul>
         </div>
