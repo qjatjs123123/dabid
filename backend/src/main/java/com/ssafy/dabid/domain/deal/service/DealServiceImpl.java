@@ -243,7 +243,14 @@ public class DealServiceImpl implements DealService {
         List<ListDealResponseDto> result = new ArrayList<>();
 
         for (Deal deal : dealPage) {
-            System.out.println(deal.toString());
+            int buyer_id = deal.getBuyer().getId();
+            int seller_id = deal.getSeller().getId();
+
+            Member buyer = memberRepository.findById(buyer_id)
+                    .orElseThrow(() -> new NoSuchElementException("구매자를 찾을 수 없습니다."));
+            Member seller = memberRepository.findById(seller_id)
+                    .orElseThrow(() -> new NoSuchElementException("판매자를 찾을 수 없습니다."));
+
             String sta = "";
             boolean isSeller = member.getId() == deal.getSeller().getId();
             boolean isTimerVisible = false; // 입금 전 타이머 표시 여부
@@ -262,6 +269,9 @@ public class DealServiceImpl implements DealService {
             ListDealResponseDto dto = ListDealResponseDto.builder()
                     .id(deal.getId())
                     .seller_nickname(deal.getSeller().getNickname())
+                    .seller_imageUrl(s3Util.generateFileUrl(seller.getImageUrl()))
+                    .buyer_nickname(buyer.getNickname())
+                    .buyer_imageUrl(s3Util.generateFileUrl(buyer.getImageUrl()))
                     .title(deal.getTitle())
                     .detail(deal.getDetail())
 //                    .image(s3Util.generateFileUrl(deal.getImage()))
@@ -371,10 +381,19 @@ public class DealServiceImpl implements DealService {
         } else{
             isTimerVisible = false;
         }
+        int buyer_id = deal.getBuyer().getId();
+        int seller_id = deal.getSeller().getId();
 
+        Member buyer = memberRepository.findById(buyer_id)
+                .orElseThrow(() -> new NoSuchElementException("구매자를 찾을 수 없습니다."));
+        Member seller = memberRepository.findById(seller_id)
+                .orElseThrow(() -> new NoSuchElementException("판매자를 찾을 수 없습니다."));
         DealResponseDto dto = DealResponseDto.builder()
                 .id(deal.getId())
                 .seller_nickname(deal.getSeller().getNickname())
+                .seller_imageUrl(s3Util.generateFileUrl(seller.getImageUrl()))
+                .buyer_nickname(buyer.getNickname())
+                .buyer_imageUrl(s3Util.generateFileUrl(buyer.getImageUrl()))
                 .title(deal.getTitle())
                 .detail(deal.getDetail())
                 .image(deal.getImage())

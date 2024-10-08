@@ -12,6 +12,9 @@ interface DealContent {
   status: string;
   created_at: [number, number, number, number, number, number, number]; 
   timerVisible: boolean;
+  seller_imageUrl: string;
+  buyer_nickname: string;
+  buyer_imageUrl: string;
 }
 
 interface DealContentListResponse {

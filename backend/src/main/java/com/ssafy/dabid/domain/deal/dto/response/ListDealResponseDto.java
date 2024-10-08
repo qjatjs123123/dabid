@@ -19,4 +19,7 @@ public class ListDealResponseDto {
     private String status;
     private boolean isTimerVisible;
     private LocalDateTime created_at;
+    private String seller_imageUrl;
+    private String buyer_nickname;
+    private String buyer_imageUrl;
 }

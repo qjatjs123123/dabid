@@ -16,6 +16,9 @@ interface DealContent {
   trackingNumber: string | null;
   seller: boolean;
   created_at: [number, number, number, number, number, number, number]; 
+  seller_imageUrl: string;
+  buyer_nickname: string;
+  buyer_imageUrl: string;
 }
 
 export function getDealContentDetailQuery(dealId: number) {

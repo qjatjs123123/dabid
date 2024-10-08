@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useDealContentDetail from '../../../business/hooks/useDeal/useDealContentDetail';
 import { formatNumberWithCommas } from '../../../util/moneyComma';
-import DealContentUserProfile from './DealContentUserProfile';
+import DealContentContainer from './DealContentUserProfile';
 import DealContentDetailSkeleton from '../skeletons/DealContentDetailSkeleton';
 import DealButton from '../../../components/Button/DealButton';
 import CloseButton from '../../../components/Button/CloseButton';
@@ -62,8 +62,14 @@ const DealContentDetail = () => {
             alt="Deal Image"
           />
           <div className="flex justify-start">
-            <div className="flex-2 flex item-center">
-              <DealContentUserProfile />
+            <div className="flex-2 flex item-center flex-col">
+              <DealContentContainer
+                imageUrl={deal.seller_imageUrl}
+                nickname={deal.seller_nickname}
+                value={'판매자: '}
+              />
+              <div className="mt-[10px]"></div>
+              <DealContentContainer imageUrl={deal.buyer_imageUrl} nickname={deal.buyer_nickname} value={'구매자: '} />
             </div>
             <div className="flex-1 flex justify-end">
               <div className="w-[180px]">{!deal.seller ? renderButton() : <></>}</div>

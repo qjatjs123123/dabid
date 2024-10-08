@@ -14,6 +14,9 @@ interface DealProps {
     status: string;
     timerVisible: boolean;
     created_at: [number, number, number, number, number, number, number];
+    seller_imageUrl: string;
+    buyer_nickname: string;
+    buyer_imageUrl: string;
   };
 }
 
@@ -38,7 +41,7 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
         <span>원</span>
       </div>
       <div className="flex justify-between items-center h-full">
-        <DealContentContainer />
+        <DealContentContainer imageUrl={deal.seller_imageUrl} nickname={deal.seller_nickname} value={''} />
         <DealContentTimer dealQuery={deal} fontSize="11px" />
       </div>
     </div>
