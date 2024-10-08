@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <Header />
-        <Nav />
+        {/* <Nav /> */}
         <App />
         <SnackBarUI />
       </QueryClientProvider>
