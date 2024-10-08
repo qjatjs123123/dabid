@@ -1,6 +1,6 @@
 services:
   chatbot:
-    build: .
+    image: taegun1011/dabid_ai:1.1.2
     container_name: chatbot
     ports:
       - "5000:5000"

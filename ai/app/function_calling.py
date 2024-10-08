@@ -14,16 +14,6 @@ topic_details = {
     "거래":"판매자와 구매자는 다비드의 거래 페이지에서 거래를 진행하게 됩니다. 둘은 거래 진행 상황을 실시간으로 확인하고 채팅을 주고 받을 수 있습니다. 낙찰에 성공한 구매자는 경매 종료 후 이틀 이내에 다비드의 가상 계좌에 낙찰액을 입금해야 합니다. 판매자는 가상계좌에 돈이 입금된 사실을 확인한 뒤 택배를 배송하고, 배송한 택배의 송장번호를 등록해야 합니다. 송장 번호를 등록하면 구매자는 택배 배송 상황을 확인할 수 있습니다. 택배가 도착한 사실을 확인하면 구매자는 물품의 상태를 확인하고 '인수하기' 버튼을 누릅니다. 이 일련의 절차가 문제 없이 진행되면 거래가 성공적으로 종료됩니다.",
     "은행과 계좌":"가난한 취업 준비생들의 서비스 이용을 위해 다비드에서는 100만원이 입금된 테스트용 계좌를 제공하고 있습니다. 테스트 계좌는 회원 가입 시 자동으로 발급되며, 다비드 내부의 가상 은행 '다비드뱅크'에서 계좌를 관리할 수 있습니다.",
     "고객센터":"경매나 거래 중 시스템적으로 해결하지 못하는 문제가 발생할 수 있습니다. 고객센터에서 문의를 작성하면 빠른 시일 내에 적절한 조치를 받을 수 있습니다. 개인 정보 유출 우려가 있으므로 유저는 자신이 작성한 문의만 확인할 수 있습니다.",
-    "사람":
-"""
-다비드와 비드미를 개발한 6명의 20대 프로그래머들입니다. 비드미는 나머지 사람들에 대해서는 알지 못합니다.
-유우준(부지런함, 밴드 "LUCY"의 메인 보컬 "조원상"을 닮음)
-조성욱(똑똑함, 개발을 잘함) 
-이민정(무서움)
-홍범선(든든함)
-장윤주(재능있음)
-황태건(쓸모없음)
-"""
 }
 def get_details(topic):
     return topic_details.get(topic)
@@ -58,87 +48,54 @@ def get_details_bank_account():
 def get_details_cs():
     return get_details("고객센터")
 
-def get_details_person():
-    return get_details("사람")
-
 func_specs = [
         {
             "name": "get_details_dabid",
             "description": "다비드 사이트에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+ 
         },
         {
             "name": "get_details_bidding",
-            "description": "비딩에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+            "description": "비딩, 비크리 경매에 대한 정보 제공",
         },
         {
             "name": "get_details_escrow",
-            "description": "에스크로 거래에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+            "description": "에스크로 거래 방식에 대한 정보 제공",
         },
         {
             "name": "get_details_point",
             "description": "포인트에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
         },
         {
             "name": "get_details_user_info",
             "description": "회원 정책에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+ 
         },
         {
             "name": "get_details_apply_auction",
             "description": "다비드에서 경매를 등록하는 방법에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+ 
         },
         {
             "name": "get_details_enter_auction",
             "description": "다비드에서 경매에 참가하는 방법에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+ 
         },
         {
             "name": "get_details_deal",
             "description": "다비드에서 경매 물품을 거래하는 방법에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+ 
         },
         {
             "name": "get_details_bank_account",
-            "description": "다비드의 은행 '다비드뱅크'와 다비드에서 제공하는 '테스트 계좌'에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
+            "description": "'다비드뱅크'와 '테스트 계좌'에 대한 정보 제공",
+ 
         },
         {
             "name": "get_details_cs",
-            "description": "다비드의 고객센터에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
-        },
-        {
-            "name": "get_details_person",
-            "description": "비드미가 아는 사람들에 대한 정보 제공",
-            "parameters": {
-                "type": "void"
-            },
-        },
+            "description": "고객센터에 대한 정보 제공",
+ 
+        }
     ]
 
 
@@ -156,7 +113,6 @@ class FunctionCalling:
             "get_details_deal" : get_details_deal,
             "get_details_bank_account" : get_details_bank_account,
             "get_details_cs" : get_details_cs,
-            "get_details_person" : get_details_person,
         }
         self.model = model
 
