@@ -3,20 +3,7 @@ import Stomp, { Client } from 'stompjs';
 
 const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
   const stompClient = useRef<Client | null>(null);
-
-  // // 웹소켓 연결
-  // const connect = () => {
-  //   // const socket = new WebSocket('ws://localhost:8080/api/chat');
-  //   const socket = new WebSocket('wss://j11a505.p.ssafy.io/api/chat');
-  //   stompClient.current = Stomp.over(socket)!;
-  //   stompClient.current.connect({}, () => {
-  //     stompClient.current?.subscribe(`/sub/chat/room/${dealId}`, (message) => {
-  //       const parsedMessage = JSON.parse(message.body);
-  //       onMessage(parsedMessage); // 수신한 메시지를 처리하는 함수 호출
-  //     });
-  //   });
-  // };
-  const [, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const reconnectInterval = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttempts = useRef(0);
   const maxReconnectAttempts = 5; // 재연결 시도 횟수 제한
@@ -38,10 +25,12 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
         setIsConnected(true);
         reconnectAttempts.current = 0; // 성공 시 재연결 시도 횟수 초기화
 
-        stompClient.current?.subscribe(`/sub/chat/room/${dealId}`, (message) => {
-          const parsedMessage = JSON.parse(message.body);
-          onMessage(parsedMessage); // 수신한 메시지를 처리하는 함수 호출
-        });
+        if (socket.readyState === WebSocket.OPEN && stompClient.current) {
+          stompClient.current?.subscribe(`/sub/chat/room/${dealId}`, (message) => {
+            const parsedMessage = JSON.parse(message.body);
+            onMessage(parsedMessage); // 수신한 메시지를 처리하는 함수 호출
+          });
+        }
       },
       (error) => {
         console.error('WebSocket connection error', error);
@@ -79,14 +68,16 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
 
   // 메시지 전송
   const sendMessage = (message: any) => {
-    if (stompClient.current) {
+    if (stompClient.current && stompClient.current.connected) {
       stompClient.current.send(`/pub/chat/message`, {}, JSON.stringify(message));
+    } else {
+      console.warn('WebSocket is not connected, message not sent.');
     }
   };
 
   // 연결 해제
-  const disconnect = () => {
-    if (stompClient.current) {
+  const disconnect = (callback?: () => void) => {
+    if (stompClient.current && stompClient.current.connected) {
       stompClient.current.disconnect(() => {
         console.log('Disconnected from the server');
       });
@@ -97,8 +88,13 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
   };
 
   useEffect(() => {
-    connect();
-    return () => disconnect(); // 컴포넌트 언마운트 시 연결 해제
+    disconnect(() => {
+      setTimeout(() => {
+        connect(); // 대기 후 재연결
+      }, 500); // 0.5초 대기 후 재연결
+    });
+
+    return () => disconnect();
   }, [dealId]);
 
   return { sendMessage, disconnect };
