@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuctionListDto } from '../../AuctionList'; // 경로를 조정하여 AuctionListDto 가져오기
+import { AuctionListDto } from '../../../../stores/recoilStores/auctionListState';
 
 interface AuctionFilterProps {
   setAuctionList: React.Dispatch<React.SetStateAction<AuctionListDto[]>>;
