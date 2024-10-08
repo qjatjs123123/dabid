@@ -50,7 +50,7 @@ const Inquiry = () => {
             return (
               <li key={page}>
                 <button
-                  className={`block text-black p-3 ${activePage === page ? 'bg-gray-200' : ' '} hover:font-bold`}
+                  className={`block text-black p-3 ${activePage === page ? 'bg-db_main text-white font-bold' : ' '} hover:font-bold`}
                   onClick={() => setActivePage(page)}
                 >
                   {page}

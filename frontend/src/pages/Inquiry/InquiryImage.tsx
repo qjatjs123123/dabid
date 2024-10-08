@@ -58,7 +58,7 @@ const InquiryImage: React.FC<InquiryImageProps> = ({ onImagesChange }) => {
         <img src={getLatestImageUrl()} alt="Recent Upload" className="w-full h-full object-cover mb-4 opacity-50" />
       </div>
 
-      <button onClick={handleButtonClick} className="bg-orange-500 text-white rounded-md py-2 px-4">
+      <button onClick={handleButtonClick} className="bg-db_main hover:bg-db_hover text-white rounded-md py-2 px-4">
         이미지 업로드
       </button>
 
@@ -85,7 +85,7 @@ const InquiryImage: React.FC<InquiryImageProps> = ({ onImagesChange }) => {
             />
             <button
               onClick={() => handleRemoveImage(index)}
-              className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+              className="absolute top-0 right-0 text-white bg-db_main rounded-full px-1"
             >
               &times;
             </button>
