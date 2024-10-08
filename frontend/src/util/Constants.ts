@@ -126,6 +126,10 @@ export const MESSAGE = {
   API_ACCOUNT_COMPLETE: '계좌 인증 완료',
 
   API_SIGNUP_SUCCESS: '회원 가입 완료',
+  API_POINTIN_SUCCESS: '포인트 충전 완료',
+  API_POINTIN_FAIL: '포인트 충전 실패',
+  API_POINTOUT_SUCCESS: '포인트 환전 완료',
+  API_POINTOUT_FAIL: '포인트 환전 실패',
 };
 
 export const DELAY_TIME_START = 400;

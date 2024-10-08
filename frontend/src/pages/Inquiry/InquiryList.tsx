@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axiosConfig';
 import { INQUIRY_API_URL } from '../../util/Constants';
+import { getImgUrl } from '../../util/Functions';
 
 interface InquiryItem {
   inquiryId: number;
@@ -63,7 +64,13 @@ const InquiryList = () => {
             </div>
           ))
         ) : (
-          <div className="flex justify-center items-center text-2xl text-gray-500">{error === null ? '' : '텅'}</div>
+          <div className="flex justify-center items-center">
+            <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] m-[100px]" />
+          </div>
+
+          // <div className="flex justify-center items-center text-2xl text-gray-500">
+          //   {error === null ? '' : '아직 작성한 문의가 없습니다.'}
+          // </div>
         )}
       </div>
     </div>

@@ -54,7 +54,7 @@ const MyInfo: React.FC = () => {
       const response = await axios.post(`${MEMBER_API_URL.ACCOUNT_AUTH}`);
       if (response.data.code === 'SU') {
         // setStatus({ ...status, accountAuth: true, message: '계좌 인증 요청을 보냈습니다.' });
-        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_SUCCESS, DELAY_TIME_END_LONG); // 요청 성공
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_SUCCESS, DELAY_TIME_END); // 요청 성공
         setShowAccountVerification(true); // 계좌 인증 폼 표시
       } else if (response.data.code === 'AV') {
         setStatus({ ...status, accountCheck: true, message: '이미 인증된 계좌입니다.' });
@@ -72,7 +72,7 @@ const MyInfo: React.FC = () => {
 
       if (response.data.code === 'SU') {
         setStatus({ ...status, accountCheck: true, message: '계좌 인증이 완료되었습니다.' });
-        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_COMPLETE, DELAY_TIME_END_LONG); // 요청 보냄
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_COMPLETE, DELAY_TIME_END); // 요청 보냄
         fetchUserInfo();
       } else {
         setStatus({ ...status, message: '계좌 인증에 실패했습니다.' });
@@ -93,13 +93,16 @@ const MyInfo: React.FC = () => {
       const response = await axios.post(`${MEMBER_API_URL.POINT_IN}`, { amount: pointAmount });
       if (response.data.code === 'SU') {
         const res = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
-        await setUserInfo(res.data);
-        setPointStatus({ warning: false, message: '포인트 충전이 완료되었습니다.' });
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTIN_SUCCESS, DELAY_TIME_END_LONG);
+        setUserInfo(res.data);
+        // setPointStatus({ warning: false, message: '포인트 충전이 완료되었습니다.' });
       } else {
-        setPointStatus({ warning: true, message: response.data.message });
+        setPointStatus({ warning: true, message: '계좌 잔액이 부족합니다.' });
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTIN_FAIL, DELAY_TIME_END_LONG);
       }
     } catch (error) {
       console.log(error);
+      delaySetApiInfo(setApiInfo, MESSAGE.API_POINTIN_FAIL, DELAY_TIME_END_LONG);
       setPointStatus({ warning: true, message: '포인트 충전 요청 중 오류가 발생했습니다.' });
     }
     setPointAmount(0);
@@ -113,14 +116,17 @@ const MyInfo: React.FC = () => {
       const response = await axios.post(`${MEMBER_API_URL.POINT_OUT}`, { amount: pointAmount });
       if (response.data.code === 'SU') {
         const res = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
-        await setUserInfo(res.data);
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTOUT_SUCCESS, DELAY_TIME_END_LONG);
+        setUserInfo(res.data);
         setPointStatus({ warning: false, message: '포인트 환전이 완료되었습니다.' });
       } else {
-        setPointStatus({ warning: true, message: response.data.message });
+        setPointStatus({ warning: true, message: '포인트 잔액이 부족합니다.' });
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTOUT_FAIL, DELAY_TIME_END_LONG);
       }
     } catch (error) {
       console.log(error);
       setPointStatus({ warning: true, message: '포인트 환전 요청 중 오류가 발생했습니다.' });
+      await delaySetApiInfo(setApiInfo, MESSAGE.API_POINTOUT_FAIL, DELAY_TIME_END_LONG);
     }
     setPointAmount(0);
   };
@@ -263,11 +269,11 @@ const MyInfo: React.FC = () => {
                     환전하기
                   </button>
                 </div>
-                {pointStatus.message && (
+                {/* {pointStatus.message && (
                   <p className={`mt-2 ${pointStatus.warning ? 'text-red-600' : 'text-db_main'}`}>
                     {pointStatus.message}
                   </p>
-                )}
+                )} */}
               </div>
             </>
           )}
