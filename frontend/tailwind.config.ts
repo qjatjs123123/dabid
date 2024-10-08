@@ -16,6 +16,13 @@ export default {
         8: '8 8 0%',
         9: '9 9 0%',
       },
+      colors: {
+        db_white: '#FFF3E3',
+        db_sub: '#FFCDAC',
+        db_main: '#FFA45D',
+        db_hover: '#FF872A',
+        db_black: '#5D5E59',
+      },
     },
   },
   plugins: [

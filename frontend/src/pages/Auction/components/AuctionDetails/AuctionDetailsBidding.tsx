@@ -89,8 +89,8 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
 
   return (
     <div className="bg-gray-100 flex flex-col items-center ml-4 p-5 rounded-lg">
-      <div className="bg-white p-2 rounded-lg text-3xl font-bold w-full">{auctionData.title}</div>
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center m-4">
+      <div className="bg-white p-2 rounded-lg text-3xl font-bold w-full shadow-lg">{auctionData.title}</div>
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full text-center m-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-bold">현재가</h1>
           <p className="text-2xl font-semibold text-gray-800">{formatCurrency(auctionData.bid)}</p>
@@ -130,7 +130,7 @@ const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData 
           />
         </div>
       </div>
-      <div className="bg-white p-2 rounded-lg w-full">
+      <div className="bg-white p-2 rounded-lg w-full shadow-lg">
         <div className="mt-1 flex items-center">
           <p className="text-gray-600">판매자</p>
           <img
