@@ -45,32 +45,26 @@ const InquiryList = () => {
     getInquiries();
   }, []);
 
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
-    <div className="container mx-auto flex flex-col justify-center items-center">
-      <h1 className="text-3xl font-bold mb-6">내가 작성한 문의</h1>
-      <div className="space-y-4">
-        {inquiries.map((inquiry) => (
-          <div key={inquiry.inquiryId} className="border p-4 min-w-[500px] rounded shadow">
-            <h2 className="text-lg font-semibold">{inquiry.title}</h2>
-            <p className="text-sm text-gray-600">{inquiry.content}</p>
-            <p className="text-sm italic">카테고리: {inquiry.category}</p>
-            {inquiry.imageUrls.length > 0 && (
-              <div className="flex flex-row mt-2">
-                {inquiry.imageUrls.map((url, index) => (
-                  <img key={index} src={url} alt={`image-${index}`} className="w-32 h-32 object-cover mr-[10px]" />
-                ))}
+    <div className="flex justify-center items-center">
+      <div className="flex gap-4 flex-col w-full">
+        {inquiries.length > 0 ? (
+          inquiries.map((inquiry) => (
+            <div key={inquiry.inquiryId} className="flex flex-row border p-4 rounded shadow w-full">
+              <div className="mr-[20px]">
+                <img src={inquiry.imageUrls[0]} className="w-40 h-40 object-cover" />
               </div>
-            )}
-          </div>
-        ))}
+
+              <div className="flex flex-col">
+                <h2 className="font-semibold text-[30px]">{inquiry.title}</h2>
+                <p className="text-sm italic">카테고리: {inquiry.category}</p>
+                <p className="text-[20px] text-gray-600">{inquiry.content}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="flex justify-center items-center text-2xl text-gray-500">{error === null ? '' : '텅'}</div>
+        )}
       </div>
     </div>
   );
