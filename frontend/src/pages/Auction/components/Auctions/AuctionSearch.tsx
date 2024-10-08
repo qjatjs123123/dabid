@@ -8,6 +8,7 @@ import { FaSearch } from 'react-icons/fa';
 const AuctionSearch: React.FC = () => {
   const [_, setAuctionList] = useRecoilState(auctionListState);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isFocus, setIsFocus] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSearch = async () => {
@@ -44,15 +45,19 @@ const AuctionSearch: React.FC = () => {
   };
 
   return (
-    <div className="container bg-gray-100 rounded flex flex-row">
-      <FaSearch className="text-gray-400 m-2" />
+    <div
+      className={`container bg-gray-100 rounded flex flex-row items-center ${isFocus ? 'border-2 border-db_main' : ''}`}
+    >
+      <FaSearch className="text-gray-400 my-2 ml-4 cursor-pointer" onClick={handleSearch} />
       <input
         type="text"
         placeholder="원하는 물건을 검색해 보세요!"
-        className="w-full p-2 text-sm bg-gray-100"
+        className="w-full p-4 text-md bg-gray-100 outline-none"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={handleKeyDown}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
       />
     </div>
   );

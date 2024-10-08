@@ -110,14 +110,14 @@ const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onLoginSucces
             {errorMessage && <p className="text-red-500 mb-3 text-sm">{errorMessage}</p>} {/* 에러 메시지 표시 */}
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-[300px] focus:outline-none focus:shadow-outline mb-4"
+              className="bg-db_main hover:bg-db_hover text-white font-bold py-2 px-4 rounded w-[300px] focus:outline-none focus:shadow-outline mb-4"
             >
               로그인
             </button>
             <div className="text-right text-sm">
               <Link
                 to={`${PAGE_URL.SIGN_UP}`}
-                className="text-blue-600 hover:text-blue-800 text-right mr-0 w-[100%]"
+                className="text-db_main hover:text-db_hover text-right mr-0 w-[100%]"
                 onClick={handleClose}
               >
                 아직 다비드 회원이 아니신가요?

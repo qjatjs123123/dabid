@@ -131,59 +131,98 @@ const MyInfo: React.FC = () => {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-4xl font-semibold mb-5">사용자 정보</h1>
       {loading ? (
         <p className="text-gray-500">로딩 중...</p>
       ) : userInfo ? (
         <>
-          <div className="mb-6">
-            <p className="text-xl font-medium my-3">프로필 사진</p>
-            {userInfo.imageUrl && (
-              <img src={userInfo.imageUrl} alt="사용자 이미지" className="rounded-full w-32 h-32 object-cover" />
-            )}
-            <p className="text-xl my-3">닉네임: {userInfo.nickname}</p>
-            <p className="text-xl my-3">이메일: {userInfo.email}</p>
-            <p className="text-xl my-3">전화번호: {userInfo.phoneNumber}</p>
-            <div className="text-xl my-3 flex items-center">
-              <span className="">계좌: </span>
-              <input type="text" value={userInfo.accountNo} disabled className="ml-2 border rounded-md p-1 text-md" />
-              {!status.accountCheck && (
-                <button
-                  onClick={accountAuth}
-                  className="bg-black text-white text-lg rounded px-4 py-1 ml-2 w-[160px] h-[35px]"
-                >
-                  계좌 등록하기
-                </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="flex flex-col items-center">
+              {userInfo.imageUrl && (
+                <img
+                  src={userInfo.imageUrl}
+                  alt="사용자 이미지"
+                  className="rounded-full w-32 h-32 object-cover mb-3 border-4 border-db_black"
+                />
               )}
+              <p className="text-xl my-3">{userInfo.nickname}</p>
             </div>
-            {showAccountVerification &&
-              !status.accountCheck && ( // 계좌 인증 폼 표시 조건
-                <div className="text-xl my-3">
-                  <div className="flex items-center">
-                    <span className="">계좌 인증 코드: </span>
-                    <input
-                      type="text"
-                      name="code"
-                      id="code"
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      className="ml-2 border rounded-md p-1 text-md"
-                    />
-                    <button onClick={accountCheck} className="bg-black text-white rounded px-4 ml-2 w-[170px] h-[35px]">
-                      계좌 인증하기
-                    </button>
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <div className="flex justify-between border-b py-2">
+                <span className="text-xl">이메일</span>
+                <span className="text-xl font-semibold">{userInfo.email}</span>
+              </div>
+              <div className="flex justify-between border-b py-2">
+                <span className="text-xl">전화번호</span>
+                <span className="text-xl font-semibold">{userInfo.phoneNumber}</span>
+              </div>
+              <div className="flex justify-between border-b py-2">
+                <span className="text-xl">계좌</span>
+                <div className="flex items-center w-1/2">
+                  <input
+                    type="text"
+                    value={userInfo.accountNo}
+                    disabled
+                    className="border rounded-md p-1 text-md text-right text-slate-600 bg-gray-200 w-full"
+                  />
+                </div>
+              </div>
+              {!showAccountVerification && !status.accountCheck && (
+                <div className="flex justify-end border-b py-2">
+                  <button
+                    onClick={accountAuth}
+                    className="bg-db_main text-white text-lg rounded px-4 py-1 ml-2 transition duration-300 hover:bg-db_hover"
+                  >
+                    계좌 등록하기
+                  </button>
+                </div>
+              )}
+              {showAccountVerification && !status.accountCheck && (
+                <div>
+                  <div className="flex justify-between border-b py-2">
+                    <span className="text-xl">인증코드</span>
+                    <div className="flex items-center w-1/4">
+                      <input
+                        type="text"
+                        name="code"
+                        id="code"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        className="ml-2 border rounded-md p-1 text-md text-center w-full"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-end border-b py-2">
+                      <button
+                        onClick={accountCheck}
+                        className="bg-db_main text-white rounded px-4 py-1 ml-2 transition duration-300 hover:bg-db_hover"
+                      >
+                        인증하기
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
-            <div className="mt-3">{status.message && <p className="text-green-600">{status.message}</p>}</div>
+              <div className="mt-3">
+                {status.message && <p className="text-db_main text-right">{status.message}</p>}
+              </div>
+            </div>
           </div>
           {status.accountCheck && (
             <>
               <hr className="my-6" />
-              <p className="text-xl font-semibold">포인트: {formatNumberWithCommas(userInfo.point)}</p>
+              <p className="text-xl font-semibold">
+                포인트
+                <input
+                  type="text"
+                  value={formatNumberWithCommas(userInfo.point)}
+                  disabled
+                  className="border rounded-md p-1 ml-3 text-md text-right bg-gray-200 w-1/5"
+                />
+              </p>
               <div className="my-4">
-                <div className="flex items-center my-4 space-x-2 ">
-                  <p className="text-xl my-3 w-[150px]">충전/환전할 금액: </p>
+                <div className="flex items-center my-4 space-x-2">
+                  <p className="text-xl my-3 w-[150px]">충전/환전할 금액 </p>
                   <input
                     type="number"
                     value={pointAmount}
@@ -191,27 +230,41 @@ const MyInfo: React.FC = () => {
                     placeholder="충전할 금액"
                     className="border rounded p-2"
                   />
-                  <button onClick={pointIn} className="bg-black text-white text-md rounded px-4 py-2">
-                    포인트 충전
-                  </button>
-                  <button onClick={pointOut} className="bg-black text-white text-md rounded px-4 py-2">
-                    포인트 환전
-                  </button>
-                </div>
-
-                <div className="flex space-x-2 mb-4">
-                  <button onClick={() => addPoint(5000)} className="bg-gray-200 rounded px-2 py-1">
+                  <button
+                    onClick={() => addPoint(5000)}
+                    className="bg-db_sub hover:bg-db_main text-white rounded px-2 py-1"
+                  >
                     +5,000
                   </button>
-                  <button onClick={() => addPoint(10000)} className="bg-gray-200 rounded px-2 py-1">
+                  <button
+                    onClick={() => addPoint(10000)}
+                    className="bg-db_sub hover:bg-db_main text-white rounded px-2 py-1"
+                  >
                     +10,000
                   </button>
-                  <button onClick={() => addPoint(50000)} className="bg-gray-200 rounded px-2 py-1">
+                  <button
+                    onClick={() => addPoint(50000)}
+                    className="bg-db_sub hover:bg-db_main text-white rounded px-2 py-1"
+                  >
                     +50,000
                   </button>
                 </div>
+                <div className="flex space-x-2 mb-4">
+                  <button
+                    onClick={pointIn}
+                    className="bg-db_main hover:bg-db_hover text-white text-md rounded px-4 py-2"
+                  >
+                    충전하기
+                  </button>
+                  <button
+                    onClick={pointOut}
+                    className="bg-db_main hover:bg-db_hover text-white text-md rounded px-4 py-2"
+                  >
+                    환전하기
+                  </button>
+                </div>
                 {pointStatus.message && (
-                  <p className={`mt-2 ${pointStatus.warning ? 'text-red-600' : 'text-green-600'}`}>
+                  <p className={`mt-2 ${pointStatus.warning ? 'text-red-600' : 'text-db_main'}`}>
                     {pointStatus.message}
                   </p>
                 )}

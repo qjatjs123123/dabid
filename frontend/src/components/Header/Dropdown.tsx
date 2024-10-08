@@ -31,7 +31,7 @@ const UserDropdown = () => {
   };
 
   return (
-    <div className="relative inline-block text-left z-[9999] hover:bg-slate-50 rounded">
+    <div className="relative inline-block text-left z-[9999] hover:bg-slate-100 rounded">
       <button
         id="dropdownDefaultButton"
         onClick={toggleDropdown}

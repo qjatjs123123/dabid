@@ -51,11 +51,11 @@ const ButtonGroup: React.FC<{ onButtonClick: (value: string) => void }> = ({ onB
   ];
 
   return (
-    <div className="flex flex-wrap gap-2 mt-4">
+    <div className="flex flex-wrap">
       {buttons.map((buttonProperty) => (
         <button
           key={buttonProperty.title}
-          className="bg-gray-300 p-2 rounded-lg"
+          className="border-2 border-db_sub p-2 hover:bg-db_sub"
           onClick={() => onButtonClick(buttonProperty.content)}
         >
           {buttonProperty.title}
@@ -151,7 +151,7 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     >
       <div
         ref={modalRef} // 대화창을 위한 ref 추가
-        className={`bg-white p-6 rounded-lg shadow-lg max-w-md w-full mb-10 transition-transform duration-300 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'} h-[700px] flex flex-col`} // Flexbox 설정
+        className={`bg-white p-6 rounded-lg shadow-lg max-w-md w-full mb-10 transition-transform duration-300 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'} h-[600px] flex flex-col`} // Flexbox 설정
       >
         <div className="flex items-center mb-4">
           <div
@@ -177,7 +177,7 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           {' '}
           {chatHistory.map((message, index) => (
             <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-2`}>
-              <p className={`p-2 rounded-lg ${message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}>
+              <p className={`p-2 rounded-lg ${message.role === 'user' ? 'bg-db_hover text-white' : 'bg-db_white'}`}>
                 {message.content}
               </p>
             </div>
@@ -187,10 +187,10 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
         <ButtonGroup onButtonClick={handleButtonClick} />
 
-        <div className="flex mt-4">
+        <div className="flex">
           {' '}
           <input
-            className="text-gray-600 flex-grow border border-gray-300 rounded-lg p-2"
+            className="text-gray-600 flex-grow border border-gray-300 rounded-lg p-2 outline-db_hover"
             placeholder="다비드에 대해 궁금한 점은 무엇이든 물어보세요!"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -201,7 +201,7 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
               }
             }}
           />
-          <button className="bg-blue-500 text-white p-2 ml-2 rounded-lg" onClick={() => handleSend()}>
+          <button className="bg-db_main hover:bg-db_hover text-white p-2 ml-2 rounded-lg" onClick={() => handleSend()}>
             전송
           </button>
         </div>
