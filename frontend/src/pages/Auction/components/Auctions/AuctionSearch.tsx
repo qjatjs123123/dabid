@@ -46,7 +46,7 @@ const AuctionSearch: React.FC = () => {
 
   return (
     <div
-      className={`container bg-gray-100 rounded flex flex-row items-center ${isFocus ? 'border-2 border-db_black' : ''}`}
+      className={`container bg-gray-100 rounded flex flex-row items-center ${isFocus ? 'border-2 border-db_main' : ''}`}
     >
       <FaSearch className="text-gray-400 my-2 ml-4 cursor-pointer" onClick={handleSearch} />
       <input
