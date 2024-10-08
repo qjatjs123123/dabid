@@ -14,8 +14,11 @@ const RegistSuccessModal: React.FC<RegistSuccessModalProps> = ({ isRegistSuccess
       <div className="bg-white rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold mb-4">알림</h2>
         <p>경매가 성공적으로 등록되었습니다.</p>
-        <div className="flex justify-end mt-4">
-          <button onClick={onRegistSuccessClose} className="mr-2 bg-gray-300 text-black px-4 py-2 rounded">
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={onRegistSuccessClose}
+            className="mr-2 bg-db_black hover:bg-gray-600 text-white px-4 py-2 rounded"
+          >
             확인
           </button>
         </div>

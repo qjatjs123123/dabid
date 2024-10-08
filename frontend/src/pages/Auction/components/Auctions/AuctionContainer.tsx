@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { AuctionListDto, auctionListState } from '../../../../stores/recoilStores/auctionListState';
 import { useNavigate } from 'react-router-dom';
@@ -12,8 +13,21 @@ const AuctionContainer: React.FC = () => {
     navigate(`/auctions/${auctionId}`);
   };
 
+  const [showFirstText, setShowFirstText] = useState(false);
+  useEffect(() => {
+    const firstTextTimer = setTimeout(() => {
+      setShowFirstText(true);
+    }, 100); // 텍스트 애니메이션 시작
+
+    return () => {
+      clearTimeout(firstTextTimer);
+    };
+  }, []);
+
   return (
-    <div className="card-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 p-4 ml-auto cursor-pointer">
+    <div
+      className={`card-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 p-4 ml-auto cursor-pointer ${showFirstText ? 'animate-fade-in' : 'opacity-0'}`}
+    >
       {auctionList.map((auction, index) => (
         <div
           key={index}

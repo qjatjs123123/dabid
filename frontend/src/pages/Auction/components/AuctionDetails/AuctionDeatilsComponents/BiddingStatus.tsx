@@ -81,7 +81,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
         } catch (error) {
           console.error('User info update failed:', error);
         }
-        navigate(PAGE_URL.AUCTION_LIST);
+        // navigate(PAGE_URL.AUCTION_LIST);
 
         setModalResultMessage('경매가 성공적으로 취소되었습니다.');
         setModalResultIsOpen(true);

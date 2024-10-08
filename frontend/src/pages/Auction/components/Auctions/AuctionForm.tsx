@@ -9,7 +9,6 @@ import { MEMBER_API_URL } from '../../../../util/Constants';
 import RegistSuccessModal from '../Modal/RegistSuccessModal'; // 성공 모달 컴포넌트 임포트
 import AuctionErrorModal from '../Modal/AuctionErrorModal'; // 에러 모달 컴포넌트 임포트
 
-
 interface AuctionFormProps {
   images: File[]; // AuctionImage에서 가져온 이미지
 }
@@ -51,7 +50,6 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
       });
 
       if (response.ok) {
-
         // 성공 시 처리
         // alert('경매가 성공적으로 등록되었습니다.'); // 알림 표시
         try {
@@ -60,11 +58,8 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
         } catch (error) {
           console.error('User info update failed:', error);
         }
-        navigate('/auction'); // 페이지 이동
-
         // 성공 시 모달 열기
         setRegistSuccessOpen(true);
-
       } else {
         // 오류 처리
         if (response.status === 403) {
@@ -144,7 +139,7 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
           />
         </div>
 
-        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
+        <button type="submit" className="w-full p-2 bg-db_main hover:bg-db_hover text-white rounded">
           경매 시작하기
         </button>
       </form>
