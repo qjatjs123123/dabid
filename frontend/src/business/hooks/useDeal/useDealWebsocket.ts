@@ -15,7 +15,7 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
       return;
     }
 
-    const socket = new WebSocket('wss://j11a505.p.ssafy.io/api/chat');
+    const socket = new WebSocket('wss://j11a505.p.ssafy.io/api/chat', ['v10.stomp', 'v12.stomp']);
     stompClient.current = Stomp.over(socket)!;
 
     stompClient.current.connect(
@@ -68,6 +68,7 @@ const useWebSocket = (dealId: number, onMessage: (message: any) => void) => {
 
   // 메시지 전송
   const sendMessage = (message: any) => {
+    console.log(stompClient.current);
     if (stompClient.current && stompClient.current.connected) {
       stompClient.current.send(`/pub/chat/message`, {}, JSON.stringify(message));
     } else {
