@@ -35,7 +35,7 @@ const NavBar: React.FC = () => {
       };
       fetchUserInfo(); // 사용자 정보를 가져옵니다.
     }
-  }, [token, setToken]);
+  }, [localStorage.getItem('accessToken')]);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
