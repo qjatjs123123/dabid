@@ -445,7 +445,7 @@ public class DealServiceImpl implements DealService {
         // 경매 key를 통해 스케줄링을 실행할 경매를 알아냄
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
-        if(auction.getFirstMemberId() == -1) { // 경매 참여자가 존재하지 않은 경우
+        if(!auctionService.isExistParticipant(auctionId)) { // 경매 참여자가 존재하지 않은 경우
             auctionService.returnSellerPoint(auctionId);
             // 알림 CoolSMS -> 판매자에게 "니 유감. 아무도 입찰안함"
 
@@ -453,11 +453,15 @@ public class DealServiceImpl implements DealService {
         }
         else { // 경매 참여자가 존재하는 경우
             auctionService.returnBuyerPointWhenExpired(auctionId, auction.getFirstMemberId(), auction.getDeposit());
-            // 거래, 채팅 생성, 거래용 가상계좌 생성
-            createDeal(auctionId);
-            // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
-            //              -> 판매자에게 "니 거래로 넘어감!"
-            biddingSMSService.sendSellerAndBidder(auctionId);
+
+            if(auction.getFirstMemberId() != -1) {
+                // 거래, 채팅 생성, 거래용 가상계좌 생성
+                createDeal(auctionId);
+                // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
+                //              -> 판매자에게 "니 거래로 넘어감!"
+                biddingSMSService.sendSellerAndBidder(auctionId);
+            }
+            
             log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");
         }
 
