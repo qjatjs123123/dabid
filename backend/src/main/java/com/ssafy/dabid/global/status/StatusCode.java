@@ -9,4 +9,5 @@ public interface StatusCode {
     String NOT_ENOUGH_POINTS = "NEP";
     String NOT_VERIFIED_ACCOUNT = "NVA";
     String EXTERNAL_API_ERROR = "EAE";
+    String INTERNAL_SERVER_ERROR = "ISE";
 }

@@ -15,6 +15,6 @@ public class CommonResponseDto {
     }
 
     public static CommonResponseDto fail() {
-        return new CommonResponseDto(StatusCode.VALIDATION_FAIL, StatusMessage.VALIDATION_FAIL);
+        return new CommonResponseDto(StatusCode.INTERNAL_SERVER_ERROR, StatusMessage.INTERNAL_SERVER_ERROR);
     }
 }

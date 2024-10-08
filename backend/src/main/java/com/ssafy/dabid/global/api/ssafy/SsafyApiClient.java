@@ -23,8 +23,8 @@ public class SsafyApiClient {
     private static String baseURL = "https://finopenapi.ssafy.io/ssafy/api/v1";
 
     // 유저키 발급, 별도의 req/res DTO 사용
-    public GetUserKeyResponse registerUserKey(String userId) {
-
+    public GetUserKeyResponse registerUserKey(String userId) throws SsafyApiException {
+        log.info("Trying to register user key");
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .userId(userId)
                 .apiKey(apiKey)
@@ -33,8 +33,18 @@ public class SsafyApiClient {
         return getSsafyApiResponse("/member", request, GetUserKeyResponse.class);
     }
 
+    public GetUserKeyResponse searchUserKey(String userId) throws SsafyApiException {
+
+        SsafyApiRequest request = SsafyApiRequest.builder()
+                .userId(userId)
+                .apiKey(apiKey)
+                .build();
+
+        return getSsafyApiResponse("/member/search", request, GetUserKeyResponse.class);
+    }
+
     // 개인 계좌 생성
-    public CreateAccountResponse createAccount(String userKey) {
+    public CreateAccountResponse createAccount(String userKey) throws SsafyApiException {
 
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(CREATE_DEMAND_DEPOSIT_ACCOUNT_CODE, userKey))
@@ -48,7 +58,7 @@ public class SsafyApiClient {
      * @param accountNo 입금 계좌
      * */
     // 계좌 입금
-    public DepositResponse depositIn(String userKey, String accountNo, String transactionBalance) {
+    public DepositResponse depositIn(String userKey, String accountNo, String transactionBalance) throws SsafyApiException {
 
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(DEPOSIT_IN_CODE, userKey))
@@ -63,7 +73,7 @@ public class SsafyApiClient {
      * @param accountNo 출금 계좌
      * */
     // 계좌 출금
-    public DepositResponse depositOut(String userKey, String accountNo, String transactionBalance) {
+    public DepositResponse depositOut(String userKey, String accountNo, String transactionBalance) throws SsafyApiException {
 
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(DEPOSIT_OUT_CODE, userKey))
@@ -79,7 +89,7 @@ public class SsafyApiClient {
      * @param withdrawalAccountNo 출금 계좌
      * */
     // 계좌 이체
-    public TransferResponse deposit(String userKey, String depositAccountNo, String withdrawalAccountNo, String transactionBalance) {
+    public TransferResponse deposit(String userKey, String depositAccountNo, String withdrawalAccountNo, String transactionBalance) throws SsafyApiException {
 
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(TRANSFER_CODE, userKey))
@@ -92,7 +102,7 @@ public class SsafyApiClient {
     }
 
     // 거래 내역 조회
-    public TransactionHistoryResponse transactionHistory (String userKey, String accountNo) {
+    public TransactionHistoryResponse transactionHistory (String userKey, String accountNo) throws SsafyApiException {
 
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(TRANSACTION_HISTORY_CODE, userKey))
@@ -107,7 +117,7 @@ public class SsafyApiClient {
     }
 
     // 계좌 잔액 조회
-    public AccountBalanceResponse accountBalance (String userKey, String accountNo) {
+    public AccountBalanceResponse accountBalance (String userKey, String accountNo) throws SsafyApiException {
 
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(ACCOUNT_BALANCE_CODE, userKey))
@@ -118,7 +128,7 @@ public class SsafyApiClient {
     }
 
     // 1원 송금
-    public AccountAuthResponse accountAuth (String userKey, String accountNo) {
+    public AccountAuthResponse accountAuth (String userKey, String accountNo) throws SsafyApiException {
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(ACCOUNT_AUTH_CODE, userKey))
                 .accountNo(accountNo)
@@ -129,7 +139,7 @@ public class SsafyApiClient {
     }
 
     // 1원 송금 인증
-    public CheckAuthCodeResponse checkAuth (String userKey, String accountNo, String authCode) {
+    public CheckAuthCodeResponse checkAuth (String userKey, String accountNo, String authCode) throws SsafyApiException {
         SsafyApiRequest request = SsafyApiRequest.builder()
                 .header(generateHeader(CHECK_AUTH_CODE, userKey))
                 .accountNo(accountNo)
@@ -156,9 +166,9 @@ public class SsafyApiClient {
                 .bodyValue(serializedString)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse ->
-                        Mono.just(new RuntimeException("error")))
+                             clientResponse.bodyToMono(SsafyApiErrorResponse.class)
+                                    .flatMap(errorResponse -> Mono.error(new SsafyApiException(errorResponse.getResponseCode(), errorResponse.getResponseMessage()))))
                 .bodyToMono(responseType)
                 .block();
     }
-
 }
