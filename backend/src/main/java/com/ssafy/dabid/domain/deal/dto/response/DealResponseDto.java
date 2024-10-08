@@ -25,4 +25,7 @@ public class DealResponseDto {
     private LocalDateTime created_at;
     private int winning_bid;
     private boolean isSeller;
+    private String seller_imageUrl;
+    private String buyer_nickname;
+    private String buyer_imageUrl;
 }
