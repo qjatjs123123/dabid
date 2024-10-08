@@ -14,8 +14,8 @@ const BiddingResultModal: React.FC<ModalProps> = ({ isOpen, onClose, modalResult
       <div className="bg-white rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold mb-4">알림</h2>
         <div>{modalResultMessage}</div>
-        <div className="flex justify-end mt-4">
-          <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 rounded">
+        <div className="flex justify-center mt-4">
+          <button onClick={onClose} className="bg-db_black hover:bg-gray-600 text-white px-4 py-2 rounded">
             닫기
           </button>
         </div>

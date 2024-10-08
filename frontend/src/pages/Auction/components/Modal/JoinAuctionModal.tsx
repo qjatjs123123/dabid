@@ -15,11 +15,11 @@ const JoinAuctionModal: React.FC<ModalProps> = ({ isOpen, onClose, onConfirm }) 
       <div className="bg-white rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold mb-4">알림</h2>
         <p>진행중인 경매에 참여하시겠습니까?</p>
-        <div className="flex justify-end mt-4">
-          <button onClick={onClose} className="mr-2 bg-gray-300 text-black px-4 py-2 rounded">
+        <div className="flex justify-center mt-4">
+          <button onClick={onClose} className="mr-2 bg-db_black hover:bg-gray-600 text-white px-4 py-2 rounded">
             취소
           </button>
-          <button onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded">
+          <button onClick={onConfirm} className="bg-db_main hover:bg-db_hover text-white px-4 py-2 rounded">
             확인
           </button>
         </div>
