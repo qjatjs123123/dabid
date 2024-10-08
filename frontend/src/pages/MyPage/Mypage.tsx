@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import MyInfo from './components/MyInfo';
-import Deal from '../Deal/Deal';
 import MyCreateList from './components/MyCreateList';
 import MyJoinList from './components/MyJoinList';
 
@@ -11,8 +10,6 @@ const Mypage: React.FC = () => {
     switch (localActivePage) {
       case '내 정보':
         return <MyInfo />;
-      case '내 거래':
-        return <Deal />;
       case '생성한 경매':
         return <MyCreateList />;
       case '참여한 경매':
@@ -26,7 +23,7 @@ const Mypage: React.FC = () => {
     <div className="container w-full border-gray-300 flex flex-col mt-4">
       <nav className="h-[30px]">
         <ul className="flex">
-          {['내 정보', '내 거래', '생성한 경매', '참여한 경매'].map((page) => (
+          {['내 정보', '생성한 경매', '참여한 경매'].map((page) => (
             <li key={page}>
               <button
                 onClick={() => setLocalActivePage(page)}

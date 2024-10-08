@@ -9,6 +9,7 @@ import { loginState } from '../../stores/recoilStores/Member/loginState';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
 import './Header.css';
 import UserDropdown from './Dropdown';
+import AuctionSearch from '../../pages/Auction/components/Auctions/AuctionSearch';
 
 const NavBar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -16,7 +17,7 @@ const NavBar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [_, setModalOpen] = useRecoilState(modalState);
   const [token, setToken] = useRecoilState(loginState);
-  console.log(userInfo);
+  // console.log(userInfo);
   useEffect(() => {
     const storedAccessToken = localStorage.getItem('accessToken');
     if (storedAccessToken) {
@@ -48,29 +49,27 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <Link to={`${PAGE_URL.HOME}`} className="navbar-logo">
+    <nav className="flex flex-col justify-center w-full px-4 mx-auto bg-opacity-90 md:px-8 backdrop-blur-md backdrop-saturate-150 z-[9999] h-[100px]">
+      <div className="flex flex-wrap items-center text-slate-800 justify-center w-full">
+        <Link to={`${PAGE_URL.HOME}`} className="mr-4 block cursor-pointer text-base text-slate-800 font-semibold">
           <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15 h-[50px]" />
         </Link>
-        <div className={`navbar-menu`}>
-          <ul className="navbar-list">
-            <li className="navbar-item">
-              <Link to={`${PAGE_URL.AUCTION_LIST}`}>
-                <img src={getImgUrl('navbar/nav-info.png')} alt="경매 둘러보기" className="navbar-logo-img" />
-              </Link>
+        <div className={`hidden lg:block  justify-between`}>
+          <ul className="flex flex-col gap-2 mb-4 md:mb-0 md:mt-0 md:flex-row md:items-center md:gap-6">
+            <li className="flex flex-wrap flex-row items-center text-lg  font-[600] hover:font-bold">
               <Link to={`${PAGE_URL.AUCTION_LIST}`}>경매 둘러보기</Link>
             </li>
 
-            <li className="navbar-item">
-              <Link to={`${PAGE_URL.HELP}`}>
-                <img src={getImgUrl('navbar/nav-help.png')} alt="고객센터" className="navbar-logo-img" />
+            <li className="flex flex-wrap flex-row items-center text-lg font-[600] hover:font-bold">
+              <Link to={`${PAGE_URL.HELP}`} className="hover:bold">
+                고객센터
               </Link>
-              <Link to={`${PAGE_URL.HELP}`}>고객센터</Link>
             </li>
-
+            <li className="flex flex-wrap flex-row items-center text-lg text-slate-600 lg:mx-3 font-[600] max-w-[600px] min-w-[300px] lg:w-[500px]">
+              <AuctionSearch />
+            </li>
             {!isAuthenticated && (
-              <li className="navbar-item">
+              <li className="flex flex-wrap flex-row items-center text-lg text-slate-600 font-[600]">
                 <button onClick={() => setModalOpen(true)} className="flex items-center">
                   <img src={getImgUrl('navbar/nav-sign-up.png')} alt="로그인" className="navbar-logo-img" />
                   <span>로그인</span>

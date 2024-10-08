@@ -17,7 +17,7 @@ export const DEAL_API_URL = {
   GET_DEAL_CONTENT_LIST: '/api/deal/list',
   GET_DEAL_CONTENT_DETAIL: '/api/deal/list',
   GET_DEAL_SELLER_ACCOUNT: '/api/deal/account/seller',
-  POST_DEAL_COURIER_INFO: 'api/deal/courier'
+  POST_DEAL_COURIER_INFO: 'api/deal/courier',
 };
 
 export const SKELETON_TIME = {
@@ -104,9 +104,9 @@ export const DEAL_STAGE = [
 ];
 
 export const DEAL_STAGE_2 = [
-  { name: '낙찰', id: 'BID_SUCCESS', color: '#34C759' },  // 초록색
+  { name: '낙찰', id: 'BID_SUCCESS', color: '#34C759' }, // 초록색
   { name: '입금완료', id: 'PAYMENT_COMPLETE', color: '#FFD60A' }, // 노란색
-  { name: '배송중', id: 'IN_TRANSIT', color: '#0A84FF' }, 
+  { name: '배송중', id: 'IN_TRANSIT', color: '#0A84FF' },
   { name: '배송완료', id: 'DELIVERED', color: '#FF9F0A' }, // 주황색
   { name: '거래 완료', id: 'TRANSACTION_DONE', color: 'gray' }, // 파란색
   { name: '거래 오류', id: 'ERROR', color: '#FF3B30' }, // 빨간색
@@ -118,7 +118,12 @@ export const MESSAGE = {
   DEAL_LIST_NO_CONTENTS: '텅',
   API_POST_ENROLL: '저장중...',
   API_POST_SUCESS: '운송장이 저장되었습니다.',
-  API_ERROR: '오류가 발생하였습니다.'
+  API_ERROR: '오류가 발생하였습니다.',
+
+  API_ACCOUNT_AUTH: '계좌 인증 요청 중...',
+  API_ACCOUNT_SUCCESS: '계좌 인증 요청 완료',
+  API_ACCOUNT_ERROR: '계좌 인증 오류 발생',
+  API_ACCOUNT_COMPLETE: '계좌 인증 완료',
 };
 
 export const DELAY_TIME_START = 400;

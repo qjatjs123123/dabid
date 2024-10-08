@@ -1,5 +1,5 @@
 .navbar {
-  @apply  block flex flex-col items-center justify-center w-full px-4 mx-auto  bg-opacity-90  md:px-8 items-center backdrop-blur-md backdrop-saturate-150 z-[9999] h-[100px];
+  @apply flex flex-col items-center justify-center w-full px-4 mx-auto  bg-opacity-90  md:px-8 items-center backdrop-blur-md backdrop-saturate-150 z-[9999] h-[100px];
 } /* sticky */
 
 .navbar-container {
@@ -35,7 +35,7 @@
 }
 
 .toggle-navbar-menu.open {
-  @apply block flex flex-col  lg:hidden;
+  @apply flex flex-col  lg:hidden;
 }
 
 .navbar-logo-img {

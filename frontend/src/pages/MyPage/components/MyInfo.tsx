@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import axios from '../../../api/axiosConfig';
 import { UserInfo, userState } from '../../../stores/recoilStores/Member/userState';
-import { MEMBER_API_URL } from '../../../util/Constants';
+import { DELAY_TIME_END, DELAY_TIME_END_LONG, MEMBER_API_URL, MESSAGE } from '../../../util/Constants';
 import { formatNumberWithCommas } from '../../../util/moneyComma';
+import { delaySetApiInfo } from '../../../util/Functions';
+import { apiState } from '../../../stores/recoilStores/Message/apiState';
 
 const MyInfo: React.FC = () => {
   const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const [loading, setLoading] = useState<boolean>(true);
   const [code, setCode] = useState<string>('');
+  const [apiInfo, setApiInfo] = useRecoilState(apiState);
   const [status, setStatus] = useState({
     accountAuth: false,
     accountCheck: false,
@@ -21,57 +24,64 @@ const MyInfo: React.FC = () => {
     message: '',
   });
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
-        await setUserInfo(response.data);
+  const [showAccountVerification, setShowAccountVerification] = useState<boolean>(false);
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
+      await setUserInfo(response.data);
 
-        if (response && response.data.accountActive) {
-          setStatus((prevStatus) => ({
-            ...prevStatus,
-            accountAuth: true,
-            accountCheck: true,
-            message: '계좌 인증이 완료되었습니다.',
-          }));
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+      if (response && response.data.accountActive) {
+        setStatus((prevStatus) => ({
+          ...prevStatus,
+          accountAuth: true,
+          accountCheck: true,
+          message: '계좌 인증이 완료되었습니다.',
+        }));
       }
-    };
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUserInfo();
-    console.log('userInfo:', userInfo);
   }, [setUserInfo]);
 
   const accountAuth = async () => {
     try {
       const response = await axios.post(`${MEMBER_API_URL.ACCOUNT_AUTH}`);
-      console.log(response);
       if (response.data.code === 'SU') {
-        setStatus({ ...status, accountAuth: true, message: '계좌 인증 요청을 보냈습니다.' });
+        // setStatus({ ...status, accountAuth: true, message: '계좌 인증 요청을 보냈습니다.' });
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_SUCCESS, DELAY_TIME_END_LONG); // 요청 성공
+        setShowAccountVerification(true); // 계좌 인증 폼 표시
       } else if (response.data.code === 'AV') {
         setStatus({ ...status, accountCheck: true, message: '이미 인증된 계좌입니다.' });
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_ERROR, DELAY_TIME_END_LONG); // 요청 실패
       }
     } catch (error) {
       console.error(error);
+      await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_ERROR, DELAY_TIME_END_LONG); // 요청 실패
     }
   };
 
   const accountCheck = async () => {
     try {
       const response = await axios.post(`${MEMBER_API_URL.ACCOUNT_CHECK}`, { code });
-      console.log(response);
+
       if (response.data.code === 'SU') {
         setStatus({ ...status, accountCheck: true, message: '계좌 인증이 완료되었습니다.' });
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_COMPLETE, DELAY_TIME_END_LONG); // 요청 보냄
+        fetchUserInfo();
       } else {
         setStatus({ ...status, message: '계좌 인증에 실패했습니다.' });
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_ERROR, DELAY_TIME_END_LONG); // 요청 실패
       }
     } catch (error) {
       console.error(error);
       setStatus({ ...status, message: '계좌 인증 요청 중 오류가 발생했습니다.' });
+      await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_ERROR, DELAY_TIME_END_LONG); // 요청 실패
     }
   };
 
@@ -81,13 +91,11 @@ const MyInfo: React.FC = () => {
     }
     try {
       const response = await axios.post(`${MEMBER_API_URL.POINT_IN}`, { amount: pointAmount });
-      console.log(response);
       if (response.data.code === 'SU') {
         const res = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
         await setUserInfo(res.data);
         setPointStatus({ warning: false, message: '포인트 충전이 완료되었습니다.' });
       } else {
-        console.log(response.data);
         setPointStatus({ warning: true, message: response.data.message });
       }
     } catch (error) {
@@ -103,15 +111,11 @@ const MyInfo: React.FC = () => {
     }
     try {
       const response = await axios.post(`${MEMBER_API_URL.POINT_OUT}`, { amount: pointAmount });
-      console.log(response);
       if (response.data.code === 'SU') {
         const res = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
         await setUserInfo(res.data);
         setPointStatus({ warning: false, message: '포인트 환전이 완료되었습니다.' });
-      } else if (response.data.code === 'NEP') {
-        setPointStatus({ warning: true, message: '포인트가 부족합니다.' });
       } else {
-        console.log(response.data);
         setPointStatus({ warning: true, message: response.data.message });
       }
     } catch (error) {
@@ -122,80 +126,80 @@ const MyInfo: React.FC = () => {
   };
 
   const addPoint = (amount: number) => {
-    setPointAmount((prev) => (typeof prev === 'number' ? prev + amount : amount)); // 이전 금액에 추가
+    setPointAmount((prev) => (typeof prev === 'number' ? prev + amount : amount));
   };
 
   return (
-    <div>
-      <h1 className="text-4xl mb-3">사용자 정보</h1>
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-4xl font-semibold mb-5">사용자 정보</h1>
       {loading ? (
-        <p>로딩 중...</p>
+        <p className="text-gray-500">로딩 중...</p>
       ) : userInfo ? (
         <>
-          <div>
-            <p className="text-xl my-3">프로필 사진</p>
-            {userInfo.imageUrl && <img src={userInfo.imageUrl} alt="사용자 이미지" className="rounded-full" />}
+          <div className="mb-6">
+            <p className="text-xl font-medium my-3">프로필 사진</p>
+            {userInfo.imageUrl && (
+              <img src={userInfo.imageUrl} alt="사용자 이미지" className="rounded-full w-32 h-32 object-cover" />
+            )}
             <p className="text-xl my-3">닉네임: {userInfo.nickname}</p>
             <p className="text-xl my-3">이메일: {userInfo.email}</p>
             <p className="text-xl my-3">전화번호: {userInfo.phoneNumber}</p>
-            <div className="text-xl my-3">
-              <span>계좌: </span>
-              <input type="text" value={userInfo.accountNo} disabled />
+            <div className="text-xl my-3 flex items-center">
+              <span className="">계좌: </span>
+              <input type="text" value={userInfo.accountNo} disabled className="ml-2 border rounded-md p-1 text-md" />
               {!status.accountCheck && (
-                <>
-                  <button
-                    onClick={accountAuth}
-                    className="bg-black text-white text-lg rounded px-4 py-1 ml-2 w-[160px] h-[35px]"
-                    disabled={status.accountCheck}
-                  >
-                    계좌 등록하기
-                  </button>
-                </>
+                <button
+                  onClick={accountAuth}
+                  className="bg-black text-white text-lg rounded px-4 py-1 ml-2 w-[160px] h-[35px]"
+                >
+                  계좌 등록하기
+                </button>
               )}
             </div>
-            {!status.accountCheck && (
-              <div className="text-xl my-3">
-                <div className="flex flex-row">
-                  <span className="w-[150px]">계좌 인증 코드: </span>
-                  <input
-                    type="text"
-                    name="code"
-                    id="code"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    className="border rounded w-[300px]"
-                  />
-                  <button
-                    onClick={accountCheck}
-                    className="bg-black text-white rounded px-4 ml-2 w-[170px] h-[35px]"
-                    disabled={status.accountCheck}
-                  >
-                    계좌 인증하기
-                  </button>
+            {showAccountVerification &&
+              !status.accountCheck && ( // 계좌 인증 폼 표시 조건
+                <div className="text-xl my-3">
+                  <div className="flex items-center">
+                    <span className="">계좌 인증 코드: </span>
+                    <input
+                      type="text"
+                      name="code"
+                      id="code"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      className="ml-2 border rounded-md p-1 text-md"
+                    />
+                    <button onClick={accountCheck} className="bg-black text-white rounded px-4 ml-2 w-[170px] h-[35px]">
+                      계좌 인증하기
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             <div className="mt-3">{status.message && <p className="text-green-600">{status.message}</p>}</div>
           </div>
           {status.accountCheck && (
             <>
-              <br />
-              <hr />
-              <br />
-              <p className="text-xl">포인트: {formatNumberWithCommas(userInfo.point)}</p>
+              <hr className="my-6" />
+              <p className="text-xl font-semibold">포인트: {formatNumberWithCommas(userInfo.point)}</p>
               <div className="my-4">
-                <div className="flex flex-row my-4">
-                  <p className="text-xl my-3 w-[200px]">충전/환전할 금액: </p>
+                <div className="flex items-center my-4 space-x-2 ">
+                  <p className="text-xl my-3 w-[150px]">충전/환전할 금액: </p>
                   <input
                     type="number"
                     value={pointAmount}
                     onChange={(e) => setPointAmount(Number(e.target.value))}
                     placeholder="충전할 금액"
-                    className="border rounded w-full p-2"
+                    className="border rounded p-2"
                   />
+                  <button onClick={pointIn} className="bg-black text-white text-md rounded px-4 py-2">
+                    포인트 충전
+                  </button>
+                  <button onClick={pointOut} className="bg-black text-white text-md rounded px-4 py-2">
+                    포인트 환전
+                  </button>
                 </div>
 
-                <div className="flex space-x-2 mb-2">
+                <div className="flex space-x-2 mb-4">
                   <button onClick={() => addPoint(5000)} className="bg-gray-200 rounded px-2 py-1">
                     +5,000
                   </button>
@@ -206,17 +210,6 @@ const MyInfo: React.FC = () => {
                     +50,000
                   </button>
                 </div>
-
-                <button
-                  onClick={pointIn}
-                  className="bg-black text-white text-lg rounded px-4 py-1 w-[160px] h-[35px] mx-4"
-                >
-                  포인트 충전
-                </button>
-
-                <button onClick={pointOut} className="bg-black text-white text-lg rounded px-4 py-1 w-[160px] h-[35px]">
-                  포인트 환전
-                </button>
                 {pointStatus.message && (
                   <p className={`mt-2 ${pointStatus.warning ? 'text-red-600' : 'text-green-600'}`}>
                     {pointStatus.message}
@@ -227,7 +220,7 @@ const MyInfo: React.FC = () => {
           )}
         </>
       ) : (
-        <p>사용자 정보를 가져오는 데 실패했습니다.</p>
+        <p className="text-red-600">사용자 정보를 가져오는 데 실패했습니다.</p>
       )}
     </div>
   );

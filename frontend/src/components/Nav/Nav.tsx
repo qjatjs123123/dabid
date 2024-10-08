@@ -13,18 +13,17 @@ const Nav: React.FC = () => {
 
   const breadcrumbPaths = [
     { name: '홈', link: `${PAGE_URL.HOME}` },
+    { name: '회원가입', link: `${PAGE_URL.SIGN_UP}` },
     { name: '경매 목록', link: `${PAGE_URL.AUCTION_LIST}` },
     { name: '등록하기', link: `${PAGE_URL.AUCTION_INPUT}` },
     { name: `${auctionId}번째 경매`, link: `/auctions/${auctionId}` },
     { name: '고객 센터', link: `${PAGE_URL.HELP}` },
     { name: '마이 페이지', link: `${PAGE_URL.MY_PAGE}` },
+    { name: '거래', link: `${PAGE_URL.DEAL}` },
     // { name: activePage || '현재 페이지', link: '#' },
   ].filter((path) => location.pathname.includes(path.link));
 
   const shouldShowBreadcrumb = location.pathname !== '/';
-  console.log('location', location.pathname);
-  console.log('shouldShowBreadcrumb', shouldShowBreadcrumb);
-  console.log('breadcrumbPaths', breadcrumbPaths);
 
   return (
     <>
