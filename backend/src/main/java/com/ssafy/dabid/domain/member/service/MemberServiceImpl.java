@@ -10,8 +10,10 @@ import com.ssafy.dabid.domain.member.repository.MemberAccountRepository;
 import com.ssafy.dabid.domain.member.repository.MemberRepository;
 import com.ssafy.dabid.domain.member.repository.RandomNicknameMapper;
 import com.ssafy.dabid.global.api.ssafy.SsafyApiClient;
+import com.ssafy.dabid.global.api.ssafy.SsafyApiException;
 import com.ssafy.dabid.global.api.ssafy.response.*;
 import com.ssafy.dabid.global.config.CoolSMSConfig;
+import com.ssafy.dabid.global.error.GlobalExceptionHandler;
 import com.ssafy.dabid.global.status.CommonResponseDto;
 import com.ssafy.dabid.global.status.StatusCode;
 import com.ssafy.dabid.global.status.StatusMessage;
@@ -83,48 +85,66 @@ public class MemberServiceImpl implements MemberService {
     public CommonResponseDto signUp(SignUpRequestDto dto) {
         log.info("Sign-up user with email {}", dto.getEmail());
         //이메일, 휴대폰번호 중복 체크를 다시 해야할까?
-        String profileUrl = s3Util.uploadFile(dto.getImage());
+        try {
+            String profileUrl = s3Util.uploadFile(dto.getImage());
 
-        Member member = Member
-                .builder()
-                .email(dto.getEmail())
-                .role(Role.USER)
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .nickname(dto.getNickname())
-                .phoneNumber(dto.getPhoneNumber())
-                .imageUrl(profileUrl)
-                .build();
-        
-        //랜덤 생성 닉네임에 포함되는 닉네임일 경우 사용 여부 갱신
-        randomNicknameMapper.updateUsed(dto.getNickname());
+            Member member = Member
+                    .builder()
+                    .email(dto.getEmail())
+                    .role(Role.USER)
+                    .password(passwordEncoder.encode(dto.getPassword()))
+                    .nickname(dto.getNickname())
+                    .phoneNumber(dto.getPhoneNumber())
+                    .imageUrl(profileUrl)
+                    .build();
 
-        //금융망 API 를 통해 userKey 등록
-        String userKey = generateKey(member.getEmail());
-        member.addKey(userKey);
+            //랜덤 생성 닉네임에 포함되는 닉네임일 경우 사용 여부 갱신
+            randomNicknameMapper.updateUsed(dto.getNickname());
 
-        //계좌 생성 후 repository 에 저장
-        String accountNo = generateAccount(userKey);
-        Account account = Account
-                .builder()
-                .account_number(accountNo)
-                .member(member)
-                .build();
+            //금융망 API 를 통해 userKey 등록
+            String userKey = generateKey(member.getEmail());
+            log.info("{}", userKey);
+            member.addKey(userKey);
 
-        //계좌는 인증 전까지 사용 불가
-        account.kill();
+            //계좌 생성 후 repository 에 저장
+            String accountNo = generateAccount(userKey);
+            Account account = Account
+                    .builder()
+                    .account_number(accountNo)
+                    .member(member)
+                    .build();
 
-        memberAccountRepository.save(account);
-        
-        //서비스 이용을 위한 기본금 지급
-        ssafyApiClient.depositIn(userKey, accountNo, "1000000");
-        memberRepository.save(member);
+            //계좌는 인증 전까지 사용 불가
+            account.kill();
 
-        return new CommonResponseDto();
+            memberAccountRepository.save(account);
+
+            //서비스 이용을 위한 기본금 지급
+            ssafyApiClient.depositIn(userKey, accountNo, "1000000");
+            memberRepository.save(member);
+
+            return new CommonResponseDto();
+        }
+        catch (Exception e){
+            return CommonResponseDto.fail();
+        }
     }
 
     private String generateKey(String email){
-        GetUserKeyResponse response = ssafyApiClient.registerUserKey(email);
-        return response.getUserKey();
+        log.info("Trying to generate ssafy api userkey with email {}", email);
+        try {
+            return ssafyApiClient.registerUserKey(email).getUserKey();
+        } catch (SsafyApiException e1) {
+            if(e1.getCode().equals("E4002")){
+                try {
+                    log.info("Trying to search existing ssafy api userkey with email {}", email);
+                    return ssafyApiClient.searchUserKey(email).getUserKey();
+                } catch (SsafyApiException e2) {
+                    throw new RuntimeException(e2.getMessage());
+                }
+            }
+            throw new RuntimeException(e1.getMessage());
+        }
     }
 
     private String generateAccount(String userKey){
@@ -143,7 +163,7 @@ public class MemberServiceImpl implements MemberService {
 
             return new SignInResponseDto(access, refresh);
         }
-        return null;
+        return CommonResponseDto.fail();
     }
 
     @Override
