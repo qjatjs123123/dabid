@@ -57,7 +57,7 @@ const AuctionImage: React.FC<AuctionImageProps> = ({ onImagesChange }) => {
       <div className="border-2 border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center mb-4 w-96 h-72">
         <img src={getLatestImageUrl()} alt="Recent Upload" className="w-full h-full object-cover mb-4 opacity-50" />
       </div>
-
+      <p className="text-xs text-gray-500 my-2">최대 4개</p>
       <button onClick={handleButtonClick} className="bg-orange-500 text-white rounded-md py-2 px-4">
         이미지 업로드
       </button>

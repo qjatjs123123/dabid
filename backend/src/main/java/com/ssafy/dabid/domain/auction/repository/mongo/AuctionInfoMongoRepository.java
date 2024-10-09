@@ -11,11 +11,14 @@ import java.util.Optional;
 @Repository
 public interface AuctionInfoMongoRepository extends MongoRepository<AuctionInfo, String> {
     @Query(value = "{auctionId:?0}")
-    List<AuctionInfo> findMemberByAuctionId(int memberId);
+    List<AuctionInfo> findMemberByAuctionId(int auctionId);
 
     @Query(value = "{auctionId:?0, memberId:?1}")
     Optional<AuctionInfo> findByAuctionIdAndMemberId(int auctionId, int memberId);
 
     @Query(value="{auctionId:?0}", count = true)
     Integer countByAuctionId(int auctionId);
+
+    @Query(value = "{auctionId:?0}", sort = "{ 'bid': -1 }")
+    List<AuctionInfo> findAllSortedByBid(int auctionId);
 }

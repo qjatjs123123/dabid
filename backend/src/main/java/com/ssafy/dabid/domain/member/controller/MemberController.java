@@ -103,4 +103,16 @@ public class MemberController {
     public ResponseEntity<?> getInfo(){
         return ResponseEntity.ok(memberService.getUserInfo());
     }
+
+    @PostMapping("/check/email1")
+    public ResponseEntity<?> checkEmailNonNative(){
+        memberService.checkEmailNonNative();
+        return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/check/email2")
+    public ResponseEntity<?> checkEmailNative(){
+        memberService.checkEmailNative();
+        return ResponseEntity.ok("ok");
+    }
 }
