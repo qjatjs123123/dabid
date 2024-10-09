@@ -36,7 +36,7 @@ const About = () => {
   return (
     <div>
       {/* <div className="container mx-auto mt-5"> */}
-      <div className="w-full lg:h-[45vh] sm:h-auto px-[15%] flex flex-col lg:flex-row justify-center items-center mt-5">
+      <div className="w-full lg:h-[calc(100vh-100px)] bg-[#F9F9F9] sm:h-auto px-[15%] flex flex-col lg:flex-row justify-center items-center">
         {/* 첫 번째 섹션: 다비드 소개 */}
         <div className="flex flex-col lg:flex-row items-center justify-between mb-10">
           <div className="text-center md:text-left">
@@ -64,36 +64,36 @@ const About = () => {
       {/* 두 번째 섹션: 다비드 기능 소개 */}
       <div className={`mb-10 ${showSecondText ? 'animate-fade-in' : 'opacity-0'}`}>
         {/* 1행 */}
-        <div className="w-full lg:h-[45vh] sm:h-auto bg-db_white px-[15%] flex flex-col lg:flex-row justify-center items-center">
+        <div className="w-full lg:h-[calc(100vh-100px)] sm:h-auto bg-db_white px-[15%] flex flex-col lg:flex-row justify-center items-center">
           <div className="flex flex-col mb-8 lg:mb-0 lg:mr-[100px] text-center lg:text-left">
-            <div className="text-3xl lg:text-3xl font-bold mb-[15px]">기존 선착순 중고거래가</div>
-            <div className="text-3xl lg:text-3xl font-bold mb-[15px]">아닌 경매를 더한 다비드</div>
+            <div className="text-3xl lg:text-3xl font-bold mb-[15px]">선착순 중고거래가</div>
+            <div className="text-3xl lg:text-3xl font-bold mb-[15px]">아닌 경매를 더하다</div>
             <div className="text-[16px] lg:text-[20px] font-normal mb-[10px]">시간적인 여유를 가지고</div>
             <div className="text-[16px] lg:text-[20px]">원하는 물건을 입찰하세요.</div>
           </div>
-          <img src="/clock.png" className="h-[25vh] lg:h-[30vh] w-auto"></img>
+          <img src="/auctionsBg.PNG" className="h-[25vh] lg:h-[45vh] w-auto"></img>
         </div>
 
         {/* 2행 */}
-        <div className="w-full lg:h-[45vh] sm:h-auto bg-[#FEF1AA] px-[15%] flex flex-col lg:flex-row justify-center items-center">
-          <div className="flex flex-col mb-8 lg:mb-0 lg:mr-[100px] text-center lg:text-left">
+        <div className="w-full lg:h-[calc(100vh-100px)] sm:h-auto bg-[#FEF1AA] px-[15%] flex flex-col lg:flex-row justify-center items-center">
+          <img src="/detailBg.PNG" className="h-[25vh] lg:h-[45vh] w-auto lg:mr-[100px]"></img>
+          <div className="flex flex-col mb-8 lg:mb-0  text-center lg:text-left">
             <div className="text-3xl lg:text-3xl font-bold mb-[15px]">긴장감 넘치는</div>
             <div className="text-3xl lg:text-3xl font-bold mb-[15px]">비크리 경매</div>
-            <div className="text-[16px] lg:text-[20px] font-normal mb-[10px]">원하는 물건을 합리적인 가격으로</div>
-            <div className="text-[16px] lg:text-[20px]">구해보세요.</div>
+            <div className="text-[16px] lg:text-[19px] font-normal mb-[10px]">원하는 물건을 합리적인 가격으로</div>
+            <div className="text-[16px] lg:text-[19px]">구해보세요.</div>
           </div>
-          <img src="/vickrey_auction.png" className="h-[25vh] lg:h-[30vh] w-auto"></img>
         </div>
 
         {/* 3행 */}
-        <div className="w-full lg:h-[45vh] sm:h-auto bg-black-100 px-[15%] flex flex-col lg:flex-row justify-center items-center">
+        <div className="w-full lg:h-[calc(100vh-100px)] sm:h-auto bg-black-100 px-[15%] flex flex-col lg:flex-row justify-center items-center">
           <div className="flex flex-col mb-8 lg:mb-0 lg:mr-[100px] text-center lg:text-left">
             <div className="text-3xl lg:text-3xl font-bold mb-[15px]">안전한 거래를 위한</div>
             <div className="text-3xl lg:text-3xl font-bold mb-[15px]">에스크로 서비스</div>
-            <div className="text-[16px] lg:text-[20px] font-normal mb-[10px]">판매자와 구매자간 안전한 거래를</div>
+            <div className="text-[16px] lg:text-[20px] font-normal mb-[10px]">판매자와 구매자간 안전한 거래</div>
             <div className="text-[16px] lg:text-[20px]">보장해드립니다.</div>
           </div>
-          <img src="/handshake.png" className="h-[25vh] lg:h-[30vh] w-auto"></img>
+          <img src="/dealBg.PNG" className="h-[25vh] lg:h-[45vh] w-auto"></img>
         </div>
       </div>
     </div>

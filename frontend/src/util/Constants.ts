@@ -11,6 +11,7 @@ export const PAGE_URL = {
   AUCTION_LIST: '/auction',
   AUCTION_DETAIL: '/auctions/:auctionId',
   AUCTION_INPUT: `/auction/input`,
+  AUCTION_DETAILS: '/auctions'
 };
 
 export const DEAL_API_URL = {

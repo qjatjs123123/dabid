@@ -65,7 +65,7 @@ const AuctionDeatil: React.FC = () => {
   }
 
   if (!auctionData) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return (

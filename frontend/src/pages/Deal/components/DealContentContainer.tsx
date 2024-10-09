@@ -7,7 +7,7 @@ import { dealIsContent } from '../../../stores/recoilStores/Deal/stateIsContent'
 import { MESSAGE } from '../../../util/Constants';
 
 const DealContentContainer = () => {
-  const { data: dealContentList, fetchNextPage, hasNextPage } = useDealContentList();
+  const { data: dealContentList, fetchNextPage, hasNextPage, isLoading } = useDealContentList();
   const curDealId = useRecoilValue(curDealIdState);
 
   const setCurDealId = useSetRecoilState(curDealIdState);
@@ -52,6 +52,10 @@ const DealContentContainer = () => {
     };
   }, [fetchNextPage, hasNextPage]);
 
+  // 스켈레턴 UI
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-full"></div>;
+  }
   return (
     <div className="max-h-[calc(100vh-150px)] w-full overflow-y-auto flex flex-col border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)] scroll-hide">
       {curDealId !== -1 && dealContentList ? (
