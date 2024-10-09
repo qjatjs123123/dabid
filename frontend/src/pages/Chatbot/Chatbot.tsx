@@ -178,7 +178,15 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           {chatHistory.map((message, index) => (
             <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-2`}>
               <p className={`p-2 rounded-lg ${message.role === 'user' ? 'bg-db_hover text-white' : 'bg-db_white'}`}>
-                {message.content}
+                {message.role !== 'user' ? (
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: message.content.replace(/\. /g, '.<br /><br />'),
+                    }}
+                  />
+                ) : (
+                  message.content
+                )}
               </p>
             </div>
           ))}

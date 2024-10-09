@@ -53,7 +53,7 @@ const InquiryList = () => {
           inquiries.map((inquiry) => (
             <div key={inquiry.inquiryId} className="flex flex-row border p-4 rounded shadow w-full">
               <div className="mr-[20px]">
-                <img src={inquiry.imageUrls[0]} className="w-40 h-40 object-cover" />
+                <img src={inquiry.imageUrls[0]} className="min-w-[160px] h-40 object-cover" />
               </div>
 
               <div className="flex flex-col">
