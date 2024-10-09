@@ -127,17 +127,20 @@ public class BiddingServiceImpl implements BiddingService {
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         log.info("입찰 신청한 회원의 입찰금 갱신 시작");
-        auctionInfo.setBid(bid);
+        if(auctionInfo.getBid() < bid) {
+            auctionInfo.setBid(bid);
+            auctionInfoMongoRepository.save(auctionInfo);
+        }
 
         /* 3. 사용자가 2nd price auction 경매 방식에서 입찰에 성공했는지 여부를 판단한다.  */
         log.info("입찰 성공 여부 판단 시작");
-                if (auction.getFirstBid() > bid || (auction.getFirstBid() == bid && auction.getFirstMemberId() != -1)) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
+        if (auction.getFirstBid() > bid || (auction.getFirstBid() == bid && auction.getFirstMemberId() != -1)) { // 1등 입찰가보다 적거나 같은 금액 입찰 시도
             log.info("입찰 실패! - 1등 입찰가보다 적은 입찰 금액!");
             if (auction.getSecondBid() < bid && auction.getFirstBid() != bid) { // 2등 입찰가보다 높은 금액이면 표시 2등 입찰가 수정
                 log.info("1등 입찰가보다 낮고 2등 입찰가보다 높은 입찰 금액이므로 표기 2등 입찰가 수정");
                 auction.setSecondBid(bid);
+                auctionJpaRepository.save(auction);
             }
-            auctionJpaRepository.save(auction);
 
             log.info("bid 끝");
 

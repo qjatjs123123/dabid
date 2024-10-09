@@ -34,4 +34,7 @@ public interface MemberService {
     CommonResponseDto checkPhoneAuth(CheckPhoneAuthRequestDto dto);
 
     CommonResponseDto getUserInfo();
+
+    void checkEmailNonNative();
+    void checkEmailNative();
 }

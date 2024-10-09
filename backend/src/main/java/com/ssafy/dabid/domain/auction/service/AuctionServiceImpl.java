@@ -89,21 +89,21 @@ public class AuctionServiceImpl implements AuctionService{
         int memberId = memberRepository.findByEmail(email).orElseThrow(() -> new NullPointerException("존재하지 않은 Member")).getId();
 
         log.info("Auction 전체 리스트 가져오기");
-        List<AuctionDocument> auctions = auctionElasticSearchRepository.findAllByOrderByCreatedAtDesc();
+        List<Auction> auctions = auctionJpaRepository.findAllAuctions();
 
         log.info("내가 참가한 경매 리스트 가져오기");
         List<AuctionListDto> result = new ArrayList<>();
-        for (AuctionDocument auction : auctions) {
-            String auctionId = auction.getId();
+        for (Auction auction : auctions) {
+            int auctionId = auction.getId();
 
-            AuctionInfo auctionInfo = auctionInfoMongoRepository.findByAuctionIdAndMemberId(Integer.parseInt(auctionId), memberId).orElse(null);
+            AuctionInfo auctionInfo = auctionInfoMongoRepository.findByAuctionIdAndMemberId(auctionId, memberId).orElse(null);
             if (auctionInfo != null) {
                 result.add(AuctionListDto.builder()
-                        .auctionId(auctionId)
+                        .auctionId(String.valueOf(auctionId))
                         .title(auction.getTitle())
                         .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
-                        .secondBid(auction.getSecondBid())
-                        .person(auctionInfoMongoRepository.countByAuctionId(Integer.parseInt(auctionId)))
+                        .secondBid(String.valueOf(auction.getSecondBid()))
+                        .person(auctionInfoMongoRepository.countByAuctionId(auctionId))
                         .createdAt(auction.getCreatedAt())
                         .finishedAt(auction.getFinishedAt())
                         .build());
@@ -125,13 +125,17 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("조회된 Auction을 AuctionListDto로 변환");
         List<AuctionListDto> results = new ArrayList<>();
         for (AuctionDocument auctionDocument : auctions){
+            List<AuctionInfo> auctionInfos = auctionInfoMongoRepository.findAllSortedByBid(Integer.parseInt(auctionDocument.getId()));
+            int person = auctionInfos.size();
+            String secondBid = String.valueOf(person < 2 ? (person == 0 ? auctionDocument.getSecondBid() : auctionInfos.get(person - 1).getBid()) : auctionInfos.get(1).getBid());
+
             results.add(
                     AuctionListDto.builder()
                             .auctionId(auctionDocument.getId())
                             .title(auctionDocument.getTitle())
                             .thumbnail(s3Util.generateFileUrl(auctionDocument.getThumbnail()))
-                            .secondBid(auctionDocument.getSecondBid())
-                            .person(auctionInfoMongoRepository.countByAuctionId(Integer.parseInt(auctionDocument.getId())))
+                            .secondBid(secondBid.equals("0") ? auctionDocument.getSecondBid() : secondBid)
+                            .person(person)
                             .finishedAt(auctionDocument.getFinishedAt())
                             .createdAt(auctionDocument.getCreatedAt())
                             .build()
@@ -162,13 +166,17 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("조회된 Auction을 AuctionListDto로 변환");
         List<AuctionListDto> results = new ArrayList<>();
         for (AuctionDocument auctionDocument : auctions){
+            List<AuctionInfo> auctionInfos = auctionInfoMongoRepository.findAllSortedByBid(Integer.parseInt(auctionDocument.getId()));
+            int person = auctionInfos.size();
+            String secondBid = String.valueOf(person < 2 ? (person == 0 ? auctionDocument.getSecondBid() : auctionInfos.get(person - 1).getBid()) : auctionInfos.get(1).getBid());
+
             results.add(
                     AuctionListDto.builder()
                             .auctionId(auctionDocument.getId())
                             .title(auctionDocument.getTitle())
                             .thumbnail(s3Util.generateFileUrl(auctionDocument.getThumbnail()))
-                            .secondBid(auctionDocument.getSecondBid())
-                            .person(auctionInfoMongoRepository.countByAuctionId(Integer.parseInt(auctionDocument.getId())))
+                            .secondBid(secondBid.equals("0") ? auctionDocument.getSecondBid() : secondBid)
+                            .person(person)
                             .finishedAt(auctionDocument.getFinishedAt())
                             .createdAt(auctionDocument.getCreatedAt())
                             .build()
@@ -199,13 +207,16 @@ public class AuctionServiceImpl implements AuctionService{
         log.info("조회된 Auction을 AuctionListDto로 변환");
         List<AuctionListDto> results = new ArrayList<>();
         for (Auction auction : auctions){
+            List<AuctionInfo> auctionInfos = auctionInfoMongoRepository.findAllSortedByBid(auction.getId());
+            int person = auctionInfos.size();
+
             results.add(
                     AuctionListDto.builder()
                             .auctionId(String.valueOf(auction.getId()))
                             .title(auction.getTitle())
                             .thumbnail(s3Util.generateFileUrl(auction.getThumbnail()))
                             .secondBid(String.valueOf(auction.getSecondBid()))
-                            .person(auctionInfoMongoRepository.countByAuctionId(auction.getId()))
+                            .person(person)
                             .finishedAt(auction.getFinishedAt())
                             .createdAt(auction.getCreatedAt())
                             .build()
