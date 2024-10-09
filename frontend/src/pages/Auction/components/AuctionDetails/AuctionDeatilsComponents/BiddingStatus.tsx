@@ -17,6 +17,7 @@ interface BiddingStatusProps {
   isFirstMember: boolean;
   firstBid: String;
   bid: String;
+  deposit: String;
 }
 
 const BiddingStatus: React.FC<BiddingStatusProps> = ({
@@ -25,6 +26,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
   isParticipant,
   isFirstMember,
   firstBid,
+  deposit,
 }) => {
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -289,6 +291,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
             </button>
             <JoinAuctionModal
               auctionId={auctionId}
+              deposit={deposit}
               isOpen={isModalOpen}
               onClose={closeModal}
               onConfirm={joinHandleConfirm}

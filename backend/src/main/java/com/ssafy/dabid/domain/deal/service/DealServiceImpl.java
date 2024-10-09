@@ -473,7 +473,8 @@ public class DealServiceImpl implements DealService {
         }
         else { // 경매 참여자가 존재하는 경우
             auctionService.returnBuyerPointWhenExpired(auctionId, auction.getFirstMemberId(), auction.getDeposit());
-            //auctionService.returnSellerPoint();
+            auctionService.returnSellerPoint(auctionId);
+
             if(auction.getFirstMemberId() != -1) {
                 // 거래, 채팅 생성, 거래용 가상계좌 생성
                 createDeal(auctionId);
