@@ -127,10 +127,8 @@ public class BiddingServiceImpl implements BiddingService {
 
         /* 2. 사용자가 경매에 참여 중인지 여부를 DB(auction_info)에서 확인한다. */
         log.info("입찰 신청한 회원의 입찰금 갱신 시작");
-        if(auctionInfo.getBid() < bid) {
-            auctionInfo.setBid(bid);
-            auctionInfoMongoRepository.save(auctionInfo);
-        }
+        auctionInfo.setBid(bid);
+        auctionInfoMongoRepository.save(auctionInfo);
 
         /* 3. 사용자가 2nd price auction 경매 방식에서 입찰에 성공했는지 여부를 판단한다.  */
         log.info("입찰 성공 여부 판단 시작");
