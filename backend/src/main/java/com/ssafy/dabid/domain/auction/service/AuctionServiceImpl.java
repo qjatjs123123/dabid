@@ -127,14 +127,14 @@ public class AuctionServiceImpl implements AuctionService{
         for (AuctionDocument auctionDocument : auctions){
             List<AuctionInfo> auctionInfos = auctionInfoMongoRepository.findAllSortedByBid(Integer.parseInt(auctionDocument.getId()));
             int person = auctionInfos.size();
-            String secondBid = String.valueOf(person < 2 ? (person == 0 ? auctionDocument.getSecondBid() : auctionInfos.get(person - 1).getBid()) : auctionInfos.get(1).getBid());
+            String secondBid = String.valueOf(person < 2 ? auctionDocument.getSecondBid() : auctionInfos.get(1).getBid());
 
             results.add(
                     AuctionListDto.builder()
                             .auctionId(auctionDocument.getId())
                             .title(auctionDocument.getTitle())
                             .thumbnail(s3Util.generateFileUrl(auctionDocument.getThumbnail()))
-                            .secondBid(secondBid.equals("0") ? auctionDocument.getSecondBid() : secondBid)
+                            .secondBid(secondBid)
                             .person(person)
                             .finishedAt(auctionDocument.getFinishedAt())
                             .createdAt(auctionDocument.getCreatedAt())
@@ -168,14 +168,14 @@ public class AuctionServiceImpl implements AuctionService{
         for (AuctionDocument auctionDocument : auctions){
             List<AuctionInfo> auctionInfos = auctionInfoMongoRepository.findAllSortedByBid(Integer.parseInt(auctionDocument.getId()));
             int person = auctionInfos.size();
-            String secondBid = String.valueOf(person < 2 ? (person == 0 ? auctionDocument.getSecondBid() : auctionInfos.get(person - 1).getBid()) : auctionInfos.get(1).getBid());
+            String secondBid = String.valueOf(person < 2 ? auctionDocument.getSecondBid() : auctionInfos.get(1).getBid());
 
             results.add(
                     AuctionListDto.builder()
                             .auctionId(auctionDocument.getId())
                             .title(auctionDocument.getTitle())
                             .thumbnail(s3Util.generateFileUrl(auctionDocument.getThumbnail()))
-                            .secondBid(secondBid.equals("0") ? auctionDocument.getSecondBid() : secondBid)
+                            .secondBid(secondBid)
                             .person(person)
                             .finishedAt(auctionDocument.getFinishedAt())
                             .createdAt(auctionDocument.getCreatedAt())
