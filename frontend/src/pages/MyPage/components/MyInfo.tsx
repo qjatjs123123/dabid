@@ -11,7 +11,7 @@ const MyInfo: React.FC = () => {
   const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const [loading, setLoading] = useState<boolean>(true);
   const [code, setCode] = useState<string>('');
-  const [apiInfo, setApiInfo] = useRecoilState(apiState);
+  const [, setApiInfo] = useRecoilState(apiState);
   const [status, setStatus] = useState({
     accountAuth: false,
     accountCheck: false,
@@ -19,7 +19,7 @@ const MyInfo: React.FC = () => {
   });
 
   const [pointAmount, setPointAmount] = useState<number>(0);
-  const [pointStatus, setPointStatus] = useState({
+  const [, setPointStatus] = useState({
     warning: false,
     message: '',
   });
@@ -147,7 +147,7 @@ const MyInfo: React.FC = () => {
                 <img
                   src={userInfo.imageUrl}
                   alt="사용자 이미지"
-                  className="rounded-full w-32 h-32 object-cover mb-3 border-4 border-db_black"
+                  className="rounded-full w-32 h-32 object-cover mb-3 border-2 border-db_black"
                 />
               )}
               <p className="text-xl my-3">{userInfo.nickname}</p>
@@ -193,7 +193,7 @@ const MyInfo: React.FC = () => {
                         id="code"
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
-                        className="ml-2 border rounded-md p-1 text-md text-center w-full"
+                        className="ml-2 border-2 rounded-md p-1 text-md text-center w-full"
                       />
                     </div>
                   </div>

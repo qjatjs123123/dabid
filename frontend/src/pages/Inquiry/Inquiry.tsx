@@ -4,11 +4,14 @@ import InquiryInput from './InquiryInput';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
 import { useRecoilState } from 'recoil';
 import axios from '../../api/axiosConfig';
-import { INQUIRY_API_URL } from '../../util/Constants';
+import { DELAY_TIME_END, DELAY_TIME_END_LONG, INQUIRY_API_URL, MESSAGE } from '../../util/Constants';
+import { delaySetApiInfo } from '../../util/Functions';
+import { apiState } from '../../stores/recoilStores/Message/apiState';
 
 const Inquiry = () => {
   const [activePage, setActivePage] = useState<string>('내 문의');
   const [userInfo] = useRecoilState<UserInfo | null>(userState);
+  const [, setApiInfo] = useRecoilState(apiState);
 
   const renderContent = () => {
     switch (activePage) {
@@ -16,7 +19,6 @@ const Inquiry = () => {
         return <InquiryList />;
       case '문의 작성':
         return <InquiryInput />;
-
       default:
         return null;
     }
@@ -24,12 +26,29 @@ const Inquiry = () => {
 
   const saveInquiry = async () => {
     try {
-      const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_EXCEL}`);
-      if (response.data.code !== 'SU') {
-        console.log(response.data);
-      }
+      const response = await axios.get(`${INQUIRY_API_URL.INQUIRY_EXCEL}`, {
+        responseType: 'blob', // 응답 타입을 blob으로 설정
+      });
+
+      // Blob 객체 생성
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+
+      // a 태그를 만들어 다운로드
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'inquiry.xlsx'); // 파일 이름 설정
+      document.body.appendChild(link);
+      link.click();
+      link.remove(); // 링크 제거
+      window.URL.revokeObjectURL(url); // URL 메모리 해제
+
+      delaySetApiInfo(setApiInfo, MESSAGE.API_INQUIRY_SUCCESS, DELAY_TIME_END_LONG);
     } catch (error) {
       console.error(error);
+      delaySetApiInfo(setApiInfo, MESSAGE.API_INQUIRY_FAIL, DELAY_TIME_END);
     }
   };
 
@@ -45,20 +64,30 @@ const Inquiry = () => {
         <img src="/center.png" className="h-[25vh] lg:h-[30vh] w-auto"></img>
       </div>
       <div className="container w-full border-gray-300 flex flex-col mt-4 p-6 ">
-        <ul className="flex border-gray-300 mb-[10px]">
-          {['내 문의', '문의 작성', ...(userInfo?.role === 'ADMIN' ? ['문의 파일 저장'] : [])].map((page) => {
-            return (
-              <li key={page}>
-                <button
-                  className={`block text-black p-3 ${activePage === page ? 'bg-db_main text-white font-bold' : ' '} hover:font-bold`}
-                  onClick={() => setActivePage(page)}
-                >
-                  {page}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <div className={`flex ${userInfo?.role === 'ADMIN' ? 'justify-between' : 'justify-start'}`}>
+          <ul className="flex border-gray-300 mb-[10px]">
+            {['내 문의', '문의 작성'].map((page) => {
+              return (
+                <li key={page}>
+                  <button
+                    className={`block text-black p-3 ${activePage === page ? 'bg-db_main text-white font-bold' : ' '} hover:font-bold`}
+                    onClick={() => setActivePage(page)}
+                  >
+                    {page}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          {userInfo?.role === 'ADMIN' && (
+            <button
+              className="bg-db_main text-white rounded-lg px-4 py-1 ml-2 h-2/3 hover:bg-db_hover"
+              onClick={saveInquiry}
+            >
+              문의 저장
+            </button>
+          )}
+        </div>
 
         <div className="m-1">{renderContent()}</div>
       </div>
