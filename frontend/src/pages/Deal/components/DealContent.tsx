@@ -25,7 +25,7 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
 
   return (
     <div
-      className={`p-2 mb-4 w-full rounded-md ${borderColorClasses} ${boxShadowClasses} ${transitionClasses} cursor-pointer`}
+      className={`p-2 mb-4 w-full h-full rounded-md ${borderColorClasses} ${boxShadowClasses} ${transitionClasses} cursor-pointer`}
       onClick={handleClick}
     >
       <img
@@ -34,10 +34,36 @@ const DealContent: React.FC<DealProps> = ({ deal }) => {
         src={`${deal.image}`}
         alt="Deal Image"
       />
-      <div className="text-[20px] mb-[8px] font-[600] overflow-hidden text-ellipsis line-clamp-1">{deal.title}</div>
-      <div className="mb-[4px] h-[48px] overflow-hidden text-ellipsis line-clamp-2">{deal.detail}</div>
+      <div
+        className="text-[20px] w-full mb-[8px] font-[600] overflow-hidden text-ellipsis line-clamp-1"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 1,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
+          height: '1.5rem',
+        }}
+      >
+        {deal.title}
+      </div>
+      <div
+        className="mb-[4px]  w-full overflow-hidden"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          wordBreak: 'break-word',
+          height: '3rem',
+        }}
+      >
+        {deal.detail}
+      </div>
       <div className="mb-[5px]">
-        <span className="text-[20px]  font-[800] mr-[3px]">{formatNumberWithCommas(deal.winning_bid)}</span>
+        <span className="text-[20px] font-[800] mr-[3px]">{formatNumberWithCommas(deal.winning_bid)}</span>
         <span>원</span>
       </div>
       <div className="flex justify-between items-center h-full">

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { curDealIdState } from '../../../stores/recoilStores/Deal/stateDealId';
 import { useRecoilValue } from 'recoil';
 import { getDealContentDetailQuery } from '../../../stores/queries/getDealContentDetailQuery';
+import { getDealContentListQuery } from '../../../stores/queries/getDealContentListQuery';
 
 interface ConfirmCloseModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ const ConfirmCloseModal: React.FC<ConfirmCloseModalProps> = ({ isOpen, onClose, 
   const [error, setError] = useState<string | null>(null); // 에러 상태 관리
   const curDealId = useRecoilValue(curDealIdState);
   const { data: dealContentDetail, refetch } = getDealContentDetailQuery(curDealId);
-
+  const { data: dealContentDetail1, refetch: refetchDealContentList } = getDealContentListQuery();
   const handleConfirmClose = async () => {
     setLoading(true);
     try {
@@ -25,6 +26,7 @@ const ConfirmCloseModal: React.FC<ConfirmCloseModalProps> = ({ isOpen, onClose, 
         setLoading(false);
         onClose(); // 모달 닫기
         refetch();
+        refetchDealContentList();
       } else {
         setError('인수 확인에 실패했습니다.');
         setLoading(false);

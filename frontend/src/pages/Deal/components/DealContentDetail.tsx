@@ -76,13 +76,33 @@ const DealContentDetail = () => {
             </div>
           </div>
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[25px] mb-[25px]"></div>
-          <div className="text-[30px] font-[600] mb-[4px] leading-tight ">{deal.title}</div>
+          <div
+            className="text-[30px] font-[600] mb-[4px] leading-tight"
+            style={{
+              display: 'block', // 기본 블록으로 설정
+              overflow: 'hidden', // 넘치는 부분 숨기기
+              wordBreak: 'break-word', // 긴 단어의 경우 줄바꿈
+              whiteSpace: 'normal', // 자동 줄바꿈 허용
+            }}
+          >
+            {deal.title}
+          </div>
           <DealContentTimer dealQuery={deal} fontSize="16px" />
           {/* <div className="mb-[4px] text-[16px] text-[#868e96] font-[400]">12시간 06분 전</div> */}
           <div className="mb-[25px]">
             <span className="font-[800] text-[19px]">{formatNumberWithCommas(deal.winning_bid)} 원</span>
           </div>
-          <div className="mb-[8px] text-[17px] leading-tight">{deal.detail}</div>
+          <div
+            className="mb-[8px] text-[17px] leading-tight"
+            style={{
+              display: 'block', // 기본 블록으로 설정
+              overflow: 'hidden', // 넘치는 부분 숨기기
+              wordBreak: 'break-word', // 긴 단어의 경우 줄바꿈
+              whiteSpace: 'normal', // 자동 줄바꿈 허용
+            }}
+          >
+            {deal.detail}
+          </div>
           <div className="h-[1px] w-full bg-[#e9ecef] mt-[35px] mb-[35px]"></div>
 
           <DeliveryStatusSearch IsSeller={deal.seller} />

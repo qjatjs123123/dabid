@@ -123,7 +123,7 @@ public class DealServiceImpl implements DealService {
 
         if (transferResponse.getRec() == null)
             throw new NoSuchElementException("전송 응답에서 REC 값을 찾을 수 없습니다.");
-
+        dealRepository.save(deal);
     }
 
     @Override
