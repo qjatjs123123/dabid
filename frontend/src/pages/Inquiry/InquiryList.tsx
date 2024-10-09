@@ -57,15 +57,16 @@ const InquiryList = () => {
               </div>
 
               <div className="flex flex-col">
-                <h2 className="font-semibold text-[30px]">{inquiry.title}</h2>
-                <p className="text-sm italic">카테고리: {inquiry.category}</p>
+                <h2 className="font-semibold text-[30px] mb-2">
+                  [{inquiry.category}] {inquiry.title}
+                </h2>
                 <p className="text-[20px] text-gray-600">{inquiry.content}</p>
               </div>
             </div>
           ))
         ) : (
           <div className="flex justify-center items-center">
-            <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] m-[100px]" />
+            <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] mx-auto" />
           </div>
         )}
       </div>
