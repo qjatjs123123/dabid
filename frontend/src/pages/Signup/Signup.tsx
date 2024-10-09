@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login, randomNickname, phoneNumberAuth, phoneNumberCheck, checkDuplication } from '../../api/MemberAPI'; // API 호출 import
-import { DELAY_TIME_END_LONG, MEMBER_API_URL, MESSAGE, PAGE_URL } from '../../util/Constants';
+import { login, randomNickname, phoneNumberAuth, phoneNumberCheck, checkDuplication } from '../../api/MemberAPI';
+import { MEMBER_API_URL, MESSAGE, PAGE_URL, DELAY_TIME_END } from '../../util/Constants';
 import { useRecoilState } from 'recoil';
 import { loginState } from '../../stores/recoilStores/Member/loginState';
 import axios from 'axios';
@@ -11,10 +11,11 @@ import { delaySetApiInfo } from '../../util/Functions';
 import { UserInfo, userState } from '../../stores/recoilStores/Member/userState';
 
 const SignUp: React.FC = () => {
-  const [_, setToken] = useRecoilState(loginState); // 컴포넌트 최상위에서 호출
+  const [, setToken] = useRecoilState(loginState);
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState<File | null>(null);
-  const [apiInfo, setApiInfo] = useRecoilState(apiState);
+  const [, setApiInfo] = useRecoilState(apiState);
+  const [, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const [formData, setFormData] = useState({
     email: '',
     nickname: '',
@@ -302,11 +303,11 @@ const SignUp: React.FC = () => {
       // 로그인 성공 후 홈으로 이동
       if (loginResponse.code === 'SU') {
         setToken(true);
-        await delaySetApiInfo(setApiInfo, MESSAGE.API_SIGNUP_SUCCESS, DELAY_TIME_END_LONG); // 요청 성공
+        delaySetApiInfo(setApiInfo, MESSAGE.API_SIGNUP_SUCCESS, DELAY_TIME_END); // 요청 성공
         localStorage.setItem('accessToken', loginResponse.accessToken); // 로그인 성공 시 token 저장
         localStorage.setItem('refreshToken', loginResponse.refreshToken);
         init(formData.email);
-        const [, setUserInfo] = useRecoilState<UserInfo | null>(userState);
+
         const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
         await setUserInfo(response.data);
 
@@ -314,7 +315,7 @@ const SignUp: React.FC = () => {
       }
     } catch (error) {
       console.error('회원가입 실패:', error);
-      await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_ERROR, DELAY_TIME_END_LONG); // 요청 실패
+      delaySetApiInfo(setApiInfo, MESSAGE.API_SIGNUP_FAIL, DELAY_TIME_END); // 요청 실패
     }
   };
 
@@ -327,16 +328,32 @@ const SignUp: React.FC = () => {
           className="space-y-4 p-5 w-full flex flex-col items-center rounded-lg border shadow-md"
         >
           <div className="mt-10 flex flex-row space-x-2 w-2/3 justify-between items-center">
-            <label className="block mb-3 text-xl">프로필 사진</label>
+            <label className="block mb-3 text-xl w-1/5">프로필 사진</label>
 
             {imagePreview && (
               <img
                 src={URL.createObjectURL(imagePreview)}
                 alt="미리보기"
-                className="max-h-[200px] object-cover mb-4 rounded-full"
+                className="h-[200px] w-[200px] mb-4 rounded-full object-cover"
               />
             )}
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="mb-4 text-sm" />
+
+            <div className="relative">
+              {/* 파일 입력 숨기기 */}
+              <input
+                type="file"
+                accept="image/*"
+                id="file-upload"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                onChange={handleImageUpload}
+              />
+              <label
+                htmlFor="file-upload"
+                className="bg-db_main text-white rounded-lg px-4 py-1 h-2/3 text-sm hover:bg-db_hover cursor-pointer"
+              >
+                {imagePreview ? '사진 수정' : '사진 선택'}
+              </label>
+            </div>
           </div>
 
           <div className="mt-10 flex flex-row space-x-2 w-2/3 justify-between">
@@ -397,7 +414,7 @@ const SignUp: React.FC = () => {
             </div>
           </div>
           {errors.passwordFormatError && (
-            <p className="text-red-500">비밀번호는 최소 8자, 최대 13자로 문자와 숫자로 구성되어야 함니다.</p>
+            <p className="text-red-500">비밀번호는 최소 8자, 최대 13자로 문자와 숫자, 특수문자로 구성되어야 함니다.</p>
           )}
 
           <div className="mt-10 flex flex-row space-x-3 w-2/3 justify-between">
@@ -469,12 +486,12 @@ const SignUp: React.FC = () => {
               {errors.phoneVerification && <p className="text-red-500">인증 코드가 올바르지 않습니다.</p>}
             </>
           )}
-
-          {!canSubmit() && <p className="text-red-500 text-lg">사진을 포함한 모든 항목을 오류 없이 입력하셨나요?</p>}
+          <br />
+          {!canSubmit() && <p className="text-red-500 text-lg pb-5">사진을 포함한 모든 항목을 입력해 주세요.</p>}
           {canSubmit() && (
             <button
               type="submit"
-              className="bg-db_main text-white rounded-lg px-4 py-2 hover:bg-db_hover"
+              className="bg-db_main text-white rounded-lg px-4 py-2 hover:bg-db_hover pb-5"
               disabled={!canSubmit()}
             >
               회원가입

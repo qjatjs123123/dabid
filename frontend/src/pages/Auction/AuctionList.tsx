@@ -3,11 +3,11 @@ import AuctionContainer from './components/Auctions/AuctionContainer';
 import { AuctionListDto, auctionListState } from '../../stores/recoilStores/auctionListState';
 import { useRecoilState } from 'recoil';
 import { useLocation } from 'react-router-dom';
+import { getImgUrl } from '../../util/Functions';
 
 const Auction: React.FC = () => {
-  const [_, setAuctionList] = useRecoilState(auctionListState);
+  const [auctionList, setAuctionList] = useRecoilState(auctionListState);
   const location = useLocation();
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const searchTerm = params.get('search');
@@ -88,6 +88,11 @@ const Auction: React.FC = () => {
         {/* <AuctionFilter setAuctionList={setAuctionList} /> */}
         <div className="container mx-auto">
           <AuctionContainer /> {/* setAuctionList 추가 */}
+          {auctionList.length === 0 && (
+            <div className="flex justify-center items-center">
+              <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] mx-auto" />
+            </div>
+          )}
         </div>
       </div>
     </div>

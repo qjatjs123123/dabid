@@ -51,7 +51,6 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
 
       if (response.ok) {
         // 성공 시 처리
-        // alert('경매가 성공적으로 등록되었습니다.'); // 알림 표시
         try {
           const response = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
           setUserInfo(response.data);
@@ -101,7 +100,6 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
             required
           />
         </div>
-
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">시작가</label>
           <input
@@ -113,7 +111,6 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
             required
           />
         </div>
-
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">기간</label>
           <select
@@ -127,7 +124,6 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
             {/* 다른 기간 추가 가능 */}
           </select>
         </div>
-
         <div className="mb-4">
           <label className="block text-sm font-semibold mb-1">설명</label>
           <textarea
@@ -138,7 +134,8 @@ const AuctionForm: React.FC<AuctionFormProps> = ({ images }) => {
             rows={4}
           />
         </div>
-
+        <p className="text-xs text-gray-500 my-2">*경매를 등록하기 위해서는 5000 포인트가 필요합니다.</p>{' '}
+        {/* 스타일 변경 */}
         <button type="submit" className="w-full p-2 bg-db_main hover:bg-db_hover text-white rounded">
           경매 시작하기
         </button>

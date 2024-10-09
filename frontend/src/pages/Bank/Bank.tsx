@@ -56,7 +56,7 @@ const BankModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       onClick={handleBackgroundClick} // 배경 클릭 이벤트 추가
     >
       <div
-        className={`bg-gray-100 h-2/3 rounded-3xl shadow-lg max-w-lg w-full mb-10 transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-10'}`}
+        className={`bg-gray-100 h-3/4 rounded-3xl shadow-lg max-w-lg w-full mb-10 transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-10'}`}
       >
         <div className={`bg-white h-20 rounded-3xl flex flex-col justify-center`}>
           <div className="flex items-center">
@@ -72,7 +72,7 @@ const BankModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
         <div className={'p-6'}>
-          <div className={`bg-white flex flex-col h-36 justify-evenly px-6 rounded-3xl`}>
+          <div className={`bg-white flex flex-col h-32 justify-evenly px-6 rounded-3xl`}>
             <div>
               <p className="text-4xl font-semibold">
                 <i>{userInfo?.accountNo}</i>
@@ -85,7 +85,7 @@ const BankModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <div className={`bg-white h-[200px] mt-6 py-1 px-4 rounded-3xl overflow-y-auto`}>
+          <div className={`bg-white h-[180px] mt-6 py-1 px-4 rounded-3xl overflow-y-auto`}>
             <h3 className="mt-3 text-2xl font-bold">최근 거래 내역</h3>
             <div className="mt-2">
               {Array.isArray(transactions) && transactions.length > 0 ? (

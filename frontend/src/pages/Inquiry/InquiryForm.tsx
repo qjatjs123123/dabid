@@ -86,7 +86,7 @@ const InquiryForm: React.FC<InquiryFormProps> = ({ images }) => {
         />
       </div>
 
-      <button onClick={handleSubmit} className="w-full p-2 bg-blue-500 text-white rounded-md">
+      <button onClick={handleSubmit} className="w-full p-2 bg-db_main hover:bg-db_hover text-white rounded-md">
         문의 등록하기
       </button>
     </div>

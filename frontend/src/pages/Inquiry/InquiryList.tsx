@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axiosConfig';
 import { INQUIRY_API_URL } from '../../util/Constants';
+import { getImgUrl } from '../../util/Functions';
 
 interface InquiryItem {
   inquiryId: number;
@@ -56,14 +57,17 @@ const InquiryList = () => {
               </div>
 
               <div className="flex flex-col">
-                <h2 className="font-semibold text-[30px]">{inquiry.title}</h2>
-                <p className="text-sm italic">카테고리: {inquiry.category}</p>
+                <h2 className="font-semibold text-[30px] mb-2">
+                  [{inquiry.category}] {inquiry.title}
+                </h2>
                 <p className="text-[20px] text-gray-600">{inquiry.content}</p>
               </div>
             </div>
           ))
         ) : (
-          <div className="flex justify-center items-center text-2xl text-gray-500">{error === null ? '' : '텅'}</div>
+          <div className="flex justify-center items-center">
+            <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] mx-auto" />
+          </div>
         )}
       </div>
     </div>

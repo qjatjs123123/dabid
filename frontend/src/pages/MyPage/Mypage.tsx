@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import MyInfo from './components/MyInfo';
 import MyCreateList from './components/MyCreateList';
 import MyJoinList from './components/MyJoinList';
+import { Navigate } from 'react-router-dom';
+import { PAGE_URL } from '../../util/Constants';
 
 const Mypage: React.FC = () => {
   const [localActivePage, setLocalActivePage] = useState<string>('내 정보');
@@ -10,10 +12,13 @@ const Mypage: React.FC = () => {
     switch (localActivePage) {
       case '내 정보':
         return <MyInfo />;
+      case '내 거래':
+        return <Navigate to={`${PAGE_URL.DEAL}`} />;
       case '생성한 경매':
         return <MyCreateList />;
       case '참여한 경매':
         return <MyJoinList />;
+
       default:
         return null;
     }
@@ -23,7 +28,7 @@ const Mypage: React.FC = () => {
     <div className="container w-full border-gray-300 flex flex-col mt-4">
       <nav className="h-[30px]">
         <ul className="flex">
-          {['내 정보', '생성한 경매', '참여한 경매'].map((page) => (
+          {['내 정보', '내 거래', '생성한 경매', '참여한 경매'].map((page) => (
             <li key={page}>
               <button
                 onClick={() => setLocalActivePage(page)}

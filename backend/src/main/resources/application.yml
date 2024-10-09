@@ -24,8 +24,7 @@ spring:
     url: jdbc:mysql://13.124.170.198:3306/dabid?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     password: dabid
 
-  # SQL Encoding
-  sql:
+  # SQL
     init:
       encoding: UTF-8
       mode: always

@@ -11,7 +11,7 @@ const MyInfo: React.FC = () => {
   const [userInfo, setUserInfo] = useRecoilState<UserInfo | null>(userState);
   const [loading, setLoading] = useState<boolean>(true);
   const [code, setCode] = useState<string>('');
-  const [apiInfo, setApiInfo] = useRecoilState(apiState);
+  const [, setApiInfo] = useRecoilState(apiState);
   const [status, setStatus] = useState({
     accountAuth: false,
     accountCheck: false,
@@ -19,7 +19,7 @@ const MyInfo: React.FC = () => {
   });
 
   const [pointAmount, setPointAmount] = useState<number>(0);
-  const [pointStatus, setPointStatus] = useState({
+  const [, setPointStatus] = useState({
     warning: false,
     message: '',
   });
@@ -54,7 +54,7 @@ const MyInfo: React.FC = () => {
       const response = await axios.post(`${MEMBER_API_URL.ACCOUNT_AUTH}`);
       if (response.data.code === 'SU') {
         // setStatus({ ...status, accountAuth: true, message: '계좌 인증 요청을 보냈습니다.' });
-        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_SUCCESS, DELAY_TIME_END_LONG); // 요청 성공
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_SUCCESS, DELAY_TIME_END); // 요청 성공
         setShowAccountVerification(true); // 계좌 인증 폼 표시
       } else if (response.data.code === 'AV') {
         setStatus({ ...status, accountCheck: true, message: '이미 인증된 계좌입니다.' });
@@ -72,7 +72,7 @@ const MyInfo: React.FC = () => {
 
       if (response.data.code === 'SU') {
         setStatus({ ...status, accountCheck: true, message: '계좌 인증이 완료되었습니다.' });
-        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_COMPLETE, DELAY_TIME_END_LONG); // 요청 보냄
+        await delaySetApiInfo(setApiInfo, MESSAGE.API_ACCOUNT_COMPLETE, DELAY_TIME_END); // 요청 보냄
         fetchUserInfo();
       } else {
         setStatus({ ...status, message: '계좌 인증에 실패했습니다.' });
@@ -93,13 +93,16 @@ const MyInfo: React.FC = () => {
       const response = await axios.post(`${MEMBER_API_URL.POINT_IN}`, { amount: pointAmount });
       if (response.data.code === 'SU') {
         const res = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
-        await setUserInfo(res.data);
-        setPointStatus({ warning: false, message: '포인트 충전이 완료되었습니다.' });
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTIN_SUCCESS, DELAY_TIME_END_LONG);
+        setUserInfo(res.data);
+        // setPointStatus({ warning: false, message: '포인트 충전이 완료되었습니다.' });
       } else {
-        setPointStatus({ warning: true, message: response.data.message });
+        setPointStatus({ warning: true, message: '계좌 잔액이 부족합니다.' });
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTIN_FAIL, DELAY_TIME_END_LONG);
       }
     } catch (error) {
       console.log(error);
+      delaySetApiInfo(setApiInfo, MESSAGE.API_POINTIN_FAIL, DELAY_TIME_END_LONG);
       setPointStatus({ warning: true, message: '포인트 충전 요청 중 오류가 발생했습니다.' });
     }
     setPointAmount(0);
@@ -113,14 +116,17 @@ const MyInfo: React.FC = () => {
       const response = await axios.post(`${MEMBER_API_URL.POINT_OUT}`, { amount: pointAmount });
       if (response.data.code === 'SU') {
         const res = await axios.get(`${MEMBER_API_URL.MY_INFO}`);
-        await setUserInfo(res.data);
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTOUT_SUCCESS, DELAY_TIME_END_LONG);
+        setUserInfo(res.data);
         setPointStatus({ warning: false, message: '포인트 환전이 완료되었습니다.' });
       } else {
-        setPointStatus({ warning: true, message: response.data.message });
+        setPointStatus({ warning: true, message: '포인트 잔액이 부족합니다.' });
+        delaySetApiInfo(setApiInfo, MESSAGE.API_POINTOUT_FAIL, DELAY_TIME_END_LONG);
       }
     } catch (error) {
       console.log(error);
       setPointStatus({ warning: true, message: '포인트 환전 요청 중 오류가 발생했습니다.' });
+      await delaySetApiInfo(setApiInfo, MESSAGE.API_POINTOUT_FAIL, DELAY_TIME_END_LONG);
     }
     setPointAmount(0);
   };
@@ -141,7 +147,7 @@ const MyInfo: React.FC = () => {
                 <img
                   src={userInfo.imageUrl}
                   alt="사용자 이미지"
-                  className="rounded-full w-32 h-32 object-cover mb-3 border-4 border-db_black"
+                  className="rounded-full w-32 h-32 object-cover mb-3 border-2 border-db_black"
                 />
               )}
               <p className="text-xl my-3">{userInfo.nickname}</p>
@@ -187,12 +193,13 @@ const MyInfo: React.FC = () => {
                         id="code"
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
-                        className="ml-2 border rounded-md p-1 text-md text-center w-full"
+                        className="ml-2 border-2 rounded-md p-1 text-md text-center w-full"
                       />
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-end border-b py-2">
+                    <div className="flex justify-between border-b py-2">
+                      <p className="py-1 text-db_main">우측 하단 다비드뱅크에서 인증코드를 확인하세요!</p>
                       <button
                         onClick={accountCheck}
                         className="bg-db_main text-white rounded px-4 py-1 ml-2 transition duration-300 hover:bg-db_hover"
@@ -263,11 +270,11 @@ const MyInfo: React.FC = () => {
                     환전하기
                   </button>
                 </div>
-                {pointStatus.message && (
+                {/* {pointStatus.message && (
                   <p className={`mt-2 ${pointStatus.warning ? 'text-red-600' : 'text-db_main'}`}>
                     {pointStatus.message}
                   </p>
-                )}
+                )} */}
               </div>
             </>
           )}

@@ -38,7 +38,11 @@ const UserDropdown = () => {
         className="font-medium rounded-lg text-sm px-5 py-2.5 flex flex-row"
         type="button"
       >
-        <img src={`${userInfo?.imageUrl}`} alt="" className="h-[30px] m-1 rounded-full" />
+        <img
+          src={`${userInfo?.imageUrl}`}
+          alt="프로필 사진"
+          className="w-[30px] h-[30px] m-1 rounded-full object-cover"
+        />
         <div className="text-center inline-flex items-center">
           <span className="ml-2">
             {userInfo?.nickname} 님

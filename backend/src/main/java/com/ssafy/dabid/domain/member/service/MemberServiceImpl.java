@@ -428,4 +428,16 @@ public class MemberServiceImpl implements MemberService {
 
         return dto;
     }
+
+    @Override
+    public void checkEmailNonNative(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        memberRepository.findByEmail(email);
+    }
+
+    @Override
+    public void checkEmailNative(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        memberRepository.findByEmailNative(email);
+    }
 }

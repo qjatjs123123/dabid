@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+// import chatIcon from '../../assets/chat/chatIcon_background_blur.svg';
+// import chatIcon from '../../assets/chat/ChatIcon2.svg';
+// import chatIcon from '../../assets/chat/chatIconTwo.svg';
 import chatIcon from '../../assets/chat/chatIcon.svg';
+
 import sendChat from '../../assets/chat/sendChat.svg';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { curDealIdState } from '../../stores/recoilStores/Deal/stateDealId';
@@ -75,7 +79,7 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div className="fixed bottom-[173px] right-[33px] z-50 noto-sans-kr-bold">
+    <div className="fixed bottom-[173px] right-[40px] z-50 noto-sans-kr-bold">
       {isOpen ? (
         <>
           <div className="w-[350px] h-[500px] border border-gray-300 rounded-lg bg-white shadow-lg">
@@ -141,7 +145,7 @@ const Chat = () => {
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="h-[65px] w-[65px] flex items-center justify-center rounded-full"
+          className="h-[52px] w-[52px] flex items-center justify-center rounded-full shadow-lg"
         >
           <img src={chatIcon} alt="Chat Icon" className="w-full h-full" />
         </button>
