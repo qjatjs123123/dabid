@@ -2,7 +2,9 @@ package com.ssafy.dabid.domain.auction.service;
 
 import com.ssafy.dabid.domain.auction.entity.Auction;
 //import com.ssafy.dabid.domain.auction.entity.AuctionInfo;
+import com.ssafy.dabid.domain.auction.entity.AuctionDocument;
 import com.ssafy.dabid.domain.auction.entity.mongo.AuctionInfo;
+import com.ssafy.dabid.domain.auction.repository.AuctionElasticSearchRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionInfoRepository;
 import com.ssafy.dabid.domain.auction.repository.AuctionJpaRepository;
 import com.ssafy.dabid.domain.auction.repository.mongo.AuctionInfoMongoRepository;
@@ -29,6 +31,7 @@ public class BiddingServiceImpl implements BiddingService {
     private final AuctionInfoRepository auctionInfoRepository;
     private final MemberAccountRepository memberAccountRepository;
     private final AuctionInfoMongoRepository auctionInfoMongoRepository;
+    private final AuctionElasticSearchRepository auctionElasticSearchRepository;
 
     // 경매 참여
     @Override
@@ -116,7 +119,8 @@ public class BiddingServiceImpl implements BiddingService {
 
         log.info("경매 입찰 신청한 경매 조회");
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
-        
+        AuctionDocument auctionDocument = auctionElasticSearchRepository.findById(String.valueOf(auctionId)).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
+
         /* 1. 요청한 사용자(member) 정보를 경매 참여자 정보 DB(auction_info)에서 가져온다. */
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         log.info(email);
@@ -138,6 +142,9 @@ public class BiddingServiceImpl implements BiddingService {
                 log.info("1등 입찰가보다 낮고 2등 입찰가보다 높은 입찰 금액이므로 표기 2등 입찰가 수정");
                 auction.setSecondBid(bid);
                 auctionJpaRepository.save(auction);
+
+                auctionDocument.setSecondBid(String.valueOf(bid));
+                auctionElasticSearchRepository.save(auctionDocument);
             }
 
             log.info("bid 끝");
@@ -146,12 +153,14 @@ public class BiddingServiceImpl implements BiddingService {
         } else { // 1등 입찰가보다 높은 금액 입찰 시도
             log.info("입찰 성공!");
             auction.setSecondBid(auction.getFirstBid());
+            auctionDocument.setSecondBid(String.valueOf(bid));
             /*
             로직 - 기존 auction.getFirstMemberId()의 사용자에게 낙찰 유력 뺐김을 CoolSMS 알림
             */
             auction.setFirstMemberId(member.getId());
             auction.setFirstBid(bid);
             auctionJpaRepository.save(auction);
+            auctionElasticSearchRepository.save(auctionDocument);
 
             log.info("bid 끝");
 
