@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .formLogin(FormLoginConfigurer::disable)
                 //시큐리티를 적용/미적용할 url 지정
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/member/auth/**", "/error", "/actuator/**", "/api/chat", "/api/deal/test/**", "/api/auctions", "api/auctions/title").permitAll()
+                        .requestMatchers("/api/member/auth/**", "/error", "/actuator/**", "/api/chat", "/api/deal/test/**", "/api/auctions", "api/auctions/title", "/api/auctions/test/title").permitAll()
                         .requestMatchers("/api/member/auth/sign-out").authenticated()
                         .anyRequest().authenticated())
                 //세션 사용 방식 설정 -> Rest API 서버에서는 불필요하므로 미사용

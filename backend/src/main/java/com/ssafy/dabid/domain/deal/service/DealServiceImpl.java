@@ -466,7 +466,7 @@ public class DealServiceImpl implements DealService {
         Auction auction = auctionJpaRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("존재하지 않는 경매입니다."));
 
         if(!auctionService.isExistParticipant(auctionId)) { // 경매 참여자가 존재하지 않은 경우
-            auctionService.returnSellerPoint(auctionId);
+            //auctionService.returnSellerPoint(auctionId);
             // 알림 CoolSMS -> 판매자에게 "니 유감. 아무도 입찰안함"
 
             log.info("경매 참여자가 존재하지 않는 경우의 스케쥴러 동작 완료");
@@ -480,7 +480,7 @@ public class DealServiceImpl implements DealService {
                 createDeal(auctionId);
                 // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
                 //              -> 판매자에게 "니 거래로 넘어감!"
-                biddingSMSService.sendSellerAndBidder(auctionId);
+                //biddingSMSService.sendSellerAndBidder(auctionId);
             }
             
             log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");
