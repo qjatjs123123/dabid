@@ -15,7 +15,6 @@ createRoot(document.getElementById('root')!).render(
   <RecoilRoot>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <Header />
         <App />
         <SnackBarUI />
       </QueryClientProvider>

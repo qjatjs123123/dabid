@@ -19,6 +19,8 @@ import Inquiry from './pages/Inquiry/Inquiry';
 import { UserInfo, userState } from './stores/recoilStores/Member/userState';
 import axios from './api/axiosConfig';
 import { useState } from 'react';
+import NotFound from './pages/NotFound';
+import Header from './components/Header/Header';
 
 function App() {
   const [isModalOpen, setModalOpen] = useRecoilState(modalState);
@@ -33,17 +35,19 @@ function App() {
     init(response.data.email);
     navigate(PAGE_URL.HOME); // 로그인 성공 후 홈으로 리다이렉트
   };
+
   const isLoggedIn = localStorage.getItem('accessToken');
+  const visiblePaths = Object.values(PAGE_URL);
 
   return (
     <>
       <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
-
+      {visiblePaths.includes(location.pathname) && <Header />}
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
         <Route path={`${PAGE_URL.SIGN_UP}`} element={isLoggedIn ? <Navigate to="/" /> : <SignUp />} />
         <Route path={`${PAGE_URL.AUCTION_LIST}`} element={<AuctionList />} />
-
+        <Route path="/*" element={<NotFound />} />
         <Route element={<PrivateRoute setModalOpen={setModalOpen} />}>
           <Route
             path={`${PAGE_URL.DEAL}`}
