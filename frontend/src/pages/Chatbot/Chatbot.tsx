@@ -151,7 +151,7 @@ const ChatbotModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     >
       <div
         ref={modalRef} // 대화창을 위한 ref 추가
-        className={`bg-white p-6 rounded-lg shadow-lg max-w-md w-full mb-10 transition-transform duration-300 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'} h-[600px] flex flex-col`} // Flexbox 설정
+        className={`bg-white p-6 rounded-lg shadow-lg max-w-md w-full mb-10 transition-transform duration-300 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'} h-[550px] flex flex-col`} // Flexbox 설정
       >
         <div className="flex items-center mb-4">
           <div

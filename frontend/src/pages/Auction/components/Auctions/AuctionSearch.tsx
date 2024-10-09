@@ -33,6 +33,7 @@ const AuctionSearch: React.FC = () => {
       const data: AuctionListDto[] = await response.json();
       setAuctionList(data); // 검색 결과로 상태 업데이트
       navigate(`${PAGE_URL.AUCTION_LIST}?search=${searchTerm}`); // 검색 결과 페이지로 이동
+      window.scrollTo(0, 0);
     } catch (error) {
       console.error(error);
     }
