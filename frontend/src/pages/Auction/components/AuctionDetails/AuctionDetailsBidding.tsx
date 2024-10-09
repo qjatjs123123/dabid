@@ -40,36 +40,25 @@ const formatDateArrayToString = (dateArray: number[]): string => {
 };
 
 const AuctionBiddingInfo: React.FC<AuctionDetailsBiddingProps> = ({ auctionData }) => {
-  const getServerTime = async () => {
-    try {
-      const response = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
-      const data = await response.json();
-      const serverTime = new Date(data.utc_datetime);
-      return serverTime.getTime();
-    } catch (error) {
-      console.error('서버 시간 가져오기 실패:', error);
-      return new Date(
-        Date.UTC(
-          new Date().getUTCFullYear(),
-          new Date().getUTCMonth(),
-          new Date().getUTCDate(),
-          new Date().getUTCHours(),
-          new Date().getUTCMinutes(),
-          new Date().getUTCSeconds(),
-          0,
-        ),
-      ).getTime(); // 실패 시 현재 시간 반환
-    }
-  };
-
   const [timeRemaining, setTimeRemaining] = useState<string>('--시간 --분 --초');
 
-  const calculateTimeRemaining = async (finishedAt: number[]) => {
+  const calculateTimeRemaining = (finishedAt: number[]) => {
     const [year, month, day, hour, minute, second] = finishedAt;
+    // console.log('불러온 경매 마감일: ' + finishedAt);
     const endDate = new Date(year, month - 1, day, hour, minute, second, 0);
-
-    const now = await getServerTime();
-    const timeDiff = endDate.getTime() - now;
+    // console.log('불러온 경매 마감일 변환 결과: ' + endDate);
+    const now = new Date(
+      Date.UTC(
+        new Date().getUTCFullYear(),
+        new Date().getUTCMonth(),
+        new Date().getUTCDate(),
+        new Date().getUTCHours(),
+        new Date().getUTCMinutes(),
+        new Date().getUTCSeconds(),
+        0,
+      ),
+    );
+    const timeDiff = endDate.getTime() - now.getTime();
 
     if (timeDiff <= 0) {
       setTimeRemaining('--시간 --분 --초');
