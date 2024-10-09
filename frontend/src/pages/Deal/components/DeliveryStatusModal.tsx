@@ -37,7 +37,7 @@ const DeliveryStatusModal: React.FC<DeliveryStatusModalProps> = ({ edges }) => {
         {/* 판매자 정보 */}
         <div className="mb-4">
           <p className="font-bold">김** 님</p>
-          <p className="text-gray-500">경기 안양시 만안구</p>
+          {/* <p className="text-gray-500">경기 안양시 만안구</p> */}
         </div>
       </>
     );

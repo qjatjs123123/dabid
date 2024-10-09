@@ -50,7 +50,7 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <nav className="flex flex-col justify-center w-full px-4 mx-auto bg-opacity-90 md:px-8 backdrop-blur-md backdrop-saturate-150 z-[9999] h-[100px]">
+    <nav className="fixed top-0 left-0 flex flex-col justify-center w-full px-4 mx-auto bg-white  md:px-8 backdrop-blur-md backdrop-saturate-150 z-[9999] h-[100px]">
       <div className="flex flex-wrap items-center text-slate-800 justify-center w-full">
         <Link to={`${PAGE_URL.HOME}`} className="mr-4 block cursor-pointer text-base text-slate-800 font-semibold">
           <img src={getImgUrl('navbar/dabid-logo.png')} alt="다비드 로고" className="max-h-15 h-[50px]" />

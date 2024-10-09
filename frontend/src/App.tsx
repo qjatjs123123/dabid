@@ -38,11 +38,16 @@ function App() {
 
   const isLoggedIn = localStorage.getItem('accessToken');
   const visiblePaths = Object.values(PAGE_URL);
-
+  const isAuctionDetail = /^\/auctions\/\d+$/;
   return (
     <>
       <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onLoginSuccess={handleLoginSuccess} />
-      {visiblePaths.includes(location.pathname) && <Header />}
+      {visiblePaths.includes(location.pathname) || isAuctionDetail.test(location.pathname) ? <Header /> : null}
+
+      {visiblePaths.includes(location.pathname) || isAuctionDetail.test(location.pathname) ? (
+        <div className="w-full h-[100px]"></div>
+      ) : null}
+
       <Routes>
         <Route path={`${PAGE_URL.HOME}`} element={<About />} />
         <Route path={`${PAGE_URL.SIGN_UP}`} element={isLoggedIn ? <Navigate to="/" /> : <SignUp />} />
