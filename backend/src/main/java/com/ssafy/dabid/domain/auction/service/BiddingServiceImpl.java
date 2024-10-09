@@ -153,7 +153,7 @@ public class BiddingServiceImpl implements BiddingService {
         } else { // 1등 입찰가보다 높은 금액 입찰 시도
             log.info("입찰 성공!");
             auction.setSecondBid(auction.getFirstBid());
-            auctionDocument.setSecondBid(String.valueOf(bid));
+            auctionDocument.setSecondBid(String.valueOf(auction.getFirstBid()));
             /*
             로직 - 기존 auction.getFirstMemberId()의 사용자에게 낙찰 유력 뺐김을 CoolSMS 알림
             */
