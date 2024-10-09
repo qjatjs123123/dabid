@@ -53,7 +53,7 @@ const ConfirmCloseModal: React.FC<ConfirmCloseModalProps> = ({ isOpen, onClose, 
             취소
           </button>
           <button
-            className={`bg-blue-600 text-white px-4 py-2 rounded ${loading ? 'opacity-50' : ''}`}
+            className={`bg-[#FFA45D] text-white px-4 py-2 rounded ${loading ? 'opacity-50' : ' hover:bg-[#FF872A]'}`}
             onClick={handleConfirmClose}
             disabled={loading}
           >
