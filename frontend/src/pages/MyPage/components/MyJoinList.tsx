@@ -40,7 +40,7 @@ const Auction: React.FC = () => {
           <MyJoinContatiner auctionList={auctionList} setAuctionList={setAuctionList} />
           {auctionList.length === 0 && (
             <div className="flex justify-center items-center">
-              <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] m-[100px]" />
+              <img src={getImgUrl('dabid_tung.png')} alt="휑" className="w-[400px] mx-auto" />
             </div>
           )}
         </div>

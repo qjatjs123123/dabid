@@ -193,12 +193,13 @@ const MyInfo: React.FC = () => {
                         id="code"
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
-                        className="ml-2 border rounded-md p-1 text-md text-center w-full"
+                        className="ml-2 border-4 rounded-md p-1 text-md text-center w-full"
                       />
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-end border-b py-2">
+                    <div className="flex justify-between border-b py-2">
+                      <p className="py-1 text-db_main">우측 하단 다비드뱅크에서 인증코드를 확인하세요!</p>
                       <button
                         onClick={accountCheck}
                         className="bg-db_main text-white rounded px-4 py-1 ml-2 transition duration-300 hover:bg-db_hover"

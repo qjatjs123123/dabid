@@ -45,7 +45,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({ setIsBank
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center', // 이미지 위치 조정
         }}
-        className="h-[50px] w-[50px] rounded-full shadow-lg"
+        className="h-[50px] w-[50px] rounded-full shadow-lg bg-white"
         onClick={openBank}
       ></button>
       <BankModal isOpen={isBankOpen} onClose={closeBank} />
@@ -57,7 +57,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({ setIsBank
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center', // 이미지 위치 조정
         }}
-        className="h-[50px] w-[50px] rounded-full shadow-lg"
+        className="h-[50px] w-[50px] rounded-full shadow-lg bg-white"
         onClick={openChatbot}
       ></button>
       <ChatbotModal isOpen={isChatbotOpen} onClose={closeChatbot} />
