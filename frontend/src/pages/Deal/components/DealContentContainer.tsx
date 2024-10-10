@@ -62,7 +62,7 @@ const DealContentContainer = () => {
         dealContentList.pages.map((page) => page.content.map((deal) => <DealContent key={deal.id} deal={deal} />))
       ) : (
         <div className="text-center text-[50px]">
-          <p>{MESSAGE.DEAL_LIST_NO_CONTENTS}</p>{' '}
+          <img src="/dabid_tung.png" />
         </div>
       )}
 
