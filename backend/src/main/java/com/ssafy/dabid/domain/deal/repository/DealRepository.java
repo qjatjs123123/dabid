@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DealRepository extends JpaRepository<Deal, String>{
+public interface DealRepository extends JpaRepository<Deal, Integer>{
     Optional<Deal> findById(int id);
     List<Deal> findAllBySellerOrBuyer(Member Seller, Member Buyer);
-    Page<Deal> findAllBySellerOrBuyer(Member seller, Member buyer, Pageable pageable);
+    Page<Deal> findAllBySellerOrBuyerOrderByCreatedAtDesc(Member seller, Member buyer, Pageable pageable);
     long countBySellerOrBuyer(Member Seller, Member Buyer);
 }
 
