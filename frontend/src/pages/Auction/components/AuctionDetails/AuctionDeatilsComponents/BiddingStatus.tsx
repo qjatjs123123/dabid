@@ -9,7 +9,7 @@ import axios from '../../../../../api/axiosConfig';
 import { useRecoilState } from 'recoil';
 import { UserInfo, userState } from '../../../../../stores/recoilStores/Member/userState';
 import BiddingResultModal from '../../Modal/BiddingResultModal';
-
+import { formatNumberWithCommas } from '../../../../../util/moneyComma';
 interface BiddingStatusProps {
   auctionId: number;
   isOwner: boolean;
@@ -37,10 +37,18 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
 
   const [modalResultIsOpen, setModalResultIsOpen] = useState(false);
   const [modalResultMessage, setModalResultMessage] = useState('');
+  const removeCommas = (value: string) => value.replace(/,/g, '');
 
   const handleInputBiddingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputBiddingValue(e.target.value);
+    const rawValue = e.target.value;
+    const numericValue = removeCommas(rawValue); // 콤마 제거
+    if (!isNaN(Number(numericValue))) {
+      setInputBiddingValue(numericValue); // 숫자로 저장
+    }
   };
+  // const handleInputBiddingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInputBiddingValue(e.target.value);
+  // };
 
   const openModal = () => {
     setModalOpen(true);
@@ -214,16 +222,16 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
           <label className="text-gray-600 mb-2">내 입찰가</label>
           {isFirstMember ? (
             <div className="flex items-center">
-              <p>{firstBid}</p>
+              <p>{formatNumberWithCommas(Number(firstBid))}</p>
               <span className="ml-2 text-gray-600">WON</span>
             </div>
           ) : (
-            <div className="flex items-center">
+            <div className="flex items-center ">
               <input
                 type="text"
                 className="border rounded py-2 px-3 w-40 text-right"
                 placeholder="0"
-                value={inputBiddingValue}
+                value={formatNumberWithCommas(Number(inputBiddingValue))}
                 onChange={handleInputBiddingChange}
               />
               <span className="ml-2 text-gray-600">WON</span>
@@ -273,7 +281,7 @@ const BiddingStatus: React.FC<BiddingStatusProps> = ({
             />
             <AttemptBiddingModal
               auctionId={auctionId}
-              bid={inputBiddingValue}
+              bid={formatNumberWithCommas(Number(inputBiddingValue))}
               isOpen={isBiddingModalOpen}
               onClose={closeModal}
               onConfirm={AttemptHandleConfirm}
