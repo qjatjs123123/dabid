@@ -368,7 +368,7 @@ public class AuctionServiceImpl implements AuctionService{
         for(Member member : members){
             member.increasePoint(buyerDeposit);
             memberRepository.save(member);
-            biddingSMSService.sendParticipant(member);
+//            biddingSMSService.sendParticipant(member);
         }
     }
 
