@@ -57,7 +57,7 @@ const DealContentContainer = () => {
     return <div className="flex items-center justify-center h-full"></div>;
   }
   return (
-    <div className="max-h-[calc(100vh-150px)] w-full overflow-y-auto flex flex-col border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)] scroll-hide">
+    <div className="max-h-[100vh] mb-[100px] w-full overflow-y-auto flex flex-col border-r pt-[--dealContentContainer-pt] pr-[var(--dealContentContainer-pr)] scroll-hide">
       {curDealId !== -1 && dealContentList ? (
         dealContentList.pages.map((page) => page.content.map((deal) => <DealContent key={deal.id} deal={deal} />))
       ) : (

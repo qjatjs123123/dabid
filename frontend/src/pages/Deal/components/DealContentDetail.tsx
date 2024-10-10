@@ -46,7 +46,7 @@ const DealContentDetail = () => {
   };
 
   return (
-    <div className="flex-3 max-h-[calc(100vh-150px)] overflow-y-auto w-full scroll-hide scroll-hide">
+    <div className="flex-3 max-h-[100vh] overflow-y-auto w-full scroll-hide scroll-hide">
       <div className="w-full h-[80px] flex justify-end">
         <div className="relative">
           <i className="fa fa-ban text-[25px] cursor-pointer mt-[30px] mr-[30px]"></i>

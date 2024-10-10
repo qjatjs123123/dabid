@@ -24,7 +24,7 @@ const Deal: React.FC<DealProps> = ({ isBankOpenDeal, isChatbotOpenDeal }) => {
         <h1>내 거래</h1>
       </div>
 
-      <div className="container flex flex-row">
+      <div className="container flex flex-row h-[100vh] mb-[10px]">
         <div className="flex-1 border-r">
           <DealContentContainer />
         </div>
