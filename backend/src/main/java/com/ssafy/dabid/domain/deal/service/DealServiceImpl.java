@@ -204,7 +204,7 @@ public class DealServiceImpl implements DealService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
         log.info("닉네임 : {}", member.getNickname());
-        Page<Deal> dealPage = dealRepository.findAllBySellerOrBuyer(member, member, PageRequest.of(page, size));
+        Page<Deal> dealPage = dealRepository.findAllBySellerOrBuyerOrderByCreatedAtDesc(member, member, PageRequest.of(page, size));
 
         List<ListDealResponseDto> result = new ArrayList<>();
 
