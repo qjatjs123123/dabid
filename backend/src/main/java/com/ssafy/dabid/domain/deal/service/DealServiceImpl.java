@@ -128,27 +128,10 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public InquireDemandDepositAccountBalance findSellerAccount(int dealId) {
-//        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-//                ACCOUNT_BALANCE_CODE,
-//                ACCOUNT_BALANCE_CODE,
-//                "937d7d39-eccc-4741-bf54-af154e279537" //임시 나중에 Security에서 멤버에서 가져올것
-//        );
-
         Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
 
         String dealAccount = deal.getAccount();
-//
-//        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
-//                .header(ssafyApiHeaderRequest)
-//                .accountNo(dealAccount)
-//                .build();
-//
-//        InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
-//                ACCOUNT_BALANCE_CODE,
-//                ssafyApiRequest,
-//                InquireDemandDepositAccountBalance.class
-//        );
 
         // 가상계좌 잔액 조회
         AccountBalanceResponse response = ssafyApiClient.accountBalance(ADMIN_USER_KEY, dealAccount);
@@ -164,11 +147,6 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public BuyerBalanceAndAccount findBuyerAccount(int dealId) {
-//        SsafyApiHeaderRequest ssafyApiHeaderRequest = getSsafyApiHeaderRequest(
-//                ACCOUNT_BALANCE_CODE,
-//                ACCOUNT_BALANCE_CODE,
-//                "71b2ece2-981e-452a-8412-7c6aecbaa2e1" //임시 나중에 Security에서 멤버에서 가져올것
-//        );
 
         Deal deal = dealRepository.findById(dealId)
                 .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
@@ -178,18 +156,6 @@ public class DealServiceImpl implements DealService {
 
         Account buyer_info = memberAccountRepository.findByMemberId(buyer_id);
         String buyer_account = buyer_info.getAccount_number();
-
-
-//        SsafyApiRequest ssafyApiRequest = SsafyApiRequest.builder()
-//                .header(ssafyApiHeaderRequest)
-//                .accountNo(buyer_account)
-//                .build();
-//
-//        InquireDemandDepositAccountBalance response = ssafyApiClient.getSsafyApiResponse(
-//                ACCOUNT_BALANCE_CODE,
-//                ssafyApiRequest,
-//                InquireDemandDepositAccountBalance.class
-//        );
 
         // 구매자 계좌 잔액 조회
         AccountBalanceResponse response = ssafyApiClient.accountBalance(userKey, buyer_account);
@@ -251,20 +217,8 @@ public class DealServiceImpl implements DealService {
             Member seller = memberRepository.findById(seller_id)
                     .orElseThrow(() -> new NoSuchElementException("판매자를 찾을 수 없습니다."));
 
-            String sta = "";
             boolean isSeller = member.getId() == deal.getSeller().getId();
             boolean isTimerVisible = false; // 입금 전 타이머 표시 여부
-
-            if(deal.getStatus() == Status.TRANSACTION_DONE){
-                sta = "거래완료";
-            } else{
-                if(!isSeller && deal.getStatus() == Status.BID_SUCCESS){
-                    sta = "입금전";
-                    isTimerVisible = true;
-                } else {
-                    sta = "거래중";
-                }
-            }
 
             ListDealResponseDto dto = ListDealResponseDto.builder()
                     .id(deal.getId())
@@ -282,6 +236,7 @@ public class DealServiceImpl implements DealService {
                     .isTimerVisible(isTimerVisible)  // 타이머 표시 여부 전달
                     .created_at(deal.getCreatedAt())
                     .build();
+
 
             result.add(dto);
         }
@@ -351,7 +306,7 @@ public class DealServiceImpl implements DealService {
                 .orElseThrow(() -> new NoSuchElementException("거래를 찾을 수 없습니다."));
         log.info("호출 전 상태 : {}", deal.getStatus());
         // tracking_number가 null이 아니면
-        if(deal.getTrackingNumber() != null){
+        if(deal.getStatus()!=Status.TRANSACTION_DONE && deal.getTrackingNumber() != null){
 
             // 택배 현황 조회 API 호출
             CarrierId carrierId = deal.getCarrier_id();
