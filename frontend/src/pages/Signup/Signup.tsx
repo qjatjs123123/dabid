@@ -169,9 +169,12 @@ const SignUp: React.FC = () => {
     if (errors.phoneExists) return;
 
     try {
-      await phoneNumberAuth(formData.phoneNumber);
+      const response = await phoneNumberAuth(formData.phoneNumber);
       setIsPhoneVerified(true);
       setErrors({ ...errors, phoneFormatError: false });
+      // formData.verificationCode = response.code;
+      // console.log(response);
+      setFormData({ ...formData, ['verificationCode']: response.authCode });
     } catch (error) {
       console.error('전화번호 인증 요청 실패:', error);
     }
@@ -471,7 +474,7 @@ const SignUp: React.FC = () => {
                     value={formData.verificationCode}
                     onChange={handleChange}
                     className={`border-2 rounded-lg w-[300px] p-2 ${phoneStatus.success ? 'border-green-500' : ''}`}
-                    required
+                    disabled
                   />
 
                   <button
