@@ -11,11 +11,17 @@ import DealStatus from './DealStatus';
 import DealAccount from './DealAccount';
 import TransferModal from './TransferModal';
 import DealContentTimer from './DealContentTimer';
+import { useNavigate } from 'react-router-dom';
 
 const DealContentDetail = () => {
   const { dealContentDetail: deal, showSkeleton } = useDealContentDetail();
   const [isModalOpen, setIsModalOpen] = useState(false); // 송금 모달 상태
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // 인수 확인 모달 상태
+  const navigate = useNavigate();
+
+  const handleIconClick = () => {
+    navigate('/help');
+  };
 
   if (showSkeleton || !deal) {
     return <DealContentDetailSkeleton />; // 스켈레톤 UI를 보여줌
@@ -49,7 +55,7 @@ const DealContentDetail = () => {
     <div className="flex-3 max-h-[100vh] overflow-y-auto w-full scroll-hide scroll-hide">
       <div className="w-full h-[80px] flex justify-end">
         <div className="relative">
-          <i className="fa fa-ban text-[25px] cursor-pointer mt-[30px] mr-[30px]"></i>
+          <i className="fa fa-bell-o text-[20px] cursor-pointer mt-[30px] mr-[30px]" onClick={handleIconClick}></i>
           <p className="arrow_box1 ">신고</p>
         </div>
       </div>

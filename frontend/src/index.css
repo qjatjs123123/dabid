@@ -112,6 +112,6 @@ html {
   content: ' ';
 }
 
-.fa-ban:hover + p.arrow_box1 {
+.fa-bell-o:hover + p.arrow_box1 {
   display: block;
 }
