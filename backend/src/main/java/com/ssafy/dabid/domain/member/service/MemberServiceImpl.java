@@ -388,14 +388,18 @@ public class MemberServiceImpl implements MemberService {
 
 
         // 인증 코드 SMS 발송
-        Message message = new Message();
-        message.setFrom(CoolSMSConfig.SENDER);
-        message.setTo(phoneNumber);
-        message.setText("다비드 휴대전화 인증 코드: " + code);
+//        Message message = new Message();
+//        message.setFrom(CoolSMSConfig.SENDER);
+//        message.setTo(phoneNumber);
+//        message.setText("다비드 휴대전화 인증 코드: " + code);
+//        SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
 
-        SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
+//        return new CommonResponseDto();
 
-        return new CommonResponseDto();
+        PhoneCodeResponseDto responseDto = new PhoneCodeResponseDto();
+        responseDto.setAuthCode(code);
+
+        return responseDto;
     }
 
     @Override
