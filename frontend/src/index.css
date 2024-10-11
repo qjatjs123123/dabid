@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Cute+Font&family=Noto+Sans+KR:wght@400;500;700&family=Overpass&family=Source+Code+Pro:wght@200;300;400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+@font-face {
+    font-family: "Jua";
+    src: url("/path/to/Jua.woff2") format("woff2"),
+         url("/path/to/Jua.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  } */
+@font-face {
+  font-family: 'Noto Sans KR';
+  src:
+    url('/path/to/NotoSansKR.woff2') format('woff2'),
+    url('/path/to/NotoSansKR.woff') format('woff');
+  font-weight: normal; /* 기본 두께 */
+  font-style: normal;
+}
+html {
+  /* font-family: "Jua", sans-serif;  */
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+.container {
+  width: calc(100vw - 30%);
+  /* min-width: calc(100vw - 200px); */
+  margin-left: auto; /* 자동 마진을 적용하여 중앙 정렬 */
+  margin-right: auto; /* 자동 마진을 적용하여 중앙 정렬 */
+}
+:root {
+  /*   deal전역 변수   */
+  --deal_max-wt: 1200px;
+
+  /*   dealContentContainer전역 변수    */
+  --dealContentContainer-width: 500px;
+  --dealContentContainer-pt: 20px;
+  --dealContentContainer-pr: 40px;
+
+  /*  dealContent 전역변수  */
+  --contentImg-Height: 200px;
+}
+@layer components {
+  .noto-sans-kr {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: normal;
+  }
+
+  .noto-sans-kr-bold {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: bold;
+  }
+}
+
+.menu_1 {
+  background: #fff;
+  border-radius: 8px;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: 150px;
+  text-align: center;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    visibility 0.4s;
+  padding: 10px;
+}
+
+.active_1 {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.arrow_box1 {
+  display: none;
+  position: absolute;
+  width: 50px;
+  padding: 8px;
+  left: -12px;
+  bottom: -20px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  background: #FF9F05;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.arrow_box1:after {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -10px;
+  border: solid transparent;
+  border-color: rgba(51, 51, 51, 0);
+  border-bottom-color:#FF9F05;
+  border-width: 10px;
+  pointer-events: none;
+  content: ' ';
+}
+
+.fa-bell-o:hover + p.arrow_box1 {
+  display: block;
+}

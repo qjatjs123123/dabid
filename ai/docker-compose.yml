@@ -1,0 +1,24 @@
+services:
+  chatbot:
+    image: taegun1011/dabid_ai:1.1.4
+    container_name: chatbot
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+    environment:
+      - OPENAI_API_KEY
+      - REDIS_HOST
+      - REDIS_PORT
+    command: gunicorn -w 4 --threads 2 -b 0.0.0.0:5000 --chdir app app:app
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
