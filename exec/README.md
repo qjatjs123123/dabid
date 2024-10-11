@@ -7,18 +7,21 @@
 - WAS : `Apache Tomcat/10.1.28`
 - IDE : `IntelliJ IDEA 2024.1.4`, `Visual Studio Code`
 
-1.1 Frontend
-- React : 18.3.1
-- Node : 20.15.1
+(Frontend)
+| 종류            | 버전 | 
+| ------------- | -------- | 
+| React         | 18.3.1     | 
+| Node       | 20.15.1    |
 
 
 2. 빌드 시 사용되는 환경 변수 등의 내용 상세 기재
-2.1 Frontend
-- TRACKER_API_CLIENT_ID=7lbeq73am80t54r3rs7l6vjnnv 
-- TRACKER_API_CLIENT_SECRET=103eufmav4298s8ms4581nkffhmajqg20qmbmco1uoig535775j8
 
-
-- VITE_SERVER_ENDPOINT=https://j11a505.p.ssafy.io
+(Frontend)
+| 환경변수            | 값 | 
+| ------------- | -------- | 
+| TRACKER_API_CLIENT_ID         | 18.3.1     | 
+| TRACKER_API_CLIENT_SECRET       | 20.15.1    |
+| VITE_SERVER_ENDPOINT       | https://j11a505.p.ssafy.io    |
 
 
 
