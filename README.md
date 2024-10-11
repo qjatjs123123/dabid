@@ -1,5 +1,6 @@
 <h1>
 <img src='./frontend/src/assets/about/main-bg.png' width="40" height="auto"/> 다비드: DABID</h1>
+![메인화면](/uploads/582e5196678f114f67358d77f5df647f/메인화면.PNG)
 <hr>
 
 ### 프로젝트 개요 🎥
