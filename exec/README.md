@@ -7,7 +7,20 @@
 - WAS : `Apache Tomcat/10.1.28`
 - IDE : `IntelliJ IDEA 2024.1.4`, `Visual Studio Code`
 
-2. 빌드 시 사용되는 환경 변수 등의 내용 상세
+1.1 Frontend
+- React : 18.3.1
+- Node : 20.15.1
+
+
+2. 빌드 시 사용되는 환경 변수 등의 내용 상세 기재
+2.1 Frontend
+- TRACKER_API_CLIENT_ID=7lbeq73am80t54r3rs7l6vjnnv 
+- TRACKER_API_CLIENT_SECRET=103eufmav4298s8ms4581nkffhmajqg20qmbmco1uoig535775j8
+
+
+- VITE_SERVER_ENDPOINT=https://j11a505.p.ssafy.io
+
+
 
 - 소스 코드 내 설정 파일에 작성한 환경 변수 외에 **추가로 사용하는 환경 변수는 없습니다**.
 
@@ -31,3 +44,22 @@
   - `backend\src\main\resources\application.yml`
 
 # 2. 프로젝트에서 사용하는 외부 서비스 정보를 정리한 문서
+
+1. Delivery Tracker API
+- 택배 현황 조회 API로 `https://apis.tracker.delivery/graphql` URL을 사용합니다.
+- ClientID : `7lbeq73am80t54r3rs7l6vjnnv `
+- SecretID : `103eufmav4298s8ms4581nkffhmajqg20qmbmco1uoig535775j8`
+
+
+2. MySQL, MongoDB, Kafka
+
+- 프로젝트 빌드 및 배포만으로 이용 가능합니다.
+
+# 4. 시연 시나리오
+
+    >> 이메일 중복 여부 확인, 비밀번호 확인, 닉네임 확인 및 필수 약관 동의 후 회원가입 진행
+    >> 회원가입 이후, 소개팅 서비스 미리보기 화면으로 이동
+    >> 가면 선택 후, 소개팅 입장
+    >> 소개팅의 경우, 회원가입 시 선택한 성별 기준으로 남여 성별기준으로 랜덤 매칭
+    >> 일정 시간 소개팅 후, 상대방과의 대화를 이어나갈건지에 대한 선택 (= 친구 추가)
+    >> 선택 후, 양쪽 참가자 모두 친구 추가를 원할 경우 채팅 가능
