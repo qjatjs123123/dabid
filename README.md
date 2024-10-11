@@ -53,6 +53,12 @@
 ### 🌅 Frontend
 >   <img src="	https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"><img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white">  
 
+## ERD
+![ERD](/uploads/08be40f73be526c97b704b45f03eaa53/image.png)
+
+## Architecture
+![다비드_아키텍처](/uploads/a384d1722bb6cae4490fcbf55390d71f/다비드_아키텍처_찐찐찐찐.png)
+
 ## 사용 방법
 ### 🔐 Backend
 > ```
@@ -97,14 +103,6 @@
 |![고객센터](/uploads/a50eae90bcb5aa1054ffe8751c3a8f04/image.png)|
 | <고객센터 페이지> <br/> - 채워주세요 |
 <hr>
-
-## ERD
-![ERD](/uploads/08be40f73be526c97b704b45f03eaa53/image.png)
-
-## Architecture
-![다비드_아키텍처](/uploads/a384d1722bb6cae4490fcbf55390d71f/다비드_아키텍처_찐찐찐찐.png)
-
-
 
 ## 느낀점
 > 1. 유우준
