@@ -77,18 +77,22 @@
 |회원가입|
 | :---: |
 |![회원가입](/uploads/7ccd4ab03c6e5a2d935b585fa4ca686b/image.png)|
-|<회원가입&로그인> <br/> - 채워주세요 |
+|![로그인](/uploads/52c93289b3499116cfb53f0f74295cc4/image.png)|
+|![마이페이지](/uploads/4322b8722ea7497bc6b0bad7968769ff/마이페이지.png)|
+|<회원가입&로그인&마이페이지> <br/> - 채워주세요 |
 <hr>
 
 |경매 페이지|
 | :---: |
 |![경매 페이지](/uploads/be6867a301c2accf23a69a99ccb114a9/image.png)|
+|![경매_상세보기](/uploads/d29c5a65253b2884ae1e85ee7c79af01/경매_상세보기.png)|
 | <경매 페이지> <br/> - 채워주세요 |
 <hr>
 
 |거래 페이지|
 | :---: |
 |![거래](/uploads/3d23ab5f2d683e7752e877c7f5d80a5a/image.png)|
+|![거래 상세](/uploads/2dc2e7ee9ae41525b85728fd69a6eb14/image.png)|
 | <거래 페이지> <br/> - 채워주세요 |
 <hr>
 
@@ -98,9 +102,11 @@
 | <챗봇 페이지> <br/> - 채워주세요 |
 <hr>
 
-|고객센터 페이지|
+|고객센터 페이지 & 다비드 뱅크(SSAFY 금융망 API)|
 | :---: |
 |![고객센터](/uploads/a50eae90bcb5aa1054ffe8751c3a8f04/image.png)|
+|![고객센터](/uploads/8715703ddd031aadb8e87fc3f256e088/고객센터.png)|
+|![image](/uploads/5491f9183d15811e95eed9f37318ce61/image.png)|
 | <고객센터 페이지> <br/> - 채워주세요 |
 <hr>
 
