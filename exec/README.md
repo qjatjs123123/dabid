@@ -13,15 +13,19 @@
 
 3. 배포 시 특이사항 기재
 
-- elasticsearch를 새로 구동하면 mysql에 기존에 저장된 데이터가 연동되지 않는 문제가 있습니다.
--
+- elasticsearch를 새로 구동할 시 mysql에 기존에 저장된 데이터가 연동되지 않는 문제가 있어,
+  mysql의 덤프파일을 활용해도 거래/경매 데이터가 복원되지 않을 수 있습니다.
 
 4. DB 접속 정보 등 프로젝트(ERD)에 활용되는 주요 계정 및 프로퍼티가 정의된 파일 목록
 
-| DB  | 아이피 | 포트번호 | 계정 | 암호 |
-| --- | ------ | -------- | ---- | ---- |
+- 각 DB는 도커 컨테이너로 구동
 
-|
+| DB            | 포트번호 | 계정 | 암호  |
+| ------------- | -------- | ---- | ----- |
+| MySQL         | 3306     | root | dabid |
+| MongoDB       | 27017    | root | dabid |
+| ElasticSearch | 9200     |      |       |
+| Redis         | 6379     | root | dabid |
 
 - 프로퍼티가 정의된 파일 목록
   - `backend\src\main\resources\application.yml`
