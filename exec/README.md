@@ -7,7 +7,20 @@
 - WAS : `Apache Tomcat/10.1.28`
 - IDE : `IntelliJ IDEA 2024.1.4`, `Visual Studio Code`
 
+1.1 Frontend
+- React : 18.3.1
+- Node : 20.15.1
+
+
 2. 빌드 시 사용되는 환경 변수 등의 내용 상세 기재
+2.1 Frontend
+- TRACKER_API_CLIENT_ID=7lbeq73am80t54r3rs7l6vjnnv 
+- TRACKER_API_CLIENT_SECRET=103eufmav4298s8ms4581nkffhmajqg20qmbmco1uoig535775j8
+
+
+- VITE_SERVER_ENDPOINT=https://j11a505.p.ssafy.io
+
+
 
 - 소스 코드 내 설정 파일에 작성한 환경 변수 외에 **추가로 사용하는 환경 변수는 없습니다**.
 
@@ -28,14 +41,11 @@
 
 # 2. 프로젝트에서 사용하는 외부 서비스 정보를 정리한 문서
 
-1. 네이버 로그인 API
+1. Delivery Tracker API
+- 택배 현황 조회 API로 `https://apis.tracker.delivery/graphql` URL을 사용합니다.
+- ClientID : `7lbeq73am80t54r3rs7l6vjnnv `
+- SecretID : `103eufmav4298s8ms4581nkffhmajqg20qmbmco1uoig535775j8`
 
-- 서비스 플로우
-  ![이미지](./네이버%20로그인%20플로우.png)
-- 서비스 환경
-  ![이미지](./네이버%20로그인%20API%20서비스%20환경.png) - 배포 환경에서는 `http://i11a207.p.ssafy.io/oauth2/callback/naver` URL을 사용합니다.
-- 등록 ID
-  ![이미지](./사용%20가능%20ID%20목록.png) - 심사를 받지 않은 '개발 중' 상태의 서비스는 **등록된 일부 ID만 사용 가능**합니다. - 따라서 **평가자님들의 네이버 로그인이 제한**될 수 있습니다.
 
 2. MySQL, MongoDB, Kafka
 
