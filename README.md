@@ -1,4 +1,5 @@
-# ![로고 이미지](/frontend/src/assets/about/main-bg.png) Dabid
+<h1>
+<img src='./frontend/src/assets/about/main-bg.png' width="40" height="auto"/> 다비드: DABID</h1>
 <hr>
 
 ### 프로젝트 개요 🎥
