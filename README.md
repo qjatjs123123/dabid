@@ -18,18 +18,28 @@
 <hr>
 
 ### 실행 환경 (채워주세요)
-> |   TECH    | Version  |
-> | --------- | ---------|
-> |   React  |  18.3.1 |
-> |   livekit-client     |  2.4.0  |
-> |   spring boot   | 3.3.2  |
-> |    java  | 17 |
-> |    mySQL  | 8.0.33  |
-> |   jwt  | 0.11.2  |
-> |   junit | 5.12.0   |
-> |   mongodb  | 3.3.0   |
-> |   kafka  | 3.8.0   |
-> |   oauth  | 2.0   |
+> | TECH                        | Version |
+> | --------------------------- | ------- |
+> | React                       | 18.3.1  |
+> | ReactQuery                  | 5.59.0  |
+> | Recoil                      | 0.7.7   |
+> | TypeScript                  | 5.5.4   |
+> | Tailwind                    | 0.4.4   |
+> | Spring boot                 | 3.3.3   |
+> | Spring Security             | 6.3.3   |
+> | JWT                         | 0.11.2  |
+> | Flask                       | 3.0.3   |
+> | OpenAI                      | 1.5.0   |
+> | Kafka                       | 2.8.1   |
+> | MySQL                       | 8.0.33  |
+> | MongoDB                     | 6.0.17  |
+> | Redis                       | 7.4.0   |
+> | ElasticSearch               | 8.6.2   |
+> | Logstash                    | 8.6.2   |
+> | Kibana                      | 8.6.2   |
+> | Prometheus                  | 2.54.1  |
+> | Nurigo(SMS 전송)            | 4.3.0   |
+> | Apache POI (엑셀 문서 생성) | 5.3.0   |
 
 
 </br>
