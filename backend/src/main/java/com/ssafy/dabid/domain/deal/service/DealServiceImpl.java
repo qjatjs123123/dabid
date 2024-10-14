@@ -435,7 +435,7 @@ public class DealServiceImpl implements DealService {
                 createDeal(auctionId);
                 // 알림 CoolSMS -> 최종 낙찰자에게 "니 낙찰 됬음! 거래로 넘어감!"
                 //              -> 판매자에게 "니 거래로 넘어감!"
-                //biddingSMSService.sendSellerAndBidder(auctionId);
+                biddingSMSService.sendSellerAndBidder(auctionId);
             }
             
             log.info("경매 참여자가 존재하는 경우의 스케쥴러 동작 완료");
