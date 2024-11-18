@@ -1,142 +1,97 @@
-<h1>
-<img src='./frontend/src/assets/about/main-bg.png' width="40" height="auto"/> 다비드: DABID</h1>
-![메인화면](/uploads/582e5196678f114f67358d77f5df647f/메인화면.PNG)
-<hr>
+# 다비드: DABID
 
-### 프로젝트 개요 🎥
-> 경매 기반의 중고 안심 거래 플랫폼
+![image.png](https://withme.s3.amazonaws.com/interImg/2f70895b-0161-4410-88e6-832a39920239_image.png)
 
-### 프로젝트 제안배경
-> 기존의 선착순 위주의 중고거래, 간편한 국내 중고 거래 환경이 부재했습니다.<br/>때문에 중고 거래의 비용 측면을 살리고 시간적 여유를 확보하며, <br/> 국내 배송 비대면 거래 지원이 세가지를 제공하는 프로젝트를 기획하게 되었습니다.
+**✨경매 기반의 중고 안심 거래 플랫폼**
+
+## 기획 배경
+
+기존의 선착순 위주의 중고거래, 간편한 국내 중고 거래 환경이 부재했습니다.\
+때문에 중고 거래의 비용 측면을 살리고 시간적 여유를 확보하며,\
+국내 배송 비대면 거래 지원이 세가지를 제공하는 프로젝트를 기획하게 되었습니다.
+
+## 프로젝트 소개
+
 ### 개발 기간
-> 2024-08-19 ~ 2024-10-11
+
+2024-08-19 ~ 2024-10-11
 
 ### 🧑‍🤝‍🧑 Team members
-##### |  Backend  / Frontend |<br/>
-|   유우준(팀장)   |   조성욱   |   황태건   |   이민정   |   장윤주   |   홍번선(FE 총괄)   |
-| --------- | ---------| ---------| ---------| ---------| ---------|
-|경매 FE, BE 담당<br/>ELK Stack 적용|경매 FE, BE 담당<br/>Prometheus 적용<br/>실시간 채팅 지원|Infra 총괄, UCC 감독<br/>회원 관리 FE, BE 담당<br/>Chat Bot<br/>SMS 알림 적용|거래 FE, BE 담당<br/>Stomp + Kafka 실시간 채팅 적용<br/>Escrow 서비스 적용|회원 관리 FE, BE 담당<br/>SSAFY 금융망 API 적용<br/>다비드 고객센터 관리|거래 FE, BE 담당<br/>Delivery Tracker 서비스 적용| 
-<hr>
 
-### 실행 환경
-> | TECH                        | Version |
-> | --------------------------- | ------- |
-> | React                       | 18.3.1  |
-> | ReactQuery                  | 5.59.0  |
-> | Recoil                      | 0.7.7   |
-> | TypeScript                  | 5.5.4   |
-> | Tailwind                    | 0.4.4   |
-> | Spring boot                 | 3.3.3   |
-> | Spring Security             | 6.3.3   |
-> | JWT                         | 0.11.2  |
-> | Flask                       | 3.0.3   |
-> | OpenAI                      | 1.5.0   |
-> | Kafka                       | 2.8.1   |
-> | MySQL                       | 8.0.33  |
-> | MongoDB                     | 6.0.17  |
-> | Redis                       | 7.4.0   |
-> | ElasticSearch               | 8.6.2   |
-> | Logstash                    | 8.6.2   |
-> | Kibana                      | 8.6.2   |
-> | Prometheus                  | 2.54.1  |
-> | Nurigo(SMS 전송)            | 4.3.0   |
-> | Apache POI (엑셀 문서 생성) | 5.3.0   |
+*   Full Stack
 
-
-</br>
+| 유우준(팀장)         | 조성욱                    | 황태건                      | 이민정              | 장윤주                         | 홍번선                        |
+| --------------- | ---------------------- | ------------------------ | ---------------- | --------------------------- | -------------------------- |
+| 경매 ELK Stack 적용 | 경매 실시간 채팅 Promethus 적용 | 회원 관리 챗봇 SMS 알림 CI/CD 구축 | Escrow 거래 실시간 채팅 | 회원 관리 SSAFY 금융망 API 연동 고객센터 | 거래 Delivery Tracker API 연동 |
 
 ## 💻 Tech Stack
-### 🔐 Backend
-><img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"><img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"><img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white"><img src="https://img.shields.io/badge/Elastic_Search-005571?style=for-the-badge&logo=elasticsearch&logoColor=white"><img src="https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white"><img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white"><img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white"><img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"><img src = "https://img.shields.io/badge/Kibana-005571?style=for-the-badge&logo=Kibana&logoColor=white">![kafka2](/uploads/46dd938aaa0854bf08bca554b4f8c100/kafka2.png)![logstash2](/uploads/74ec7a01429cebcb86c15314d7f5167c/logstash2.png)
 
+### 🔐 Backend
+
+![BlockNote image](https://img.shields.io/badge/java-007396?style=for-the-badge\&logo=java\&logoColor=white)![BlockNote image](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge\&logo=spring\&logoColor=white)![BlockNote image](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white)![BlockNote image](https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge\&logo=MongoDB\&logoColor=white)![BlockNote image](https://img.shields.io/badge/Elastic_Search-005571?style=for-the-badge\&logo=elasticsearch\&logoColor=white)![BlockNote image](https://img.shields.io/badge/Kibana-005571?style=for-the-badge\&logo=Kibana\&logoColor=white)
 
 ### 🌅 Frontend
->   <img src="	https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"><img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white">  
 
-## ERD
-![ERD](/uploads/08be40f73be526c97b704b45f03eaa53/image.png)
+![BlockNote image](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge\&logo=typescript\&logoColor=white)![BlockNote image](https://img.shields.io/badge/react-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)![BlockNote image](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge\&logo=tailwind-css\&logoColor=white)
 
-## Architecture
-![다비드_아키텍처](/uploads/a384d1722bb6cae4490fcbf55390d71f/다비드_아키텍처_찐찐찐찐.png)
+### 🚨Monitoring
 
-## 사용 방법
-### 🔐 Backend
-> ```
-> $ ./gradlew clean build;
-> $ java -jar build/libs/*SNAPSHOT.jar
-> ```
-### 🌅 Front-end
-> ```
-> $ npm install
-> $ npm start
-> ```
+![BlockNote image](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge\&logo=Prometheus\&logoColor=white)![BlockNote image](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge\&logo=grafana\&logoColor=white)
+
+### ⚙AI
+
+![BlockNote image](https://img.shields.io/badge/Flask-000000?style=for-the-badge\&logo=flask\&logoColor=white)![BlockNote image](https://img.shields.io/badge/redis-%23DD0031.svg?\&style=for-the-badge\&logo=redis\&logoColor=white)
+
+## 아키텍처
+
+![image.png](https://withme.s3.amazonaws.com/interImg/78a4c7cc-57a7-4a1b-9653-4effe7452519_image.png)
+
+## 주요 기능
+
+### 회원가입/계좌연동
+
+![image.png](https://withme.s3.amazonaws.com/interImg/6ce94f57-dd45-44cb-88e2-806961fbe951_image.png)![image.png](https://withme.s3.amazonaws.com/interImg/1fbf0111-2058-4c80-9df8-b72eb538d5cc_image.png)
+
+*   거래 신원 보장 및 경매 알림을 위해 **SMS 인증**을 통해 전화번호를 등록합니다.
+*   **1원 인증**을 거쳐 경매/거래에 사용할 계좌를 등록할 수 있습니다.
+*   **포인트**는 등록한 계좌로 충전할 수 있으며 **경매에서 보증금**으로 사용됩니다.
+
+### 경매
+
+![image.png](https://withme.s3.amazonaws.com/interImg/130e5407-2dbe-4012-97af-b596fe64b1a3_image.png)
+
+*   물건을 판매하고 싶은 경우 5000포인트를 지출하고 경매 등록을 통해 경매를 올릴 수 있습니다.
+*   경매에 참가하고 싶은 경우 경매시작가의 30%에 해당하는 보증금을 지출하고 참가할 수 있습니다.
+*   판매자가 경매를 포기하고 싶은 경우, 참가자 유무에 따라 보증금을 환급받고 경매를 종료합니다. 또한, 경매 참가자에게 SMS 알림이 전송됩니다.
+*   구매자가 경매 참가를 포기하고 싶은 경우, 유력 입찰자가 아니라면 참가 포기가 가능합니다.
+*   Spring Batch를 사용해 경매를 판매자가 설정한 시간에 따라 자동적으로 종료되고, 판매자와 유력 입찰자는 자동으로 거래 프로세스를 진행합니다. 또한 당사자간에 SMS 알림이 전송됩니다.
+
+### 거래
+
+![image.png](https://withme.s3.amazonaws.com/interImg/7482eefd-6512-4eef-a2d6-14e09625723f_image.png)![image.png](https://withme.s3.amazonaws.com/interImg/83979c6a-cfe9-4885-a3d1-b78751e1dc66_image.png)![image.png](https://withme.s3.amazonaws.com/interImg/c419b66c-9e10-4f20-bfac-9b5aae1a3874_image.png)
+
+*   경매가 정상적으로 종료되면, 최종 낙찰자는 구매자가 되어 판매자와 거래 페이지에서 거래를 진행할 수 있습니다.
+
+*   거래는 **에스크로 방식으로 진행**됩니다.
+
+    1.  구매자가 거래용 가상 계좌에 입찰 금액을 송금합니다.
+    2.  판매자는 입금이 확인되면 상품을 배송하고 택배 정보를 등록합니다.
+
+3. 이후 구매자가 물품을 정상적으로 수령하고 인수를 확정하면, 판매자에게 대금이 입금됩니다.
+
+*   판매자와 구매자 간 채팅이 가능합니다.
+*   Delivery Tracker API를 활용해 배송 조회 기능을 제공합니다. 사용자는 운송사와 운송장 번호를 등록해 배송 현황을 확인할 수 있습니다.
 
 
-## 🖥️ 핵심 기능 설명
+### 후기
 
-|회원가입&로그인&마이페이지|
-| :---: |
-|![로그인](/uploads/52c93289b3499116cfb53f0f74295cc4/image.png)|
-|![회원가입](/uploads/7ccd4ab03c6e5a2d935b585fa4ca686b/image.png)|
-|![마이페이지](/uploads/4322b8722ea7497bc6b0bad7968769ff/마이페이지.png)|
-|<회원가입&로그인&마이페이지> <br/>
-<br/>회원가입 폼에서 이메일, 닉네임, 비밀번호, 전화번호를 입력합니다.
-<br/>이메일, 닉네임, 전화번호는 중복 여부를 확인하고, 이메일과 전화번호는 정규식에 맞게 입력되었는지 검증합니다.
-<br/>전화번호 인증 코드를 메시지로 전송하여 본인 인증을 진행합니다.
-<br/>회원가입 완료 시 자동으로 로그인되며, 이후에는 가입한 이메일과 비밀번호로 로그인을 진행할 수 있습니다.|
+*   AI가 프로젝트 디렉토리를 분석해 작성한 후기입니다.
 
-|경매 페이지|
-| :---: |
-|![경매 페이지](/uploads/be6867a301c2accf23a69a99ccb114a9/image.png)|
-![경매_등록페이지](/uploads/3d1675372d6b3f702e3ed72c4660e103/image.png)
-|![경매_상세보기](/uploads/d29c5a65253b2884ae1e85ee7c79af01/경매_상세보기.png)|
-| <경매 페이지> <br/>
-<br/>물건을 판매하고 싶은 경우 5000포인트를 지출하고 경매 등록을 통해 경매를 올릴 수 있습니다.
-<br/>경매에 참가하고 싶은 경우 경매시작가의 30%에 해당하는 보증금을 지출하고 참가할 수 있습니다.
-<br/>판매자가 경매를 포기하고 싶은 경우, 참가자 유무에 따라 보증금을 환급받고 경매를 종료합니다. 또한, 경매 참가자에게 SMS 알림이 전송됩니다.
-<br/>구매자가 경매 참가를 포기하고 싶은 경우, 유력 입찰자가 아니라면 참가 포기가 가능합니다.
-<br/>경매를 판매자가 설정한 시간에 따라 자동적으로 종료되고, 판매자와 유력 입찰자는 자동으로 거래 프로세스를 진행합니다. 또한 당사자간에 SMS 알림이 전송됩니다.|
+<!---->
 
-|거래 페이지 & 다비드 뱅크(SSAFY 금융망 API)|
-| :---: |
-|![거래페이지](/uploads/5d60ff751067ea2e23a8c8183b205ccd/거래페이지.png)|
-|![거래상세페이지](/uploads/4e5e0781112264a14b4995dc2d440f32/거래상세페이지.png)|
-|![다비드 뱅크](/uploads/5491f9183d15811e95eed9f37318ce61/image.png)|
-| <거래 페이지> <br/>
-<br/>거래 페이지에서는 구매자가 최종 입찰자일 때나 판매자가 경매를 정상적으로 종료했을 때 거래 과정이 진행되며, 에스크로 결제 방식이 적용됩니다.
-<br/>먼저 구매자는 입찰 금액을 송금하고, 판매자는 입금이 확인되면 택배 정보를 등록합니다.
-<br/>이후 구매자가 물품을 정상적으로 수령하고 인수를 확정하면, 판매자에게 대금이 입금됩니다.
-<br/>Kakfa를 활용한 채팅 기능을 통해 판매자와 구매자 간 채팅 기능을 제공합니다.
-<br/>Delivery Tracker API를 활용해 배송 조회 기능을 제공합니다. 사용자는 운송사와 운송장 번호를 등록해 배송 현황을 확인할 수 있습니다.|
-
-|챗봇 페이지|
-| :---: |
-|![챗봇 페이지](/uploads/ee800f16c08585c820e3dea4e083ab27/image.png)|
-| <챗봇 페이지> <br/>
-<br/>하단의 플로팅 액션 버튼을 통해 챗봇에게 사이트 이용에 관해 질문할 수 있습니다.
-<br/>자주 묻는 질문은 버튼으로 등록해 편리하게 물어볼 수 있습니다.
-<br/>챗봇은 로그아웃할 때까지 기존의 대화 내용을 유지하고 있으며 이를 기반으로 새로운 답변을 생성할 수 있습니다.|
-
-|고객센터 페이지|
-| :---: |
-|![고객센터](/uploads/a50eae90bcb5aa1054ffe8751c3a8f04/image.png)|
-|![고객센터](/uploads/8715703ddd031aadb8e87fc3f256e088/고객센터.png)|
-| <고객센터 페이지> <br/>
-<br/>서비스 이용 중 시스템 상에서 해결되지 않는 문제가 발생하는 경우, 고객센터에서 이미지를 포함한 문의글을 작성할 수 있습니다.
-<br/>회원은 자신이 작성한 문의를 확인할 수 있으며, 관리자는 문의 처리를 위해 현재까지 작성된 문의 글을 엑셀 파일로 다운로드할 수 있습니다.|
-
-<hr>
-
-## 느낀점
-> 1. 유우준
-> - 팀장으로서 훌륭한 팀원들과 협력하여 성공적인 프로젝트 결과물을 만들어낼 수 있었습니다. 특히 엘라스틱 서치를 적용하여 성능 향상을 이루었으며, 그 과정에서 많은 것을 배울 수 있었습니다.
-> 2. 장윤주
-> - 좋은 팀원들과 함께 프로젝트를 진행하며 많은 것을 배웠습니다. 프론트엔드뿐만 아니라 백엔드 기술에 대해서도 새로운 경험을 쌓을 수 있었습니다.
-> 3. 이민정
-> - 채팅 기능을 직접 개발하고, 이를 몽고DB에 저장해 지속적으로 사용할 수 있는 기능을 구현하며 자신감을 얻었습니다.
-> 4. 조성욱
-> - 프로메테우스를 활용해 성능 최적화를 시도해보았고, 훌륭한 팀원들과 함께 일하며 많은 것을 배웠습니다.
-> 5. 홍범선
-> - 프론트엔드에서 새로운 기술들을 학습하고 적용해볼 수 있는 기회였습니다. 또한 좋은 팀원들과 함께 프로젝트를 진행하며 많은 것을 배웠습니다.
-> 6. 황태건
-> - 인프라에 대해 깊이 배우는 계기가 되었으며, 챗봇 기능을 개발하면서 프롬프트 엔지니어링에 대해 많은 것을 배웠습니다.
+    이 Git 리포지토리는 다양한 디렉토리와 파일 구조를 가지고 있으며, 주로 백엔드 서버 개발에 중점을 두고 있는 것으로 보입니다.
+    특히 backend 디토리 내부에는 java 언어를 사용하는 여러 하위 디렉토리가 포함되어 있어, Java 기반의 서버 애플리케이션 개발에 필요한 다양한 컴포넌트들이 구성되어 있.
+    이 구조에서 auction, deal, inquiry, job, member 등의 디렉토리는 각각 다른 도메인을 나타내며, 이들 각각에는 controller, dto, entity, repository, `` 등의 하위 디렉토리가 존재합니다. 이는 각 도메인에 대해 MVC 패턴이나 유사한 구조를 따르고 있음을 시사합니다.
+    또한, global 디렉토리 내에서는 api, ``, consts, error, filter, status, utils 등의 다양한 설정과 유틸리티들이 관리되고 있어, 전역적으로 사용되는 기능들과 설정들이 중앙집중적으로 관리되고 있는을 확인할 수 있습니다.
+    이 리포지토리는 또한 docker_setting 디렉토리를 포함하고 있어, Docker를 사용하여 환경을 구성하고 있음을 알 수 있습니다. 이는 개발 및 배포 과정의관성과 효율성을 높이는 데 기여할 것입니다.
+    전반적으로, 이 리포지토리는 복잡한 서버 사이드 애플리케이션을 효과적으로 개발 및 관리하기 위한 다양한 도구와조를 갖추고 있으며, 특히 Java 기반의 기술 스택에 중점을 둔 개발이 이루어지고 있는 것으로 보입니다. 이러한 구조는 대규모 프로젝트에서 요구되는 확장성과 유보수성을 제공합니다.
