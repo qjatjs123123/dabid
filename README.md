@@ -1,142 +1,163 @@
-<h1>
-<img src='./frontend/src/assets/about/main-bg.png' width="40" height="auto"/> 다비드: DABID</h1>
-![메인화면](/uploads/582e5196678f114f67358d77f5df647f/메인화면.PNG)
-<hr>
+<div align="center">
+<img src="https://github.com/user-attachments/assets/18374c51-18c3-4413-8209-3b3db42197a3" width="600"/>
+  <br/>
+<img src='./frontend/src/assets/about/main-bg.png' width="100" height="auto"/>
+  
+### 경매 기반의 중고 안심 거래 플랫폼 🖍️
 
-### 프로젝트 개요 🎥
-> 경매 기반의 중고 안심 거래 플랫폼
+[<img src="https://img.shields.io/badge/release-v0.0.0-ㅎㄱㄷ두?style=flat&logo=google-chrome&logoColor=white" />]() 
+<br/> [<img src="https://img.shields.io/badge/프로젝트 기간-2024.08.19~2024.09.11-fab2ac?style=flat&logo=&logoColor=white" />]() <br/>
+<img src="https://img.shields.io/badge/특화 프로젝트 우수상-FFD700?style=for-the-badge&logo=award&logoColor=white" alt="우수상">
 
-### 프로젝트 제안배경
-> 기존의 선착순 위주의 중고거래, 간편한 국내 중고 거래 환경이 부재했습니다.<br/>때문에 중고 거래의 비용 측면을 살리고 시간적 여유를 확보하며, <br/> 국내 배송 비대면 거래 지원이 세가지를 제공하는 프로젝트를 기획하게 되었습니다.
-### 개발 기간
-> 2024-08-19 ~ 2024-10-11
-
-### 🧑‍🤝‍🧑 Team members
-##### |  Backend  / Frontend |<br/>
-|   유우준(팀장)   |   조성욱   |   황태건   |   이민정   |   장윤주   |   홍번선(FE 총괄)   |
-| --------- | ---------| ---------| ---------| ---------| ---------|
-|경매 FE, BE 담당<br/>ELK Stack 적용|경매 FE, BE 담당<br/>Prometheus 적용<br/>실시간 채팅 지원|Infra 총괄, UCC 감독<br/>회원 관리 FE, BE 담당<br/>Chat Bot<br/>SMS 알림 적용|거래 FE, BE 담당<br/>Stomp + Kafka 실시간 채팅 적용<br/>Escrow 서비스 적용|회원 관리 FE, BE 담당<br/>SSAFY 금융망 API 적용<br/>다비드 고객센터 관리|거래 FE, BE 담당<br/>Delivery Tracker 서비스 적용| 
-<hr>
-
-### 실행 환경
-> | TECH                        | Version |
-> | --------------------------- | ------- |
-> | React                       | 18.3.1  |
-> | ReactQuery                  | 5.59.0  |
-> | Recoil                      | 0.7.7   |
-> | TypeScript                  | 5.5.4   |
-> | Tailwind                    | 0.4.4   |
-> | Spring boot                 | 3.3.3   |
-> | Spring Security             | 6.3.3   |
-> | JWT                         | 0.11.2  |
-> | Flask                       | 3.0.3   |
-> | OpenAI                      | 1.5.0   |
-> | Kafka                       | 2.8.1   |
-> | MySQL                       | 8.0.33  |
-> | MongoDB                     | 6.0.17  |
-> | Redis                       | 7.4.0   |
-> | ElasticSearch               | 8.6.2   |
-> | Logstash                    | 8.6.2   |
-> | Kibana                      | 8.6.2   |
-> | Prometheus                  | 2.54.1  |
-> | Nurigo(SMS 전송)            | 4.3.0   |
-> | Apache POI (엑셀 문서 생성) | 5.3.0   |
+</div> 
 
 
-</br>
+## 📝 목차
+- [1. 프로젝트 개요](#1-프로젝트-개요)
+- [2. 담당 역할](#2-담당-역할)
+- [3. 프로젝트 화면 구성](#3-프로젝트-화면-구성)
+- [4. 내가 사용한 기술 스택](#4-사용한-기술-스택)
+- [5. 기술적 이슈와 해결 과정](#5-기술적-이슈와-해결-과정)
+- [6. 팀원](#6-팀원)
 
-## 💻 Tech Stack
-### 🔐 Backend
-><img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"><img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"><img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white"><img src="https://img.shields.io/badge/Elastic_Search-005571?style=for-the-badge&logo=elasticsearch&logoColor=white"><img src="https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white"><img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white"><img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white"><img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white"><img src = "https://img.shields.io/badge/Kibana-005571?style=for-the-badge&logo=Kibana&logoColor=white">![kafka2](/uploads/46dd938aaa0854bf08bca554b4f8c100/kafka2.png)![logstash2](/uploads/74ec7a01429cebcb86c15314d7f5167c/logstash2.png)
+다음과 같은 목차로 구성되어 있습니다.
+
+<br />
+
+## 🚀 프로젝트 개요
+💡 **SSAFY 금융망 활용한 거래 시나리오**
+- 1원 인증, 계좌생성, 입금, 출금, 이체 등 거래 시나리오
+
+💡 **에스크로 결제**
+- 에스크로 서비스 제공자가 대금을 보관
+- 구매자가 상품 확인 후 판매자에게 지급하는 안전한 결제 방식
+
+💡 **비크리 경매**
+- 가장 높은 입찰자가 낙찰받되, 두 번째로 높은 가격을 지불하는 경매 방식
+
+💡 **실시간 택배 현황 조회**
+- Delivery-Tracker API를 활용한 실시간 택배 현황 조회
+
+💡 **거래 완료 알람 문자 서비스**
+- coolSMS API를 사용한 거래 완료 알람 문자 서비스
+
+💡 **판매자와 거래자간 1:1 채팅 서비스**
+- stomp + kafka를 사용한 채팅 서비스
+
+💡 **챗봇 서비스**
+- Flask와 ChatGPT를 사용한 챗봇 서비스
+
+<br />
+
+## 👨‍💻 담당 역할
+💡 **에스크로 결제 로직 개발**
+- SpringBoot와 JPA를 활용
+
+💡 **SSAFY 금융망 API 호출 로직 개발**
+- webClient를 사용하여 비동기적으로 SSAFY 금융망 API 호출을 관리하는 로직 분리
+
+💡 **거래 페이지 개발**
+
+💡 **실시간 택배 현황 조회**
+- Delivery-Tracker 사용
 
 
-### 🌅 Frontend
->   <img src="	https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"><img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white">  
+<br />
 
-## ERD
-![ERD](/uploads/08be40f73be526c97b704b45f03eaa53/image.png)
-
-## Architecture
-![다비드_아키텍처](/uploads/a384d1722bb6cae4490fcbf55390d71f/다비드_아키텍처_찐찐찐찐.png)
-
-## 사용 방법
-### 🔐 Backend
-> ```
-> $ ./gradlew clean build;
-> $ java -jar build/libs/*SNAPSHOT.jar
-> ```
-### 🌅 Front-end
-> ```
-> $ npm install
-> $ npm start
-> ```
-
-
-## 🖥️ 핵심 기능 설명
-
-|회원가입&로그인&마이페이지|
-| :---: |
-|![로그인](/uploads/52c93289b3499116cfb53f0f74295cc4/image.png)|
-|![회원가입](/uploads/7ccd4ab03c6e5a2d935b585fa4ca686b/image.png)|
-|![마이페이지](/uploads/4322b8722ea7497bc6b0bad7968769ff/마이페이지.png)|
-|<회원가입&로그인&마이페이지> <br/>
-<br/>회원가입 폼에서 이메일, 닉네임, 비밀번호, 전화번호를 입력합니다.
-<br/>이메일, 닉네임, 전화번호는 중복 여부를 확인하고, 이메일과 전화번호는 정규식에 맞게 입력되었는지 검증합니다.
-<br/>전화번호 인증 코드를 메시지로 전송하여 본인 인증을 진행합니다.
-<br/>회원가입 완료 시 자동으로 로그인되며, 이후에는 가입한 이메일과 비밀번호로 로그인을 진행할 수 있습니다.|
-
+## 🖥️ 화면 구성
 |경매 페이지|
-| :---: |
-|![경매 페이지](/uploads/be6867a301c2accf23a69a99ccb114a9/image.png)|
-![경매_등록페이지](/uploads/3d1675372d6b3f702e3ed72c4660e103/image.png)
-|![경매_상세보기](/uploads/d29c5a65253b2884ae1e85ee7c79af01/경매_상세보기.png)|
-| <경매 페이지> <br/>
-<br/>물건을 판매하고 싶은 경우 5000포인트를 지출하고 경매 등록을 통해 경매를 올릴 수 있습니다.
-<br/>경매에 참가하고 싶은 경우 경매시작가의 30%에 해당하는 보증금을 지출하고 참가할 수 있습니다.
-<br/>판매자가 경매를 포기하고 싶은 경우, 참가자 유무에 따라 보증금을 환급받고 경매를 종료합니다. 또한, 경매 참가자에게 SMS 알림이 전송됩니다.
-<br/>구매자가 경매 참가를 포기하고 싶은 경우, 유력 입찰자가 아니라면 참가 포기가 가능합니다.
-<br/>경매를 판매자가 설정한 시간에 따라 자동적으로 종료되고, 판매자와 유력 입찰자는 자동으로 거래 프로세스를 진행합니다. 또한 당사자간에 SMS 알림이 전송됩니다.|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/b6e62676-7c10-47dd-9422-f8c3a357303c" width="450"/>|
+|Spring Batch를 사용하여 설정된 시간에 자동 종료|
 
-|거래 페이지 & 다비드 뱅크(SSAFY 금융망 API)|
-| :---: |
-|![거래페이지](/uploads/5d60ff751067ea2e23a8c8183b205ccd/거래페이지.png)|
-|![거래상세페이지](/uploads/4e5e0781112264a14b4995dc2d440f32/거래상세페이지.png)|
-|![다비드 뱅크](/uploads/5491f9183d15811e95eed9f37318ce61/image.png)|
-| <거래 페이지> <br/>
-<br/>거래 페이지에서는 구매자가 최종 입찰자일 때나 판매자가 경매를 정상적으로 종료했을 때 거래 과정이 진행되며, 에스크로 결제 방식이 적용됩니다.
-<br/>먼저 구매자는 입찰 금액을 송금하고, 판매자는 입금이 확인되면 택배 정보를 등록합니다.
-<br/>이후 구매자가 물품을 정상적으로 수령하고 인수를 확정하면, 판매자에게 대금이 입금됩니다.
-<br/>Kakfa를 활용한 채팅 기능을 통해 판매자와 구매자 간 채팅 기능을 제공합니다.
-<br/>Delivery Tracker API를 활용해 배송 조회 기능을 제공합니다. 사용자는 운송사와 운송장 번호를 등록해 배송 현황을 확인할 수 있습니다.|
 
-|챗봇 페이지|
-| :---: |
-|![챗봇 페이지](/uploads/ee800f16c08585c820e3dea4e083ab27/image.png)|
-| <챗봇 페이지> <br/>
-<br/>하단의 플로팅 액션 버튼을 통해 챗봇에게 사이트 이용에 관해 질문할 수 있습니다.
-<br/>자주 묻는 질문은 버튼으로 등록해 편리하게 물어볼 수 있습니다.
-<br/>챗봇은 로그아웃할 때까지 기존의 대화 내용을 유지하고 있으며 이를 기반으로 새로운 답변을 생성할 수 있습니다.|
+|경매 상세 페이지|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/057b4656-2417-4113-bb65-c80b1a04f160" width="450"/>|
+|비크리 경매 방식을 적용| 
 
-|고객센터 페이지|
-| :---: |
-|![고객센터](/uploads/a50eae90bcb5aa1054ffe8751c3a8f04/image.png)|
-|![고객센터](/uploads/8715703ddd031aadb8e87fc3f256e088/고객센터.png)|
-| <고객센터 페이지> <br/>
-<br/>서비스 이용 중 시스템 상에서 해결되지 않는 문제가 발생하는 경우, 고객센터에서 이미지를 포함한 문의글을 작성할 수 있습니다.
-<br/>회원은 자신이 작성한 문의를 확인할 수 있으며, 관리자는 문의 처리를 위해 현재까지 작성된 문의 글을 엑셀 파일로 다운로드할 수 있습니다.|
+|내 거래 페이지|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/bb798402-1c54-4ba1-bc64-3192565488e1" width="450"/>|
+|에스크로 결제 방식 적용|
 
-<hr>
+|택배 현황 조회|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/0f244ba7-dbb1-42e3-9b76-681c1b5bce9d" width="450"/>|
+|Delivery-Tracker API 사용|
 
-## 느낀점
-> 1. 유우준
-> - 팀장으로서 훌륭한 팀원들과 협력하여 성공적인 프로젝트 결과물을 만들어낼 수 있었습니다. 특히 엘라스틱 서치를 적용하여 성능 향상을 이루었으며, 그 과정에서 많은 것을 배울 수 있었습니다.
-> 2. 장윤주
-> - 좋은 팀원들과 함께 프로젝트를 진행하며 많은 것을 배웠습니다. 프론트엔드뿐만 아니라 백엔드 기술에 대해서도 새로운 경험을 쌓을 수 있었습니다.
-> 3. 이민정
-> - 채팅 기능을 직접 개발하고, 이를 몽고DB에 저장해 지속적으로 사용할 수 있는 기능을 구현하며 자신감을 얻었습니다.
-> 4. 조성욱
-> - 프로메테우스를 활용해 성능 최적화를 시도해보았고, 훌륭한 팀원들과 함께 일하며 많은 것을 배웠습니다.
-> 5. 홍범선
-> - 프론트엔드에서 새로운 기술들을 학습하고 적용해볼 수 있는 기회였습니다. 또한 좋은 팀원들과 함께 프로젝트를 진행하며 많은 것을 배웠습니다.
-> 6. 황태건
-> - 인프라에 대해 깊이 배우는 계기가 되었으며, 챗봇 기능을 개발하면서 프롬프트 엔지니어링에 대해 많은 것을 배웠습니다.
+|내 계좌 잔액 조회|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/9801ab56-2da4-42d7-806a-19d87c412e9e" width="450"/>|
+|SSAFY 금융 API 사용|
+
+|챗봇|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/690af68b-548a-4f70-9289-f8a7a8505b20" width="450"/>|
+|사이트 이용에 관해 질문할 수 있다.|
+
+|고객센터|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/fa684b91-a56c-4a43-8c33-731c2a6f4568" width="450"/>|
+|회원은 문의글 작성 및 확인, 관리자는 문의글을 엑셀로 다운로드 있다.|
+<br />
+
+
+
+## ⚙ 내가 사용한 기술 스택
+### Frontend
+<div>
+<img src="https://img.shields.io/badge/React-%2361DAFB.svg?style=for-the-badge&logo=react&logoColor=white">
+<img src="https://img.shields.io/badge/React Query-FF4154?style=for-the-badge&logo=react-query&logoColor=white">
+<img src="https://img.shields.io/badge/Tailwind CSS-%2306B6D4.svg?style=for-the-badge&logo=tailwind-css&logoColor=white">
+<img src="https://img.shields.io/badge/TypeScript-%233178C6.svg?style=for-the-badge&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/Recoil-%3578E5.svg?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMiAxMiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2Ij48Y2lyY2xlIGN4PSI2IiBjeT0iNiIgcj0iNiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik02IDEuYTUuMDA0IDUuMDA0IDAgMSAxIDAgMTAgNS4wMDQgNS4wMDQgMCAwIDEgMC0xMHptMCAxLjk0YTEuOTY3IDEuOTY3IDAgMSAwIDAgMy45MzMgMS45NjcgMS45NjcgMCAwIDAgMC0zLjkzM3oiIGZpbGw9IiMwMDAiLz48L3N2Zz4=&logoColor=white">
+
+</div>
+
+### Tools
+<div>
+<img src="https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
+<img src="https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white">
+<img src="https://img.shields.io/badge/Git-%23F05032.svg?style=for-the-badge&logo=git&logoColor=white">
+</div>
+
+<br />
+
+## 🤔 기술적 이슈와 해결 과정
+> ### 💡 **재사용성과 확장성을 고려한 코드 설계**
+> - 팀원들이 각각 자신이 정의한 SSAFY 금융망 API 코드를 작성하면서 유지보수에 어려움 발생 → SSAFY 금융망 호출 코드와 응답 데이터를 통합적으로 정의하여 재사용성 향상, 개발 속도 향상 [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/global/api/ssafy/SsafyApiClient.java#L1-L174)  
+<br />
+
+> ### 💡 **에스크로 결제 개발**
+> <img src="https://github.com/user-attachments/assets/6c2f2d10-a4e9-45cd-bc07-b4e119c37465" width="450"/> <br/> 
+> - 구매자는 에스크로 서비스 관리자(시스템 관리자 계좌)에 낙찰금을 입금한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/global/api/ssafy/SsafyApiClient.java#L371-L413)  
+> - 판매자는 입금 금액을 확인한다.
+> - 판매자는 물품을 택배로 발송하고 운송 번호를 입력한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/global/api/ssafy/SsafyApiClient.java#L71-L93)
+> - 구매자는 물품을 받고 인수확인을 한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/global/api/ssafy/SsafyApiClient.java#L97-L127)
+> - 에스크로 서비스 관리자는 낙찰금을 판매자 계좌에 이체한다.
+> - 거래는 종료된다.
+> - 이 과정에서 판매자와 구매자간 1:1 채팅이 지원되고, 문제가 발생할 경우 고객센터로 문의한다.
+<br />
+
+> ### 💡 **이미지 로딩으로 레이아웃이 이동하는 현상**
+> - 이미지 로딩 동안 Skeleton UI를 보여줌으로서 CLS 해결 [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/frontend/src/pages/Deal/components/DealContentDetail.tsx#L26-L28)
+
+<br />
+
+> ### 💡 **API 호출 응답 대기 시간 UX로 해결** 
+> - 운송장 번호 입력 API 호출 후 응답 시간을 React-Query의 `Optimistic Update`로 해결 [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/frontend/src/business/hooks/useDeal/usePostCourierInfo.ts#L19-L58)
+<br />
+
+> ### 💡 **컴포넌트 간 API 데이터 불일치** 
+> - 택배 현황 변경 시 모달 창과 거래 상세 페이지 간 데이터 불일치 오류 발생 → `React-Query`를 활용해 데이터 불일치 문제 해결
+> - 유저 정보 Props drilling 문제 → `Recoil`로 문제 해결
+<br />
+
+## 💁‍♂️ 프로젝트 팀원
+| **FullStack** | **FullStack** | **FullStack** | **FullStack** | **FullStack** | **FullStack** |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ![](https://github.com/qjatjs123123.png?width=120&height=120) | ![](https://github.com/taegun1011.png??width=120&height=120) | ![](https://github.com/YWJ1228.png??width=120&height=120) | ![](https://github.com/umulum.png??width=120&height=120) | ![](https://github.com/josungyuk.png??width=120&height=120) | ![](https://github.com/wonchul98.png??width=120&height=120) |
+| [홍범선](https://github.com/qjatjs123123) | [황태건](https://github.com/taegun1011) | [유우준](https://github.com/YWJ1228) | [장윤주](https://github.com/umulum) | [조성욱](https://github.com/josungyuk) | [이민정](https://github.com/wonchul98) |
+
+
