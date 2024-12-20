@@ -131,10 +131,10 @@
 
 > ### 💡 **에스크로 결제 개발**
 > <img src="https://github.com/user-attachments/assets/6c2f2d10-a4e9-45cd-bc07-b4e119c37465" width="450"/> <br/> 
-> - 구매자는 에스크로 서비스 관리자(시스템 관리자 계좌)에 낙찰금을 입금한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/global/api/ssafy/SsafyApiClient.java#L371-L413)  
+> - 구매자는 에스크로 서비스 관리자(시스템 관리자 계좌)에 낙찰금을 입금한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/domain/deal/service/DealServiceImpl.java#L371-L413)  
 > - 판매자는 입금 금액을 확인한다.
-> - 판매자는 물품을 택배로 발송하고 운송 번호를 입력한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/global/api/ssafy/SsafyApiClient.java#L71-L93)
-> - 구매자는 물품을 받고 인수확인을 한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/global/api/ssafy/SsafyApiClient.java#L97-L127)
+> - 판매자는 물품을 택배로 발송하고 운송 번호를 입력한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/domain/deal/service/DealServiceImpl.java#L71-L93)
+> - 구매자는 물품을 받고 인수확인을 한다. [코드 바로보기](https://github.com/qjatjs123123/dabid/blob/master/backend/src/main/java/com/ssafy/dabid/domain/deal/service/DealServiceImpl.java#L97-L127)
 > - 에스크로 서비스 관리자는 낙찰금을 판매자 계좌에 이체한다.
 > - 거래는 종료된다.
 > - 이 과정에서 판매자와 구매자간 1:1 채팅이 지원되고, 문제가 발생할 경우 고객센터로 문의한다.
